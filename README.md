@@ -13,7 +13,7 @@ Tech Stack: React, TypeScript, and Redux/Redux Toolkit. Styling: CSS/SASS or MUI
 **Data Sources:**
 
 - Books: id, image, title, description,author, isAvailable, bookCopiesQty
-- Borrows: id, borrowerId, bookId, borrowDate, returnDate, dueDate
+- Borrows: id, borrowerid, bookid, borrowDate, returnDate, dueDate
 - Category: id, name
 - Authors: id, name
 - Users (as visitor or admin): id, firstName, lastName, email, password, role (visitor or admin)
@@ -85,7 +85,7 @@ Tech Stack: React, TypeScript, and Redux/Redux Toolkit. Styling: CSS/SASS or MUI
 
 - Products: id, name, description, categories, variants, sizes
 - Categories: id, name
-- Orders: id, productId, userId, purchasedAt
+- Orders: id, productid, userid, purchasedAt
 - Users: id, firstName, lastName, email, password, role (visitor or admin)
 
 **Pages to Create:**

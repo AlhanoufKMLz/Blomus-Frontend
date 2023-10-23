@@ -1,14 +1,5 @@
-import { createSlice } from '@reduxjs/toolkit'
-
-export type Product = {
-  id: number
-  name: string
-  image: string
-  description: string
-  categories: number[]
-  variants: string[]
-  sizes: string[]
-}
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+import { Product } from '../../../types/types'
 
 export type ProductState = {
   items: Product[]
@@ -22,27 +13,39 @@ const initialState: ProductState = {
   isLoading: false
 }
 
-export const userSlice = createSlice({
-  name: 'user',
+export const fetchProducts = createAsyncThunk('product/fetchProducts', async () => {
+  const response = await fetch('/mock/e-commerce/products.json')
+  const data = await response.json()
+  return data
+})
+
+export const productSlice = createSlice({
+  name: 'product',
   initialState,
   reducers: {
-    productsRequest: (state) => {
-      state.isLoading = true
-    },
-    productsSuccess: (state, action) => {
-      state.isLoading = false
-      state.items = action.payload
-    },
     addProduct: (state, action: { payload: { product: Product } }) => {
-      // let's append the new product to the beginning of the array
       state.items = [action.payload.product, ...state.items]
     },
-    removeProduct: (state, action: { payload: { productId: number } }) => {
-      const filteredItems = state.items.filter((product) => product.id !== action.payload.productId)
+    removeProduct: (state, action: { payload: { productid: number } }) => {
+      const filteredItems = state.items.filter((product) => product.id !== action.payload.productid)
       state.items = filteredItems
     }
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchProducts.pending, (state) => {
+        state.isLoading = true
+      })
+      .addCase(fetchProducts.fulfilled, (state, action) => {
+        state.items = action.payload
+        state.isLoading = false
+      })
+      .addCase(fetchProducts.rejected, (state, action) => {
+        // state.error = action.error.message
+        state.isLoading = false
+      })
   }
 })
-export const { removeProduct, addProduct, productsRequest, productsSuccess } = userSlice.actions
+export const { removeProduct, addProduct } = productSlice.actions
 
-export default userSlice.reducer
+export default productSlice.reducer
