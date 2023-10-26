@@ -23,18 +23,11 @@ export const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
-    usersRequest: (state) => {
-      state.isLoading = true
+    addUser: (state, action: { payload: { user: User } }) => {
+      state.items = [action.payload.user, ...state.items]
     },
-    usersSuccess: (state, action) => {
-      state.isLoading = false
-      state.items = action.payload
-    },
-    addUser: (state, action: { payload: { product: User } }) => {
-      state.items = [action.payload.product, ...state.items]
-    },
-    removeUser: (state, action: { payload: { productid: number } }) => {
-      const filteredItems = state.items.filter((product) => product.id !== action.payload.productid)
+    removeUser: (state, action: { payload: { userid: number } }) => {
+      const filteredItems = state.items.filter((product) => product.id !== action.payload.userid)
       state.items = filteredItems
     }
   },
@@ -54,6 +47,6 @@ export const userSlice = createSlice({
   }
 })
 
-export const { removeUser, addUser, usersRequest, usersSuccess } = userSlice.actions
+export const { removeUser, addUser } = userSlice.actions
 
 export default userSlice.reducer

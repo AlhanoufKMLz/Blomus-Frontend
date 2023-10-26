@@ -23,19 +23,21 @@ export const categorySlice = createSlice({
   name: 'category',
   initialState,
   reducers: {
-    categoriesRequest: (state) => {
-      state.isLoading = true
+    addCategory: (state, action: { payload: { category: Category } }) => {
+      state.items = [action.payload.category, ...state.items]
     },
-    categoriesSuccess: (state, action) => {
-      state.isLoading = false
-      state.items = action.payload
-    },
-    addCategory: (state, action: { payload: { product: Category } }) => {
-      state.items = [action.payload.product, ...state.items]
-    },
-    removeCategory: (state, action: { payload: { productid: number } }) => {
-      const filteredItems = state.items.filter((product) => product.id !== action.payload.productid)
+    removeCategory: (state, action: { payload: { categoryid: number } }) => {
+      const filteredItems = state.items.filter(
+        (product) => product.id !== action.payload.categoryid
+      )
       state.items = filteredItems
+    },
+    editCategory: (state, action: { payload: { newCategory: Category } }) => {
+      const filteredItems = state.items.filter(
+        (product) => product.id !== action.payload.newCategory.id
+      )
+      state.items = filteredItems
+      state.items = [action.payload.newCategory, ...state.items]
     }
   },
   extraReducers: (builder) => {
@@ -53,7 +55,6 @@ export const categorySlice = createSlice({
       })
   }
 })
-export const { removeCategory, addCategory, categoriesRequest, categoriesSuccess } =
-  categorySlice.actions
+export const { removeCategory, addCategory, editCategory } = categorySlice.actions
 
 export default categorySlice.reducer

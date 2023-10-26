@@ -1,11 +1,13 @@
-import { ProductsManager } from './components/ProductsManager'
+import { ProductsManager } from './components/products/ProductsManager'
 import './App.css'
-import Home from './components/pages/Home'
+import Home from './pages/Home'
 import NavBar from './components/NavBar'
 import { Route, Routes } from 'react-router'
-import Admin from './components/pages/Admin'
-import Products from './components/pages/Products'
-import ProductDetails from './components/pages/ProductDetails'
+import Admin from './pages/Admin'
+import Products from './pages/Products'
+import ProductDetails from './pages/ProductDetails'
+import { UsersManager } from './components/users/UsersManager'
+import { CategoriesManager } from './components/categories/CategoriesManager'
 
 function App() {
   return (
@@ -15,6 +17,8 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/admin" element={<Admin />} />
         <Route path="/productsmanager" element={<ProductsManager />} />
+        <Route path="/usersmanager" element={<UsersManager />} />
+        <Route path="/categoriesmanager" element={<CategoriesManager />} />
         <Route path="/:products" element={<Products />}></Route>
         <Route path="/products/:productid" element={<ProductDetails />}></Route>
       </Routes>

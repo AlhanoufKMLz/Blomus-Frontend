@@ -1,6 +1,6 @@
 import React from 'react'
 import { useParams } from 'react-router'
-import { RootState } from '../../redux/store'
+import { RootState } from '../redux/store'
 import { useSelector } from 'react-redux'
 
 export default function ProductDetails() {

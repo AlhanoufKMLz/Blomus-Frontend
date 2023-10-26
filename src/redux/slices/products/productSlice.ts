@@ -29,6 +29,10 @@ export const productSlice = createSlice({
     removeProduct: (state, action: { payload: { productid: number } }) => {
       const filteredItems = state.items.filter((product) => product.id !== action.payload.productid)
       state.items = filteredItems
+    },
+    editProdect: (state, action: { payload: { newProduct: Product } }) => {
+      state.items = state.items.filter((product) => product.id !== action.payload.newProduct.id)
+      state.items = [action.payload.newProduct, ...state.items]
     }
   },
   extraReducers: (builder) => {
@@ -46,6 +50,6 @@ export const productSlice = createSlice({
       })
   }
 })
-export const { removeProduct, addProduct } = productSlice.actions
+export const { removeProduct, addProduct, editProdect } = productSlice.actions
 
 export default productSlice.reducer

@@ -29,3 +29,15 @@ export type User = {
   password: string
   role: 'visitor' | 'admin'
 }
+
+export type ModalProps = {
+  isOpen: boolean
+  product: Product
+  setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>
+}
+
+export type EditCategoryModalProps = {
+  isOpen: boolean
+  category: Category
+  setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>
+}

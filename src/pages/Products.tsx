@@ -2,10 +2,10 @@ import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 
-import { AppDispatch, RootState } from '../../redux/store'
-import { fetchProducts } from '../../redux/slices/products/productSlice'
-import { fetchCategoreis } from '../../redux/slices/categories/categorySlice'
-import { Product } from '../../types/types'
+import { AppDispatch, RootState } from '../redux/store'
+import { fetchProducts } from '../redux/slices/products/productSlice'
+import { fetchCategoreis } from '../redux/slices/categories/categorySlice'
+import { Product } from '../types/types'
 
 export default function Products() {
   const products = useSelector((state: RootState) => state.products)
@@ -30,7 +30,7 @@ export default function Products() {
         product.name.toLowerCase().includes(searchKeyWord.toLowerCase())
       )
       setProductsToDisplay(results)
-    }
+    } else setProductsToDisplay(products.items)
   }, [searchKeyWord, products.items])
 
   function sort(event: { target: { value: string } }) {
@@ -58,23 +58,30 @@ export default function Products() {
 
   return (
     <div>
-      <input type="text" onChange={handleChange} placeholder="Search for products..." />
-      <select
-        onChange={filter}
-        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-        <option value={0}>All Products</option>
-        {categories.items.map((category) => (
-          <option key={category.id} value={category.id}>
-            {category.name}
-          </option>
-        ))}
-      </select>
-      <select
-        onChange={sort}
-        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-        <option value={'Low-High'}>Low-High</option>
-        <option value={'High-Low'}>High-Low</option>
-      </select>
+      <div className="flex">
+        <input
+          type="text"
+          onChange={handleChange}
+          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 block  p-2.5"
+          placeholder="Search for products..."
+        />
+        <select
+          onChange={filter}
+          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 block  p-2.5">
+          <option value={0}>All Products</option>
+          {categories.items.map((category) => (
+            <option key={category.id} value={category.id}>
+              {category.name}
+            </option>
+          ))}
+        </select>
+        <select
+          onChange={sort}
+          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 block  p-2.5">
+          <option value={'Low-High'}>Low-High</option>
+          <option value={'High-Low'}>High-Low</option>
+        </select>
+      </div>
 
       <section className="products-container">
         {products.isLoading && <h3> Loading products...</h3>}
