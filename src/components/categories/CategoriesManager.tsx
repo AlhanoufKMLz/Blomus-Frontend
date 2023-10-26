@@ -8,7 +8,6 @@ import EditCategory from './EditCategoryModal'
 import { CategoryForm } from './CategoryForm'
 
 export function CategoriesManager() {
-  //   const products = useSelector((state: RootState) => state.products)
   const categories = useSelector((state: RootState) => state.categories)
   const dispatch = useDispatch<AppDispatch>()
 
@@ -18,7 +17,7 @@ export function CategoriesManager() {
   const [selectedCategory, setSelectedCategory] = useState<Category>()
   const [displayAddForm, setDisplayAddForm] = useState(false)
 
-  //Search
+  //Search for category
   function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
     setSearchKeyWord(event.target.value)
   }
@@ -31,16 +30,18 @@ export function CategoriesManager() {
     } else setCategoriesToDisplay(categories.items)
   }, [searchKeyWord, categories.items])
 
+  //Open edit category modal
   function handleEdit(category: Category) {
     setSelectedCategory(category)
     setIsModalOpen(true)
   }
 
-  //Add Category
+  //Open add category form
   function addCategoryForm() {
     setDisplayAddForm(true)
   }
 
+  //Display categories table
   return (
     <div className="grid">
       <div className="flex">
@@ -84,8 +85,8 @@ export function CategoriesManager() {
           ))}
         </tbody>
       </table>
-      <tr className="text-left"></tr>
 
+      {/* Edit Modal */}
       {selectedCategory && (
         <EditCategory
           isOpen={isModalOpen}

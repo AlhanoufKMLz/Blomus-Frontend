@@ -33,7 +33,7 @@ export function CategoryForm(prop: {
 
   return (
     <div>
-      <h3 className="text-2xl font-bold">Add a new product</h3>
+      <h3 className="text-2xl font-bold">Add a new category</h3>
       <form onSubmit={handleSubmit} className="p-4 bg-gray-100 rounded-lg">
         <div className="mb-4">
           <label htmlFor="name" className={labelStyle}>

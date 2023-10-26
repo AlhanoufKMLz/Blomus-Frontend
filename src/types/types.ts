@@ -18,7 +18,7 @@ export type Order = {
   id: number
   productid: number
   userid: number
-  purchasedAt: Date
+  purchasedAt: string
 }
 
 export type User = {

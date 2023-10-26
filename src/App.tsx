@@ -8,6 +8,8 @@ import Products from './pages/Products'
 import ProductDetails from './pages/ProductDetails'
 import { UsersManager } from './components/users/UsersManager'
 import { CategoriesManager } from './components/categories/CategoriesManager'
+import Cart from './components/cart/Cart'
+import Orders from './components/orders/Orders'
 
 function App() {
   return (
@@ -16,11 +18,15 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/admin" element={<Admin />} />
+
+        <Route path="/:products" element={<Products />}></Route>
+        <Route path="/products/:productid" element={<ProductDetails />}></Route>
+        <Route path="/cart" element={<Cart />}></Route>
+
         <Route path="/productsmanager" element={<ProductsManager />} />
         <Route path="/usersmanager" element={<UsersManager />} />
         <Route path="/categoriesmanager" element={<CategoriesManager />} />
-        <Route path="/:products" element={<Products />}></Route>
-        <Route path="/products/:productid" element={<ProductDetails />}></Route>
+        <Route path="/orders" element={<Orders />}></Route>
       </Routes>
     </div>
   )

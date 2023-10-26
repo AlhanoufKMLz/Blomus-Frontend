@@ -22,22 +22,7 @@ export const fetchOrders = createAsyncThunk('product/fetchOrders', async () => {
 export const orderSlice = createSlice({
   name: 'order',
   initialState,
-  reducers: {
-    ordersRequest: (state) => {
-      state.isLoading = true
-    },
-    ordersSuccess: (state, action) => {
-      state.isLoading = false
-      state.items = action.payload
-    },
-    addOrder: (state, action: { payload: { product: Order } }) => {
-      state.items = [action.payload.product, ...state.items]
-    },
-    removeOrder: (state, action: { payload: { productid: number } }) => {
-      const filteredItems = state.items.filter((product) => product.id !== action.payload.productid)
-      state.items = filteredItems
-    }
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder
       .addCase(fetchOrders.pending, (state) => {
@@ -53,6 +38,5 @@ export const orderSlice = createSlice({
       })
   }
 })
-export const { removeOrder, addOrder, ordersRequest, ordersSuccess } = orderSlice.actions
 
 export default orderSlice.reducer

@@ -6,14 +6,13 @@ import { User } from '../../types/types'
 import { removeUser } from '../../redux/slices/users/userSlice'
 
 export function UsersManager() {
-  //   const products = useSelector((state: RootState) => state.products)
   const users = useSelector((state: RootState) => state.users)
   const dispatch = useDispatch<AppDispatch>()
 
   const [usersToDisplay, setUsersToDisplay] = useState<User[]>(users.items)
   const [searchKeyWord, setSearchKeyWord] = useState('')
 
-  //Search
+  //Search for user
   function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
     setSearchKeyWord(event.target.value)
   }
@@ -26,6 +25,7 @@ export function UsersManager() {
     } else setUsersToDisplay(users.items)
   }, [searchKeyWord, users.items])
 
+  //Display users table
   return (
     <div className="grid">
       <div className="flex">
@@ -62,7 +62,6 @@ export function UsersManager() {
           ))}
         </tbody>
       </table>
-      <tr className="text-left"></tr>
     </div>
   )
 }

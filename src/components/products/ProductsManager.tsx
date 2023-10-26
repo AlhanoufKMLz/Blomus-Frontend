@@ -18,6 +18,7 @@ export function ProductsManager() {
   const [selectedProduct, setSelectedProduct] = useState<Product>()
   const [displayAddForm, setDisplayAddForm] = useState(false)
 
+  //Filter products pased on category
   function filter(event: { target: { value: string } }) {
     const selectedValue = Number(event.target.value)
 
@@ -30,10 +31,10 @@ export function ProductsManager() {
     }
   }
 
+  //Search for product
   function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
     setSearchKeyWord(event.target.value)
   }
-
   useEffect(() => {
     if (searchKeyWord.trim() !== '') {
       const results = products.items.filter((product) =>
@@ -43,15 +44,18 @@ export function ProductsManager() {
     } else setProductsToDisplay(products.items)
   }, [searchKeyWord, products.items])
 
+  //Open edit product modal
   function handleEdit(product: Product) {
     setSelectedProduct(product)
     setIsModalOpen(true)
   }
 
+  //Open add prodact form
   function addProductForm() {
     setDisplayAddForm(true)
   }
 
+  //Display products table
   return (
     <div className="grid">
       <div className="flex">
@@ -113,6 +117,7 @@ export function ProductsManager() {
         </tbody>
       </table>
 
+      {/* Edit prodact modal */}
       {selectedProduct && (
         <EditModal isOpen={isModalOpen} product={selectedProduct} setIsModalOpen={setIsModalOpen} />
       )}

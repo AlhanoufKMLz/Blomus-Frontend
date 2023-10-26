@@ -45,12 +45,6 @@ export function ProductForm(prop: {
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault()
-    // Send the product data to your backend or in this case send it to Redux
-    console.log('New product data:', product)
-    // let's add Id property to the object (usually IDs are generated automatically on the backend)
-    product.id = +new Date()
-    console.log('product:', product)
-
     dispatch(addProduct({ product }))
     // Reset the form
     setProduct(initialProductState)
