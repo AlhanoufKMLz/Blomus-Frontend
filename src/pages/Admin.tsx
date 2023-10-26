@@ -20,7 +20,7 @@ export default function Admin() {
   return (
     <div>
       <div className="grid">
-        <Link to={'/productsmanager'}> Products Categories </Link>
+        <Link to={'/productsmanager'}> Manage Categories </Link>
         <Link to={'/categoriesmanager'}> Manage Categories </Link>
         <Link to={'/usersmanager'}> Manage Users </Link>
         <Link to={'/orders'}> Orders </Link>

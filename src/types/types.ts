@@ -7,6 +7,7 @@ export type Product = {
   categories: number[]
   variants: string[]
   sizes: string[]
+  quantity: number
 }
 
 export type Category = {

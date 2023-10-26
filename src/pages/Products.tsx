@@ -38,7 +38,7 @@ export default function Products() {
   function sort(event: { target: { value: string } }) {
     const sortedProducts = [...productsToDisplay]
     sortedProducts.sort((a, b) => {
-      if (event.target.value === 'Low-High') {
+      if (event.target.value === 'High-Low') {
         return b.price - a.price
       }
       return a.price - b.price
@@ -60,11 +60,8 @@ export default function Products() {
   }
 
   //Add product to cart
-  function handleAddToCart(id: number) {
-    const product = productsToDisplay.find((product) => product.id === Number(id))
-    if (product)
-      // Check if product is found before dispatching
-      dispatch(addToCart({ product }))
+  function handleAddToCart(product: Product) {
+    dispatch(addToCart({ product }))
   }
 
   //Display the products
@@ -108,7 +105,7 @@ export default function Products() {
                 </Link>
                 <button
                   className="mb-2 border-red-200 bg-slate-200 w-28"
-                  onClick={() => handleAddToCart(product.id)}>
+                  onClick={() => handleAddToCart(product)}>
                   Add To Cart
                 </button>
               </li>

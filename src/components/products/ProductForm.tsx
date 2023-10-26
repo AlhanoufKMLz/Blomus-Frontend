@@ -13,7 +13,8 @@ const initialProductState: Product = {
   price: 0,
   categories: [],
   variants: [],
-  sizes: []
+  sizes: [],
+  quantity: 0
 }
 
 export function ProductForm(prop: {
