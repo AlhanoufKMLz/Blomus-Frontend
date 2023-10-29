@@ -4,6 +4,7 @@ import categoriesReducer from './slices/categories/categorySlice'
 import usersReducer from './slices/users/userSlice'
 import cartSlice from './slices/cart/cartSlice'
 import orderSlice from './slices/orders/orderSlice'
+import logedinUserSlice from './slices/users/logedinUserSlice'
 
 export const store = configureStore({
   reducer: {
@@ -11,7 +12,8 @@ export const store = configureStore({
     categories: categoriesReducer,
     users: usersReducer,
     cart: cartSlice,
-    orders: orderSlice
+    orders: orderSlice,
+    logedinUser: logedinUserSlice
   }
 })
 

@@ -5,7 +5,7 @@ import { AppDispatch, RootState } from '../../redux/store'
 import { Category } from '../../types/types'
 import { removeCategory } from '../../redux/slices/categories/categorySlice'
 import EditCategory from './EditCategoryModal'
-import { CategoryForm } from './CategoryForm'
+import { CategoryForm } from './AddCategoryForm'
 
 export function CategoriesManager() {
   const categories = useSelector((state: RootState) => state.categories)

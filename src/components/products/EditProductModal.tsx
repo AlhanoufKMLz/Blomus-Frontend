@@ -37,6 +37,10 @@ export default function EditProductModal(prop: ModalProps) {
     prop.setIsModalOpen(false)
   }
 
+  const handleCloseModal = () => {
+    prop.setIsModalOpen(false)
+  }
+
   return (
     <div className="modal-overlay">
       <div className="modal-content">
@@ -123,9 +127,10 @@ export default function EditProductModal(prop: ModalProps) {
             Save Ghanges
           </button>
           <button
-            onClick={() => prop.setIsModalOpen(false)}
+            type="button"
+            onClick={handleCloseModal}
             className="w-full px-4 py-2 text-white bg-blue-500 rounded-lg hover:bg-blue-600">
-            Cansel
+            Cancel
           </button>
         </form>
       </div>

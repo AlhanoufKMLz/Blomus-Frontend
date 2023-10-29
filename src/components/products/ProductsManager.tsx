@@ -5,7 +5,7 @@ import { removeProduct } from '../../redux/slices/products/productSlice'
 import { AppDispatch, RootState } from '../../redux/store'
 import { Product } from '../../types/types'
 import EditModal from './EditProductModal'
-import { ProductForm } from './ProductForm'
+import { ProductForm } from './AddProductForm'
 
 export function ProductsManager() {
   const products = useSelector((state: RootState) => state.products)
@@ -97,9 +97,6 @@ export function ProductsManager() {
               </td>
               <td>{product.name}</td>
               <td>{product.price}</td>
-              <td>
-                <button className=" text-red-400 text-xs">Show more...</button>
-              </td>
               <td>
                 <button className=" text-red-400 text-xs" onClick={() => handleEdit(product)}>
                   Edit
