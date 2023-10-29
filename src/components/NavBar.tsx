@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { AppDispatch, RootState } from '../redux/store'
@@ -9,6 +9,15 @@ export default function NavBar() {
   const cart = useSelector((state: RootState) => state.cart)
   const logedinUser = useSelector((state: RootState) => state.logedinUser.user)
 
+  const [isOpen, setIsOpen] = useState(false)
+
+  function handleOpenNavBar() {
+    setIsOpen(true)
+  }
+  function handleCloseNavBar() {
+    setIsOpen(false)
+  }
+
   function handleLogout() {
     dispatch(logoutUser())
   }
@@ -16,46 +25,58 @@ export default function NavBar() {
   return (
     <div>
       <nav className="relative">
-        <div className="container px-6 py-4 mx-auto md:flex md:justify-between md:items-center">
-          <div className="flex items-center justify-between">
+        <div className="px-3 py-6 md:justify-between md:flex md:w-screen md:items-center">
+          <div className="flex">
             <Link to="/">
-              <img className="w-auto h-6 sm:h-7" src="#" alt="" />
+              <img className="w-auto h-6 md:h-7" src="#" alt="" />
             </Link>
 
             {/* <!-- Mobile menu button --> */}
-            <div className="flex lg:hidden">
-              <button
-                //x-cloak
-                type="button"
-                className="text-gray-500 dark:text-gray-200 hover:text-gray-600 dark:hover:text-gray-400 focus:outline-none focus:text-gray-600 dark:focus:text-gray-400"
-                aria-label="toggle menu">
-                <svg
-                  //x-show="!isOpen"
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="w-6 h-6"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  strokeWidth="2">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M4 8h16M4 16h16" />
-                </svg>
-
-                <svg
-                  //x-show="isOpen"
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="w-6 h-6"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  strokeWidth="2">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              </button>
+            <div className="flex md:hidden">
+              {!isOpen && (
+                <button
+                  onClick={handleOpenNavBar}
+                  type="button"
+                  className="text-gray-500 dark:text-gray-200 hover:text-gray-600 dark:hover:text-gray-400 focus:outline-none focus:text-gray-600 dark:focus:text-gray-400"
+                  aria-label="open menu">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="w-6 h-6"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    strokeWidth="2">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M4 8h16M4 16h16" />
+                  </svg>
+                </button>
+              )}
+              {isOpen && (
+                <button
+                  onClick={handleCloseNavBar}
+                  type="button"
+                  className="text-gray-500 dark:text-gray-200 hover:text-gray-600 dark:hover:text-gray-400 focus:outline-none focus:text-gray-600 dark:focus:text-gray-400"
+                  aria-label="close menu">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="w-6 h-6"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    strokeWidth="2">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              )}
             </div>
           </div>
 
           {/* <!-- Mobile Menu open: "block", Menu closed: "hidden" --> */}
-          <div className="absolute inset-x-0 z-20 w-full px-6 py-4 transition-all duration-300 ease-in-out md:mt-0 md:p-0 md:top-0 md:relative md:bg-transparent md:w-auto md:opacity-100 md:translate-x-0 md:flex md:items-center">
+          <div
+            className={
+              isOpen
+                ? 'absolute inset-x-0 z-20 w-full py-4 px-5 transition-all duration-300 ease-in-out md:mt-0 md:p-0 md:top-0 md:relative bg-zinc-100 md:w-auto md:opacity-100 md:translate-x-0 md:flex md:items-center'
+                : 'hidden md:flex md:items-center md:w-auto'
+            }>
             <div className="flex flex-col md:flex-row md:mx-6">
               {logedinUser?.role === 'admin' && (
                 <Link

@@ -21,8 +21,10 @@ export default function Cart() {
     <div>
       <div className="grid">
         <table className="m-20 text-[#727E7E]">
-          {cart.items.length === 0 && <h1>You don&apos;t have any items in the cart</h1>}
-          {cart.items.length !== 0 && <h1>YOURE CART</h1>}
+          {cart.items.length === 0 && (
+            <h1 className="text-[#be9995]">You don&apos;t have any items in the cart</h1>
+          )}
+          {cart.items.length !== 0 && <h1 className="text-[#be9995]">YOURE CART</h1>}
           <tbody>
             {cart.items.map((product) => (
               <tr className="border-t-2" key={product.id}>

@@ -67,7 +67,7 @@ export default function Products() {
   //Display the products
   return (
     <div>
-      <div className="flex justify-center">
+      <div className="flex flex-col justify-center md:flex-row">
         <div className="pt-2 relative  text-[#727E7E]">
           <input
             onChange={handleChange}
@@ -94,7 +94,7 @@ export default function Products() {
         <select
           onChange={sort}
           className="text-[#727E7E] border-2 border-[#D0CDD3] h-10 px-5 pr-16 rounded-lg text-sm focus:outline-none bg-white">
-          <option selected>Sort By</option>
+          <option>Sort By</option>
           <option value={'Low-High'}>Low-High</option>
           <option value={'High-Low'}>High-Low</option>
         </select>
@@ -113,16 +113,16 @@ export default function Products() {
       <section className="products-container">
         {products.isLoading && <h3> Loading products...</h3>}
         <div className="card grid gap-4">
-          <ul className="p-20 flex gap-20 flex-wrap">
+          <ul className="py-5 m:p-20 flex gap-20 flex-wrap">
             {productsToDisplay.map((product) => (
               <li key={product.id} className="flex flex-col items-center justify-center mx-auto">
                 <div className="flex w-80 h-80 bg-white rounded-lg shadow-md items-center justify-center">
-                  <Link to={`/products/${product.id}`}>
+                  <Link to={`/${product.id}`}>
                     <img className="w-48" src={product.image} alt={product.name} />
                   </Link>
                 </div>
                 <div className="w-56 -mt-10 overflow-hidden rounded-lg shadow-lg md:w-64 bg-[#E2DFE4]">
-                  <Link to={`/products/${product.id}`}>
+                  <Link to={`/${product.id}`}>
                     <h3 className="py-2 font-bold tracking-wide text-center text-[#727E7E] uppercase">
                       {product.name}
                     </h3>
