@@ -1,3 +1,5 @@
+import { ZodType, z } from 'zod'
+
 export type Product = {
   id: number
   name: string
@@ -31,6 +33,8 @@ export type User = {
   role: 'visitor' | 'admin'
 }
 
+//props
+
 export type ProductFormModalProps = {
   isOpen: boolean
   product: Product | null
@@ -42,3 +46,104 @@ export type CategoryFormModalProps = {
   category: Category | null
   setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>
 }
+
+//schemas
+
+export type RegisterSchema = {
+  firstName: string
+  lastName: string
+  email: string
+  password: string
+}
+
+export const registerSchema: ZodType<RegisterSchema> = z.object({
+  firstName: z.string().refine((value) => value !== '', { message: 'First name is required' }),
+  lastName: z.string().refine((value) => value !== '', { message: 'Last name is required' }),
+  email: z.string().refine(
+    (value) => {
+      const emailRegex = /\S+@\S+\.\S+/
+      return emailRegex.test(value)
+    },
+    { message: 'Email is not valid' }
+  ),
+  password: z
+    .string()
+    .min(8)
+    .refine(
+      (value) => {
+        const hasNumber = /\d/.test(value)
+        const hasAlphabetCharacter = /[a-zA-Z]/.test(value)
+        return hasNumber && hasAlphabetCharacter
+      },
+      { message: 'Password must contain at least one number and one alphabet character' }
+    )
+})
+
+export type LoginSchema = {
+  email: string
+  password: string
+}
+
+export const loginSchema: ZodType<LoginSchema> = z.object({
+  email: z.string().refine((value) => value !== '', { message: 'Email is required' }),
+  password: z.string().refine((value) => value !== '', { message: 'Password name is required' })
+})
+
+export type CategorySchema = {
+  name: string
+}
+
+export const categorySchema: ZodType<CategorySchema> = z.object({
+  name: z.string().refine((value) => value !== '', { message: 'Name is required' })
+})
+
+export type ProductSchema = {
+  name: string
+  image: string
+  description: string
+  price: number
+  categories: string
+  variants: string
+  sizes: string
+}
+
+export const productSchema: ZodType<ProductSchema> = z.object({
+  name: z.string().refine((value) => value !== '', { message: 'Name is required' }),
+  image: z.string().refine(
+    (value) => {
+      try {
+        new URL(value)
+        return true
+      } catch (_) {
+        return false
+      }
+    },
+    { message: 'Input should be a valid URL' }
+  ),
+  description: z.string().refine((value) => value !== '', { message: 'Description is required' }),
+  price: z.number().refine((value) => value > 0, { message: 'Price is required' }),
+  categories: z.string().refine(
+    (value) => {
+      if (value === '') return true
+      const pattern = /^\d+(?:\s*,\s*\d+)*$/
+      return pattern.test(value)
+    },
+    { message: 'Input should be in the format "1,2" or "1,2,3,..."' }
+  ),
+  variants: z.string().refine(
+    (value) => {
+      if (value === '') return true
+      const pattern = /^(\s*[^,]+\s*,)*\s*[^,]+\s*$/
+      return pattern.test(value)
+    },
+    { message: 'Input should be in the format "x,y" or "x,y,z,...' }
+  ),
+  sizes: z.string().refine(
+    (value) => {
+      if (value === '') return true
+      const pattern = /^(\s*[^,]+\s*,)*\s*[^,]+\s*$/
+      return pattern.test(value)
+    },
+    { message: 'Input should be in the format "x,y" or "x,y,z,..."' }
+  )
+})

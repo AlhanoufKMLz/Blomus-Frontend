@@ -1,6 +1,7 @@
 import React from 'react'
-import { RootState } from '../../redux/store'
 import { useSelector } from 'react-redux'
+
+import { RootState } from '../../redux/store'
 
 export default function Orders() {
   const orders = useSelector((state: RootState) => state.orders)

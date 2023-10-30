@@ -1,10 +1,14 @@
-import React, { ChangeEvent, FormEvent, useEffect, useState } from 'react'
+import React, { ChangeEvent, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { AppDispatch, RootState } from '../redux/store'
 import { useNavigate } from 'react-router'
-import { fetchUsers } from '../redux/slices/users/userSlice'
 import { Link } from 'react-router-dom'
+import { toast } from 'react-toastify'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useForm } from 'react-hook-form'
+
+import { AppDispatch, RootState } from '../redux/store'
 import { loginUser } from '../redux/slices/users/logedinUserSlice'
+import { LoginSchema, loginSchema } from '../types/types'
 
 export default function Login() {
   const dispatch = useDispatch<AppDispatch>()
@@ -12,33 +16,35 @@ export default function Login() {
   const [userLogin, setUserLogin] = useState({ email: '', password: '' })
   const navigate = useNavigate()
 
-  //Fetching the data
-  useEffect(() => {
-    dispatch(fetchUsers())
-  }, [])
+  const {
+    register,
+    handleSubmit,
+    formState: { errors }
+  } = useForm<LoginSchema>({ resolver: zodResolver(loginSchema) })
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
     setUserLogin({ ...userLogin, [name]: value })
   }
 
-  function handleSubmit(e: FormEvent) {
-    e.preventDefault()
+  function handleFormSubmit() {
     const userFound = users.users.find(
       (user) => user.email == userLogin.email && user.password == userLogin.password
     )
     if (userFound) {
-      if (userFound.role === 'visitor') navigate('/')
-      else navigate('/')
       dispatch(loginUser({ user: userFound }))
-    } else console.log('Email or password encorrect')
+      toast.success('Welcome back ' + userFound.firstName + "! We're glad to see you again")
+      navigate('/')
+    } else {
+      toast.error('incorrect email or password')
+    }
   }
 
   return (
     <div className="min-h-screen items-start">
       <section>
         <div className="container flex justify-center mt-10 mb-20 px-3 mx-auto">
-          <form onSubmit={handleSubmit} className="w-full max-w-md">
+          <form onSubmit={handleSubmit(handleFormSubmit)} className="w-full max-w-md">
             <div className="flex items-center justify-center mt-6">
               <Link
                 to={'/login'}
@@ -73,14 +79,15 @@ export default function Login() {
 
               <input
                 type="email"
-                name="email"
                 id="email"
+                {...register('email')}
                 autoComplete="email"
                 onChange={handleChange}
                 className="block w-full py-3 border rounded-lg px-11"
                 placeholder="Email address"
               />
             </div>
+            {errors.email && <span className="text-[#be9995]"> {errors.email.message} </span>}
 
             {/* password container */}
             <div className="relative flex items-center mt-4">
@@ -102,14 +109,15 @@ export default function Login() {
 
               <input
                 type="password"
-                name="password"
                 id="password"
+                {...register('password')}
                 autoComplete="current-password"
                 onChange={handleChange}
                 className="block w-full px-10 py-3 border rounded-lg"
                 placeholder="Password"
               />
             </div>
+            {errors.password && <span className="text-[#be9995]"> {errors.password.message} </span>}
 
             <div className="mt-6">
               <button className="w-full px-6 py-3 text-sm font-medium tracking-wide text-[#D0CDD3] capitalize transition-colors duration-300 transform bg-[#be9995] rounded-lg hover:bg-[#727E7E]">

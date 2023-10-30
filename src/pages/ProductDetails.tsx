@@ -1,24 +1,23 @@
-import React, { useEffect } from 'react'
 import { useParams } from 'react-router'
-import { AppDispatch, RootState } from '../redux/store'
 import { useDispatch, useSelector } from 'react-redux'
+import { toast } from 'react-toastify'
+
+import { AppDispatch, RootState } from '../redux/store'
 import { addToCart } from '../redux/slices/cart/cartSlice'
-import { fetchProducts } from '../redux/slices/products/productSlice'
 
 export default function ProductDetails() {
   const { productid } = useParams()
 
   const dispatch = useDispatch<AppDispatch>()
 
-  useEffect(() => {
-    dispatch(fetchProducts())
-  }, [])
-
   const products = useSelector((state: RootState) => state.products)
   const product = products.products.find((item) => Number(productid) === item.id)
 
   function handleAddToCart() {
-    if (product) dispatch(addToCart({ product }))
+    if (product) {
+      dispatch(addToCart({ product }))
+      toast.success('Awesome pick! ' + product.name + ' is now waiting in your cart')
+    }
   }
 
   return (

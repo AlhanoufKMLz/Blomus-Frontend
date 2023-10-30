@@ -1,7 +1,8 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { AppDispatch, RootState } from '../redux/store'
 import { Link } from 'react-router-dom'
+
+import { AppDispatch, RootState } from '../redux/store'
 import { changeQuantity, removeFromCart } from '../redux/slices/cart/cartSlice'
 import { Product } from '../types/types'
 

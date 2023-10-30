@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
+import { toast } from 'react-toastify'
 
 import { AppDispatch, RootState } from '../redux/store'
-import { fetchProducts } from '../redux/slices/products/productSlice'
-import { fetchCategories } from '../redux/slices/categories/categorySlice'
 import { addToCart } from '../redux/slices/cart/cartSlice'
 import { Product } from '../types/types'
 
@@ -12,11 +11,6 @@ export default function Products() {
   const products = useSelector((state: RootState) => state.products)
   const categories = useSelector((state: RootState) => state.categories)
   const dispatch = useDispatch<AppDispatch>()
-
-  useEffect(() => {
-    dispatch(fetchProducts())
-    dispatch(fetchCategories())
-  }, [])
 
   const [productsToDisplay, setProductsToDisplay] = useState<Product[]>(products.products)
   const [searchKeyWord, setSearchKeyWord] = useState('')
@@ -62,6 +56,7 @@ export default function Products() {
   //Add product to cart
   function handleAddToCart(product: Product) {
     dispatch(addToCart({ product }))
+    toast.success('Awesome pick! ' + product.name + ' is now waiting in your cart')
   }
 
   //Display the products

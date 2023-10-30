@@ -1,10 +1,15 @@
-import React, { ChangeEvent, FormEvent, useEffect, useState } from 'react'
+import React, { ChangeEvent, useState } from 'react'
 import { useNavigate } from 'react-router'
-import { User } from '../types/types'
-import { AppDispatch, RootState } from '../redux/store'
-import { useDispatch, useSelector } from 'react-redux'
-import { addUser, fetchUsers } from '../redux/slices/users/userSlice'
 import { Link } from 'react-router-dom'
+import { toast } from 'react-toastify'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useDispatch, useSelector } from 'react-redux'
+
+import { User, registerSchema } from '../types/types'
+import { AppDispatch, RootState } from '../redux/store'
+import { addUser } from '../redux/slices/users/userSlice'
+import { loginUser } from '../redux/slices/users/logedinUserSlice'
 
 export default function Register() {
   const dispatch = useDispatch<AppDispatch>()
@@ -19,23 +24,25 @@ export default function Register() {
   })
   const navigate = useNavigate()
 
-  //Fetching the data
-  useEffect(() => {
-    dispatch(fetchUsers())
-  }, [])
+  const {
+    register,
+    handleSubmit,
+    formState: { errors }
+  } = useForm<User>({ resolver: zodResolver(registerSchema) })
 
   function handleChange(e: ChangeEvent<HTMLInputElement>) {
     const { name, value } = e.target
     setUserData({ ...userData, [name]: value })
   }
 
-  function handleSubmit(e: FormEvent) {
-    e.preventDefault()
+  function handleFormSubmit() {
     const userFound = users.users.find((user) => user.email == userData.email)
     if (!userFound) {
       navigate('/')
+      toast.success('Welcome, ' + userData.firstName + "! We're thrilled to have you here.")
       setUserData({ ...userData, id: Number(new Date()) })
       dispatch(addUser({ user: userData }))
+      dispatch(loginUser({ user: userData }))
     } else console.log('An account with this email is already existed')
   }
 
@@ -43,7 +50,7 @@ export default function Register() {
     <div className="min-h-screen items-start">
       <section>
         <div className="container flex justify-center px-3 mx-auto mt-10 mb-20">
-          <form onSubmit={handleSubmit} className="w-full max-w-md">
+          <form onSubmit={handleSubmit(handleFormSubmit)} className="w-full max-w-md">
             <div className="flex items-center justify-center mt-6">
               <Link
                 to={'/login'}
@@ -78,13 +85,16 @@ export default function Register() {
 
               <input
                 type="text"
-                name="first-name"
                 id="first-name"
+                {...register('firstName')}
                 onChange={handleChange}
                 className="block w-full py-3 border rounded-lg px-11"
                 placeholder="First Name"
               />
             </div>
+            {errors.firstName && (
+              <span className="text-[#be9995]"> {errors.firstName.message} </span>
+            )}
 
             {/* last name container */}
             <div className="relative flex items-center mt-8">
@@ -106,13 +116,14 @@ export default function Register() {
 
               <input
                 type="text"
-                name="last-name"
                 id="last-name"
+                {...register('lastName')}
                 onChange={handleChange}
                 className="block w-full py-3 border rounded-lg px-11"
                 placeholder="Last Name"
               />
             </div>
+            {errors.lastName && <span className="text-[#be9995]"> {errors.lastName.message} </span>}
 
             {/* email container */}
             <div className="relative flex items-center mt-6">
@@ -134,14 +145,15 @@ export default function Register() {
 
               <input
                 type="email"
-                name="email"
                 id="email"
                 autoComplete="email"
+                {...register('email')}
                 onChange={handleChange}
                 className="block w-full py-3 border rounded-lg px-11"
                 placeholder="Email address"
               />
             </div>
+            {errors.email && <span className="text-[#be9995]"> {errors.email.message} </span>}
 
             {/* password container */}
             <div className="relative flex items-center mt-4">
@@ -163,18 +175,19 @@ export default function Register() {
 
               <input
                 type="password"
-                name="password"
                 id="password"
                 autoComplete="current-password"
+                {...register('password')}
                 onChange={handleChange}
                 className="block w-full py-3 border rounded-lg px-11"
                 placeholder="Password"
               />
             </div>
+            {errors.password && <span className="text-[#be9995]"> {errors.password.message} </span>}
 
             <div className="mt-6">
               <button className="w-full px-6 py-3 text-sm font-medium tracking-wide text-[#D0CDD3] capitalize transition-colors duration-300 transform bg-[#be9995] rounded-lg hover:bg-[#727E7E]">
-                Regisret
+                Register
               </button>
 
               <div className="mt-6 text-center text-[#727E7E] hover:text-[#be9995]">

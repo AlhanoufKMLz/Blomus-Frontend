@@ -1,28 +1,45 @@
-import { ProductsManager } from './components/products/ProductsManager'
 import './App.css'
+import { useEffect } from 'react'
+import { ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
+import { Route, Routes } from 'react-router'
+import { useDispatch, useSelector } from 'react-redux'
+
 import Home from './pages/Home'
 import NavBar from './components/NavBar'
-import { Route, Routes } from 'react-router'
 import Products from './pages/Products'
 import ProductDetails from './pages/ProductDetails'
-import { UsersManager } from './components/users/UsersManager'
-import { CategoriesManager } from './components/categories/CategoriesManager'
+import Dashboard from './pages/Dashboard'
 import Cart from './pages/Cart'
 import Orders from './components/orders/Orders'
 import Login from './pages/Login'
 import Register from './pages/Register'
 import Footer from './components/Footer'
 import About from './pages/About'
-import { RootState } from './redux/store'
-import { useSelector } from 'react-redux'
-import Dashboard from './pages/Dashboard'
+import { UsersManager } from './components/users/UsersManager'
+import { ProductsManager } from './components/products/ProductsManager'
+import { CategoriesManager } from './components/categories/CategoriesManager'
+import { AppDispatch, RootState } from './redux/store'
+import { fetchProducts } from './redux/slices/products/productSlice'
+import { fetchCategories } from './redux/slices/categories/categorySlice'
+import { fetchUsers } from './redux/slices/users/userSlice'
+import { fetchOrders } from './redux/slices/orders/orderSlice'
 
 function App() {
   const logedinUser = useSelector((state: RootState) => state.logedinUser.user)
+  const dispatch = useDispatch<AppDispatch>()
+
+  useEffect(() => {
+    dispatch(fetchProducts())
+    dispatch(fetchCategories())
+    dispatch(fetchUsers())
+    dispatch(fetchOrders())
+  }, [])
 
   return (
     <div className="bg-zinc-100">
       <NavBar />
+      <ToastContainer />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/dashboard" element={logedinUser ? <Dashboard /> : <Home />} />

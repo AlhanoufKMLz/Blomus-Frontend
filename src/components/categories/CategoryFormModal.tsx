@@ -1,16 +1,26 @@
-import React, { ChangeEvent, FormEvent, useEffect, useState } from 'react'
+import React, { ChangeEvent, useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
+import { toast } from 'react-toastify'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useForm } from 'react-hook-form'
+
 import { AppDispatch } from '../../redux/store'
-import { Category, CategoryFormModalProps } from '../../types/types'
+import { Category, CategoryFormModalProps, CategorySchema, categorySchema } from '../../types/types'
 import { addCategory, editCategory } from '../../redux/slices/categories/categorySlice'
 
 const initialState = {
-  id: 0,
+  id: Number(new Date()),
   name: ''
 }
 
 export default function CategoryFormModal(prop: CategoryFormModalProps) {
   if (!prop.isOpen) return null
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors }
+  } = useForm<CategorySchema>({ resolver: zodResolver(categorySchema) })
 
   const dispatch = useDispatch<AppDispatch>()
   const [categoryChanges, setCategoryChanges] = useState<Category>(initialState)
@@ -25,10 +35,14 @@ export default function CategoryFormModal(prop: CategoryFormModalProps) {
     setCategoryChanges({ ...categoryChanges, name: e.target.value })
   }
 
-  const handleSubmit = (e: FormEvent) => {
-    e.preventDefault()
-    if (!prop.category) dispatch(addCategory({ category: categoryChanges }))
-    else dispatch(editCategory({ newCategory: categoryChanges }))
+  const handleFormSubmit = () => {
+    if (!prop.category) {
+      dispatch(addCategory({ category: categoryChanges }))
+      toast.success('category added successfully!')
+    } else {
+      dispatch(editCategory({ newCategory: categoryChanges }))
+      toast.success('category details updated successfully!')
+    }
     // Reset the useState
     setCategoryChanges(initialState)
     // Close the form
@@ -44,11 +58,12 @@ export default function CategoryFormModal(prop: CategoryFormModalProps) {
     <div>
       <div className="modal-overlay">
         <div className="modal-content">
-          <form className="p-4 bg-gray-100 rounded-lg" onSubmit={handleSubmit}>
+          <form className="p-4 bg-gray-100 rounded-lg" onSubmit={handleSubmit(handleFormSubmit)}>
             <div className="mb-4">
               <label htmlFor="name" className="flex flex-col text-[#be9995]">
                 <span className="text-[#727E7E] pl-2">Name:</span>
                 <input
+                  {...register('name')}
                   onChange={handleChange}
                   className="border-2 border-[#D0CDD3] h-10 px-5 pr-16 rounded-lg text-sm focus:outline-none"
                   type="name"
@@ -57,6 +72,7 @@ export default function CategoryFormModal(prop: CategoryFormModalProps) {
                 />
               </label>
             </div>
+            {errors.name && <span className="text-[#be9995]"> {errors.name.message} </span>}
             <div className="flex justify-center gap-4">
               <button type="submit" className="h-12 w-12 bg-[#727E7E] rounded-full text-[#D0CDD3]">
                 {prop.category ? <span>Save</span> : <span>add</span>}
