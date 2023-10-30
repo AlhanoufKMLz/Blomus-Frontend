@@ -10,7 +10,7 @@ const initialState: UserState = {
 }
 
 export const logedinUserSlice = createSlice({
-  name: 'user',
+  name: 'logedin user',
   initialState,
   reducers: {
     loginUser: (state, action: { payload: { user: User } }) => {

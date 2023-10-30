@@ -5,7 +5,7 @@ export default function Footer() {
   return (
     <div>
       <footer className="bg-[#727E7E] text-[#D0CDD3]">
-        <div className="container px-6 py-8 mx-auto">
+        <div className="px-6 py-8 mx-auto">
           <div className="flex flex-col items-center text-center">
             <div className="flex flex-wrap justify-center mt-6 -mx-4">
               <Link
@@ -47,7 +47,7 @@ export default function Footer() {
 
           <hr className="my-6 border-gray-200 md:my-10" />
 
-          <div className="flex flex-col items-center sm:flex-row sm:justify-between">
+          <div className="flex flex-col items-center md:flex-row md:justify-between">
             <p className="text-sm">© Copyright Alhanouf Allazzam. All Rights Reserved.</p>
 
             <div className="flex -mx-2">

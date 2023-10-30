@@ -15,7 +15,7 @@ export default function ProductDetails() {
   }, [])
 
   const products = useSelector((state: RootState) => state.products)
-  const product = products.items.find((item) => Number(productid) === item.id)
+  const product = products.products.find((item) => Number(productid) === item.id)
 
   function handleAddToCart() {
     if (product) dispatch(addToCart({ product }))
@@ -26,7 +26,7 @@ export default function ProductDetails() {
       {product && (
         <div
           key={product?.id}
-          className="flex sm:flex-col justify-center mx-auto p-20 items-center gap-10">
+          className="flex flex-col md:flex-row justify-center mx-auto p-20 items-center gap-10">
           <div className="flex w-96 h-96 bg-white rounded-lg shadow-md items-center justify-center">
             <img className="w-56" src={product.image} alt={product.name} />
           </div>

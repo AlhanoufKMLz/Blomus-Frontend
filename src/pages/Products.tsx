@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 
 import { AppDispatch, RootState } from '../redux/store'
 import { fetchProducts } from '../redux/slices/products/productSlice'
-import { fetchCategoreis } from '../redux/slices/categories/categorySlice'
+import { fetchCategories } from '../redux/slices/categories/categorySlice'
 import { addToCart } from '../redux/slices/cart/cartSlice'
 import { Product } from '../types/types'
 
@@ -15,10 +15,10 @@ export default function Products() {
 
   useEffect(() => {
     dispatch(fetchProducts())
-    dispatch(fetchCategoreis())
+    dispatch(fetchCategories())
   }, [])
 
-  const [productsToDisplay, setProductsToDisplay] = useState<Product[]>(products.items)
+  const [productsToDisplay, setProductsToDisplay] = useState<Product[]>(products.products)
   const [searchKeyWord, setSearchKeyWord] = useState('')
 
   //Search for product
@@ -27,12 +27,12 @@ export default function Products() {
   }
   useEffect(() => {
     if (searchKeyWord.trim() !== '') {
-      const results = products.items.filter((product) =>
+      const results = products.products.filter((product) =>
         product.name.toLowerCase().includes(searchKeyWord.toLowerCase())
       )
       setProductsToDisplay(results)
-    } else setProductsToDisplay(products.items)
-  }, [searchKeyWord, products.items])
+    } else setProductsToDisplay(products.products)
+  }, [searchKeyWord, products.products])
 
   //Sort products based on price
   function sort(event: { target: { value: string } }) {
@@ -51,10 +51,10 @@ export default function Products() {
     const selectedValue = Number(event.target.value)
 
     if (selectedValue === 0) {
-      setProductsToDisplay(products.items)
+      setProductsToDisplay(products.products)
     } else {
       setProductsToDisplay(
-        products.items.filter((product) => product.categories.includes(selectedValue))
+        products.products.filter((product) => product.categories.includes(selectedValue))
       )
     }
   }
@@ -66,9 +66,9 @@ export default function Products() {
 
   //Display the products
   return (
-    <div>
-      <div className="flex flex-col justify-center md:flex-row">
-        <div className="pt-2 relative  text-[#727E7E]">
+    <div className="min-h-screen items-start m-4 md:mx-20 md:my-5">
+      <div className="flex flex-col justify-center md:flex-row border-b-2 pb-5">
+        <div className="pt-2 relative text-[#be9995]">
           <input
             onChange={handleChange}
             className="border-2 border-[#D0CDD3] h-10 px-5 pr-16 rounded-lg text-sm focus:outline-none"
@@ -91,18 +91,16 @@ export default function Products() {
             <path d="M55.146,51.887L41.588,37.786c3.486-4.144,5.396-9.358,5.396-14.786c0-12.682-10.318-23-23-23s-23,10.318-23,23  s10.318,23,23,23c4.761,0,9.298-1.436,13.177-4.162l13.661,14.208c0.571,0.593,1.339,0.92,2.162,0.92  c0.779,0,1.518-0.297,2.079-0.837C56.255,54.982,56.293,53.08,55.146,51.887z M23.984,6c9.374,0,17,7.626,17,17s-7.626,17-17,17  s-17-7.626-17-17S14.61,6,23.984,6z" />
           </svg>
         </div>
-        <select
-          onChange={sort}
-          className="text-[#727E7E] border-2 border-[#D0CDD3] h-10 px-5 pr-16 rounded-lg text-sm focus:outline-none bg-white">
+        <select onChange={sort} className="text-[#be9995] mt-2 h-10 rounded-lg text-sm bg-zinc-100">
           <option>Sort By</option>
           <option value={'Low-High'}>Low-High</option>
           <option value={'High-Low'}>High-Low</option>
         </select>
         <select
           onChange={filter}
-          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 block  p-2.5">
+          className="text-[#be9995] mt-2 h-10 rounded-lg text-sm bg-zinc-100">
           <option value={0}>All Products</option>
-          {categories.items.map((category) => (
+          {categories.categories.map((category) => (
             <option key={category.id} value={category.id}>
               {category.name}
             </option>
@@ -112,8 +110,8 @@ export default function Products() {
 
       <section className="products-container">
         {products.isLoading && <h3> Loading products...</h3>}
-        <div className="card grid gap-4">
-          <ul className="py-5 m:p-20 flex gap-20 flex-wrap">
+        <div className="grid gap-4">
+          <ul className="py-8 flex gap-5 flex-wrap">
             {productsToDisplay.map((product) => (
               <li key={product.id} className="flex flex-col items-center justify-center mx-auto">
                 <div className="flex w-80 h-80 bg-white rounded-lg shadow-md items-center justify-center">

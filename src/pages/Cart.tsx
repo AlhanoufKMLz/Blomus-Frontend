@@ -18,17 +18,19 @@ export default function Cart() {
   }
 
   return (
-    <div>
-      <div className="grid">
-        <table className="m-20 text-[#727E7E]">
-          {cart.items.length === 0 && (
-            <h1 className="text-[#be9995]">You don&apos;t have any items in the cart</h1>
-          )}
-          {cart.items.length !== 0 && <h1 className="text-[#be9995]">YOURE CART</h1>}
+    <div className="min-h-screen items-start m-4 md:mx-20 md:my-5">
+      <div className="grid ">
+        {cart.items.length === 0 && (
+          <h1 className="text-[#be9995] text-2xl font-bold">
+            You don&apos;t have any items in the cart
+          </h1>
+        )}
+        {cart.items.length !== 0 && <h1 className="text-[#be9995] font-bold">YOURE CART</h1>}
+        <table className=" text-[#727E7E]">
           <tbody>
             {cart.items.map((product) => (
               <tr className="border-t-2" key={product.id}>
-                <td className="py-12">
+                <td className="py-8">
                   <Link to={`/products/${product.id}`}>
                     <img src={product.image} alt={product.name} width="70" />
                   </Link>
@@ -36,16 +38,22 @@ export default function Cart() {
                 <td>{product.name}</td>
                 <td>{product.price * product.quantity} SAR</td>
                 <td>
-                  <button className="px-1" onClick={() => handleQuantity('remove', product)}>
+                  <button
+                    className="px-1 hover:text-[#be9995]"
+                    onClick={() => handleQuantity('remove', product)}>
                     -
                   </button>
                   <span className="px-1">{product.quantity}</span>
-                  <button className="px-1" onClick={() => handleQuantity('add', product)}>
+                  <button
+                    className="px-1 hover:text-[#be9995]"
+                    onClick={() => handleQuantity('add', product)}>
                     +
                   </button>
                 </td>
                 <td>
-                  <button onClick={() => handleRemoveFromCart(product)}>
+                  <button
+                    className="hover:text-[#be9995]"
+                    onClick={() => handleRemoveFromCart(product)}>
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       width="20"

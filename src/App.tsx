@@ -3,7 +3,6 @@ import './App.css'
 import Home from './pages/Home'
 import NavBar from './components/NavBar'
 import { Route, Routes } from 'react-router'
-import Admin from './pages/Admin'
 import Products from './pages/Products'
 import ProductDetails from './pages/ProductDetails'
 import { UsersManager } from './components/users/UsersManager'
@@ -14,14 +13,19 @@ import Login from './pages/Login'
 import Register from './pages/Register'
 import Footer from './components/Footer'
 import About from './pages/About'
+import { RootState } from './redux/store'
+import { useSelector } from 'react-redux'
+import Dashboard from './pages/Dashboard'
 
 function App() {
+  const logedinUser = useSelector((state: RootState) => state.logedinUser.user)
+
   return (
     <div className="bg-zinc-100">
       <NavBar />
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/admin" element={<Admin />} />
+        <Route path="/dashboard" element={logedinUser ? <Dashboard /> : <Home />} />
 
         <Route path="/products" element={<Products />}></Route>
         <Route path="/:productid" element={<ProductDetails />}></Route>

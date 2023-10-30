@@ -2,55 +2,55 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { Category } from '../../../types/types'
 
 export type CategoryState = {
-  items: Category[]
-  error: null | string
+  categories: Category[]
+  error: undefined | string
   isLoading: boolean
 }
 
 const initialState: CategoryState = {
-  items: [],
-  error: null,
+  categories: [],
+  error: undefined,
   isLoading: false
 }
 
-export const fetchCategoreis = createAsyncThunk('product/fetchCategoreis', async () => {
+export const fetchCategories = createAsyncThunk('product/fetchCategoreis', async () => {
   const response = await fetch('/mock/e-commerce/categories.json')
   const data = await response.json()
   return data
 })
 
 export const categorySlice = createSlice({
-  name: 'category',
+  name: 'categories',
   initialState,
   reducers: {
     addCategory: (state, action: { payload: { category: Category } }) => {
-      state.items = [action.payload.category, ...state.items]
+      state.categories = [action.payload.category, ...state.categories]
     },
     removeCategory: (state, action: { payload: { categoryid: number } }) => {
-      const filteredItems = state.items.filter(
-        (product) => product.id !== action.payload.categoryid
+      const filteredItems = state.categories.filter(
+        (category) => category.id !== action.payload.categoryid
       )
-      state.items = filteredItems
+      state.categories = filteredItems
     },
     editCategory: (state, action: { payload: { newCategory: Category } }) => {
-      const filteredItems = state.items.filter(
-        (product) => product.id !== action.payload.newCategory.id
+      const filteredItems = state.categories.filter(
+        (catecory) => catecory.id !== action.payload.newCategory.id
       )
-      state.items = filteredItems
-      state.items = [action.payload.newCategory, ...state.items]
+      state.categories = filteredItems
+      state.categories = [action.payload.newCategory, ...state.categories]
     }
   },
   extraReducers: (builder) => {
     builder
-      .addCase(fetchCategoreis.pending, (state) => {
+      .addCase(fetchCategories.pending, (state) => {
         state.isLoading = true
       })
-      .addCase(fetchCategoreis.fulfilled, (state, action) => {
-        state.items = action.payload
+      .addCase(fetchCategories.fulfilled, (state, action) => {
+        state.categories = action.payload
         state.isLoading = false
       })
-      .addCase(fetchCategoreis.rejected, (state, action) => {
-        //state.error = action.error.message
+      .addCase(fetchCategories.rejected, (state, action) => {
+        state.error = action.error.message
         state.isLoading = false
       })
   }

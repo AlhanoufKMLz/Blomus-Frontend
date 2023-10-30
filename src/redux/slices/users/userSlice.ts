@@ -2,14 +2,14 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { User } from '../../../types/types'
 
 export type UserState = {
-  items: User[]
-  error: null | string
+  users: User[]
+  error: undefined | string
   isLoading: boolean
 }
 
 const initialState: UserState = {
-  items: [],
-  error: null,
+  users: [],
+  error: undefined,
   isLoading: false
 }
 
@@ -24,11 +24,11 @@ export const userSlice = createSlice({
   initialState,
   reducers: {
     addUser: (state, action: { payload: { user: User } }) => {
-      state.items = [action.payload.user, ...state.items]
+      state.users = [action.payload.user, ...state.users]
     },
     removeUser: (state, action: { payload: { userid: number } }) => {
-      const filteredItems = state.items.filter((product) => product.id !== action.payload.userid)
-      state.items = filteredItems
+      const filteredItems = state.users.filter((user) => user.id !== action.payload.userid)
+      state.users = filteredItems
     }
   },
   extraReducers: (builder) => {
@@ -37,11 +37,11 @@ export const userSlice = createSlice({
         state.isLoading = true
       })
       .addCase(fetchUsers.fulfilled, (state, action) => {
-        state.items = action.payload
+        state.users = action.payload
         state.isLoading = false
       })
       .addCase(fetchUsers.rejected, (state, action) => {
-        // state.error = action.error.message
+        state.error = action.error.message
         state.isLoading = false
       })
   }

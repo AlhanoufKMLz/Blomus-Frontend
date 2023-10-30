@@ -37,7 +37,6 @@ export function ProductForm(prop: {
       })
       return
     }
-
     setProduct({
       ...product,
       [name]: value
@@ -46,6 +45,7 @@ export function ProductForm(prop: {
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault()
+    setProduct({ ...product, id: Number(new Date()) })
     dispatch(addProduct({ product }))
     // Reset the form
     setProduct(initialProductState)

@@ -24,20 +24,20 @@ export default function Login() {
 
   function handleSubmit(e: FormEvent) {
     e.preventDefault()
-    const userFound = users.items.find(
+    const userFound = users.users.find(
       (user) => user.email == userLogin.email && user.password == userLogin.password
     )
     if (userFound) {
       if (userFound.role === 'visitor') navigate('/')
-      else navigate('/Admin')
+      else navigate('/')
       dispatch(loginUser({ user: userFound }))
     } else console.log('Email or password encorrect')
   }
 
   return (
-    <div>
+    <div className="min-h-screen items-start">
       <section>
-        <div className="container flex items-center justify-center min-h-screen px-3 mx-auto">
+        <div className="container flex justify-center mt-10 mb-20 px-3 mx-auto">
           <form onSubmit={handleSubmit} className="w-full max-w-md">
             <div className="flex items-center justify-center mt-6">
               <Link
@@ -75,6 +75,7 @@ export default function Login() {
                 type="email"
                 name="email"
                 id="email"
+                autoComplete="email"
                 onChange={handleChange}
                 className="block w-full py-3 border rounded-lg px-11"
                 placeholder="Email address"
@@ -103,6 +104,7 @@ export default function Login() {
                 type="password"
                 name="password"
                 id="password"
+                autoComplete="current-password"
                 onChange={handleChange}
                 className="block w-full px-10 py-3 border rounded-lg"
                 placeholder="Password"

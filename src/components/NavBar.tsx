@@ -37,7 +37,7 @@ export default function NavBar() {
                 <button
                   onClick={handleOpenNavBar}
                   type="button"
-                  className="text-gray-500 dark:text-gray-200 hover:text-gray-600 dark:hover:text-gray-400 focus:outline-none focus:text-gray-600 dark:focus:text-gray-400"
+                  className="text-[#727E7E] hover:text-[#D0CDD3]"
                   aria-label="open menu">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -54,7 +54,7 @@ export default function NavBar() {
                 <button
                   onClick={handleCloseNavBar}
                   type="button"
-                  className="text-gray-500 dark:text-gray-200 hover:text-gray-600 dark:hover:text-gray-400 focus:outline-none focus:text-gray-600 dark:focus:text-gray-400"
+                  className="text-[#727E7E] hover:text-[#D0CDD3]"
                   aria-label="close menu">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -81,7 +81,7 @@ export default function NavBar() {
               {logedinUser?.role === 'admin' && (
                 <Link
                   className="text-[#be9995] transition-colors duration-300 transform hover:text-[#D0CDD3] md:mx-4 md:my-0"
-                  to={'/admin'}>
+                  to={'/dashboard'}>
                   DashBoard
                 </Link>
               )}

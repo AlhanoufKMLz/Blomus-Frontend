@@ -31,17 +31,18 @@ export default function Register() {
 
   function handleSubmit(e: FormEvent) {
     e.preventDefault()
-    const userFound = users.items.find((user) => user.email == userData.email)
+    const userFound = users.users.find((user) => user.email == userData.email)
     if (!userFound) {
       navigate('/')
+      setUserData({ ...userData, id: Number(new Date()) })
       dispatch(addUser({ user: userData }))
     } else console.log('An account with this email is already existed')
   }
 
   return (
-    <div>
+    <div className="min-h-screen items-start">
       <section>
-        <div className="container flex items-center justify-center min-h-screen px-3 mx-auto">
+        <div className="container flex justify-center px-3 mx-auto mt-10 mb-20">
           <form onSubmit={handleSubmit} className="w-full max-w-md">
             <div className="flex items-center justify-center mt-6">
               <Link

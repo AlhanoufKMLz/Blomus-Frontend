@@ -2,14 +2,14 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { Product } from '../../../types/types'
 
 export type ProductState = {
-  items: Product[]
-  error: null | string
+  products: Product[]
+  error: undefined | string
   isLoading: boolean
 }
 
 const initialState: ProductState = {
-  items: [],
-  error: null,
+  products: [],
+  error: undefined,
   isLoading: false
 }
 
@@ -24,15 +24,19 @@ export const productSlice = createSlice({
   initialState,
   reducers: {
     addProduct: (state, action: { payload: { product: Product } }) => {
-      state.items = [action.payload.product, ...state.items]
+      state.products = [action.payload.product, ...state.products]
     },
     removeProduct: (state, action: { payload: { productid: number } }) => {
-      const filteredItems = state.items.filter((product) => product.id !== action.payload.productid)
-      state.items = filteredItems
+      const filteredItems = state.products.filter(
+        (product) => product.id !== action.payload.productid
+      )
+      state.products = filteredItems
     },
     editProdect: (state, action: { payload: { newProduct: Product } }) => {
-      state.items = state.items.filter((product) => product.id !== action.payload.newProduct.id)
-      state.items = [action.payload.newProduct, ...state.items]
+      state.products = state.products.filter(
+        (product) => product.id !== action.payload.newProduct.id
+      )
+      state.products = [action.payload.newProduct, ...state.products]
     }
   },
   extraReducers: (builder) => {
@@ -41,11 +45,11 @@ export const productSlice = createSlice({
         state.isLoading = true
       })
       .addCase(fetchProducts.fulfilled, (state, action) => {
-        state.items = action.payload
+        state.products = action.payload
         state.isLoading = false
       })
       .addCase(fetchProducts.rejected, (state, action) => {
-        // state.error = action.error.message
+        state.error = action.error.message
         state.isLoading = false
       })
   }

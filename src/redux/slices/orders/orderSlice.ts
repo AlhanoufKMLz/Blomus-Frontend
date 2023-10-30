@@ -2,14 +2,14 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { Order } from '../../../types/types'
 
 export type OrderState = {
-  items: Order[]
-  error: null | string
+  orders: Order[]
+  error: undefined | string
   isLoading: boolean
 }
 
 const initialState: OrderState = {
-  items: [],
-  error: null,
+  orders: [],
+  error: undefined,
   isLoading: false
 }
 
@@ -20,7 +20,7 @@ export const fetchOrders = createAsyncThunk('product/fetchOrders', async () => {
 })
 
 export const orderSlice = createSlice({
-  name: 'order',
+  name: 'orders',
   initialState,
   reducers: {},
   extraReducers: (builder) => {
@@ -29,11 +29,11 @@ export const orderSlice = createSlice({
         state.isLoading = true
       })
       .addCase(fetchOrders.fulfilled, (state, action) => {
-        state.items = action.payload
+        state.orders = action.payload
         state.isLoading = false
       })
       .addCase(fetchOrders.rejected, (state, action) => {
-        //state.error = action.error.message
+        state.error = action.error.message
         state.isLoading = false
       })
   }
