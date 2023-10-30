@@ -1,7 +1,11 @@
 import React from 'react'
+import { useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
+import { RootState } from '../redux/store'
 
 export default function Footer() {
+  const logedinUser = useSelector((state: RootState) => state.logedinUser.user)
+
   return (
     <div>
       <footer className="bg-[#727E7E] text-[#D0CDD3]">
@@ -29,19 +33,23 @@ export default function Footer() {
                 Products
               </Link>
 
-              <Link
-                to={'/login'}
-                className="mx-4 text-sm transition-colors duration-300 hover:text-[#be9995]"
-                aria-label="Reddit">
-                Login
-              </Link>
+              {!logedinUser && (
+                <Link
+                  to={'/login'}
+                  className="mx-4 text-sm transition-colors duration-300 hover:text-[#be9995]"
+                  aria-label="Reddit">
+                  Login
+                </Link>
+              )}
 
-              <Link
-                to={'/Register'}
-                className="mx-4 text-sm transition-colors duration-300 hover:text-[#be9995]"
-                aria-label="Reddit">
-                Register
-              </Link>
+              {!logedinUser && (
+                <Link
+                  to={'/Register'}
+                  className="mx-4 text-sm transition-colors duration-300 hover:text-[#be9995]"
+                  aria-label="Reddit">
+                  Register
+                </Link>
+              )}
             </div>
           </div>
 

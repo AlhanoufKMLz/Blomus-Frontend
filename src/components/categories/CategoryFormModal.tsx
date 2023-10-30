@@ -10,8 +10,6 @@ const initialState = {
 }
 
 export default function CategoryFormModal(prop: CategoryFormModalProps) {
-  const inputStyle = 'w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-blue-400'
-
   if (!prop.isOpen) return null
 
   const dispatch = useDispatch<AppDispatch>()
