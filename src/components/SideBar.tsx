@@ -14,7 +14,6 @@ export default function SideBar(prop: {
   function handleNavigate(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
     const target = e.target as HTMLButtonElement
     prop.setSelectedComponent(target.value)
-    console.log(target.value)
   }
 
   return (

@@ -4,8 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { removeProduct } from '../../redux/slices/products/productSlice'
 import { AppDispatch, RootState } from '../../redux/store'
 import { Product } from '../../types/types'
-import EditModal from './EditProductModal'
-import { ProductForm } from './AddProductForm'
+import ProductFormModal from './ProductFormModal'
 
 export function ProductsManager() {
   const products = useSelector((state: RootState) => state.products)
@@ -15,8 +14,7 @@ export function ProductsManager() {
   const [productsToDisplay, setProductsToDisplay] = useState<Product[]>(products.products)
   const [searchKeyWord, setSearchKeyWord] = useState('')
   const [isModalOpen, setIsModalOpen] = useState(false)
-  const [selectedProduct, setSelectedProduct] = useState<Product>()
-  const [displayAddForm, setDisplayAddForm] = useState(false)
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>()
 
   //Filter products pased on category
   function filter(event: { target: { value: string } }) {
@@ -52,7 +50,8 @@ export function ProductsManager() {
 
   //Open add prodact form
   function addProductForm() {
-    setDisplayAddForm(true)
+    setSelectedProduct(null)
+    setIsModalOpen(true)
   }
 
   //Display products table
@@ -92,13 +91,7 @@ export function ProductsManager() {
             </option>
           ))}
         </select>
-        <button
-          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500block  p-2.5"
-          onClick={addProductForm}>
-          Add New Product
-        </button>
       </div>
-      {displayAddForm && <ProductForm setDisplayAddForm={setDisplayAddForm} />}
       {products.isLoading && <h3> Loading products...</h3>}
       <table className="md:mx-40 md:my-8 w-9/12">
         <tbody>
@@ -164,10 +157,22 @@ export function ProductsManager() {
           ))}
         </tbody>
       </table>
+      <button
+        className="fixed bg-[#727E7E] bottom-8 right-8 text-white h-14 w-14 rounded-full text-4xl text-center"
+        onClick={addProductForm}>
+        +
+      </button>
 
       {/* Edit prodact modal */}
       {selectedProduct && (
-        <EditModal isOpen={isModalOpen} product={selectedProduct} setIsModalOpen={setIsModalOpen} />
+        <ProductFormModal
+          isOpen={isModalOpen}
+          product={selectedProduct}
+          setIsModalOpen={setIsModalOpen}
+        />
+      )}
+      {!selectedProduct && (
+        <ProductFormModal isOpen={isModalOpen} product={null} setIsModalOpen={setIsModalOpen} />
       )}
     </div>
   )

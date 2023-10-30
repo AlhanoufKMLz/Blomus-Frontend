@@ -31,14 +31,14 @@ export type User = {
   role: 'visitor' | 'admin'
 }
 
-export type ModalProps = {
+export type ProductFormModalProps = {
   isOpen: boolean
-  product: Product
+  product: Product | null
   setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-export type EditCategoryModalProps = {
+export type CategoryFormModalProps = {
   isOpen: boolean
-  category: Category
+  category: Category | null
   setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>
 }
