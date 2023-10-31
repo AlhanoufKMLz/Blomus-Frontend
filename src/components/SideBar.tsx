@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
 
-export default function SideBar(prop: {
-  setSelectedComponent: React.Dispatch<React.SetStateAction<string>>
-}) {
+import { SideBarProp } from '../types/types'
+
+export default function SideBar(prop: SideBarProp) {
   const [isOpen, setIsOpen] = useState(false)
 
   function handleOpenNavBar() {

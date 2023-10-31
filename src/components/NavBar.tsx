@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
-
 import { AppDispatch, RootState } from '../redux/store'
 import { logoutUser } from '../redux/slices/users/logedinUserSlice'
+import Profile from './Profile'
 
 export default function NavBar() {
   const dispatch = useDispatch<AppDispatch>()
@@ -11,16 +11,22 @@ export default function NavBar() {
   const logedinUser = useSelector((state: RootState) => state.logedinUser.user)
 
   const [isOpen, setIsOpen] = useState(false)
+  const [isProfileOpe, setIsProfileOpen] = useState(false)
 
   function handleOpenNavBar() {
     setIsOpen(true)
   }
+
   function handleCloseNavBar() {
     setIsOpen(false)
   }
 
   function handleLogout() {
     dispatch(logoutUser())
+  }
+
+  function handleOpenProfile() {
+    setIsProfileOpen(true)
   }
 
   return (
@@ -81,25 +87,20 @@ export default function NavBar() {
             <div className="flex flex-col md:flex-row md:mx-6">
               {logedinUser?.role === 'admin' && (
                 <Link
-                  className="text-[#be9995] transition-colors duration-300 transform hover:text-[#D0CDD3] md:mx-4 md:my-0"
+                  className="text-[#727E7E] transition-colors duration-300 transform hover:text-[#D0CDD3] md:mx-4 md:my-0"
                   to={'/dashboard'}>
                   DashBoard
                 </Link>
               )}
               <Link
-                className="my-2 text-[#727E7E] transition-colors duration-300 transform hover:text-[#D0CDD3] md:mx-4 md:my-0"
+                className="my-2 text-[#be9995] transition-colors duration-300 transform hover:text-[#D0CDD3] md:mx-4 md:my-0"
                 to={'/'}>
                 Home
               </Link>
               <Link
-                className="my-2 text-[#be9995] transition-colors duration-300 transform  hover:text-[#D0CDD3] md:mx-4 md:my-0"
+                className="my-2 text-[#727E7E] transition-colors duration-300 transform  hover:text-[#D0CDD3] md:mx-4 md:my-0"
                 to={'/products'}>
                 Products
-              </Link>
-              <Link
-                className="my-2 text-[#727E7E] transition-colors duration-300 transform hover:text-[#D0CDD3] md:mx-4 md:my-0"
-                to={'About'}>
-                About
               </Link>
               {logedinUser === null && (
                 <Link
@@ -109,12 +110,15 @@ export default function NavBar() {
                 </Link>
               )}
               {logedinUser !== null && (
-                <Link
-                  className="my-2 text-[#be9995] transition-colors duration-300 transform hover:text-[#D0CDD3] md:mx-4 md:my-0"
-                  onClick={handleLogout}
-                  to={'/'}>
-                  Logout
-                </Link>
+                <div>
+                  <Link
+                    className="my-2 text-[#be9995] transition-colors duration-300 transform hover:text-[#D0CDD3] md:mx-4 md:my-0"
+                    onClick={handleLogout}
+                    to={'/'}>
+                    Logout
+                  </Link>
+                  <button onClick={handleOpenProfile}>Profile</button>
+                </div>
               )}
               <Link to={'/cart'}>
                 <div className="relative py-2 p-6">
@@ -146,6 +150,14 @@ export default function NavBar() {
           </div>
         </div>
       </nav>
+
+      {isProfileOpe && logedinUser && (
+        <Profile
+          isProfileOpen={isProfileOpe}
+          user={logedinUser}
+          setIsProfileOpen={setIsProfileOpen}
+        />
+      )}
     </div>
   )
 }

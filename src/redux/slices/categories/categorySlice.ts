@@ -27,16 +27,14 @@ export const categorySlice = createSlice({
       state.categories = [action.payload.category, ...state.categories]
     },
     removeCategory: (state, action: { payload: { categoryid: number } }) => {
-      const filteredItems = state.categories.filter(
+      state.categories = state.categories.filter(
         (category) => category.id !== action.payload.categoryid
       )
-      state.categories = filteredItems
     },
     editCategory: (state, action: { payload: { newCategory: Category } }) => {
-      const filteredItems = state.categories.filter(
+      state.categories = state.categories.filter(
         (catecory) => catecory.id !== action.payload.newCategory.id
       )
-      state.categories = filteredItems
       state.categories = [action.payload.newCategory, ...state.categories]
     }
   },

@@ -35,16 +35,26 @@ export type User = {
 
 //props
 
-export type ProductFormModalProps = {
+export type ProductFormModalProp = {
   isOpen: boolean
   product: Product | null
   setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-export type CategoryFormModalProps = {
+export type CategoryFormModalProp = {
   isOpen: boolean
   category: Category | null
   setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>
+}
+
+export type ProfileModalProp = {
+  isProfileOpen: boolean
+  user: User
+  setIsProfileOpen: React.Dispatch<React.SetStateAction<boolean>>
+}
+
+export type SideBarProp = {
+  setSelectedComponent: React.Dispatch<React.SetStateAction<string>>
 }
 
 //schemas

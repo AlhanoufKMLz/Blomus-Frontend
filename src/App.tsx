@@ -15,7 +15,6 @@ import Orders from './components/orders/Orders'
 import Login from './pages/Login'
 import Register from './pages/Register'
 import Footer from './components/Footer'
-import About from './pages/About'
 import { UsersManager } from './components/users/UsersManager'
 import { ProductsManager } from './components/products/ProductsManager'
 import { CategoriesManager } from './components/categories/CategoriesManager'
@@ -46,7 +45,6 @@ function App() {
 
         <Route path="/products" element={<Products />}></Route>
         <Route path="/:productid" element={<ProductDetails />}></Route>
-        <Route path="/about" element={<About />}></Route>
         <Route path="/cart" element={<Cart />}></Route>
         <Route path="/login" element={<Login />}></Route>
         <Route path="/register" element={<Register />}></Route>

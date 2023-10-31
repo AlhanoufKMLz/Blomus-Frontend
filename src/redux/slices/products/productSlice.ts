@@ -27,10 +27,7 @@ export const productSlice = createSlice({
       state.products = [action.payload.product, ...state.products]
     },
     removeProduct: (state, action: { payload: { productid: number } }) => {
-      const filteredItems = state.products.filter(
-        (product) => product.id !== action.payload.productid
-      )
-      state.products = filteredItems
+      state.products = state.products.filter((product) => product.id !== action.payload.productid)
     },
     editProdect: (state, action: { payload: { newProduct: Product } }) => {
       state.products = state.products.filter(

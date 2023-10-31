@@ -4,7 +4,7 @@ import { toast } from 'react-toastify'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 
-import { ProductFormModalProps, Product, ProductSchema, productSchema } from '../../types/types'
+import { ProductFormModalProp, Product, ProductSchema, productSchema } from '../../types/types'
 import { AppDispatch } from '../../redux/store'
 import { addProduct, editProdect } from '../../redux/slices/products/productSlice'
 
@@ -20,7 +20,7 @@ const initialState = {
   quantity: 0
 }
 
-export default function ProductFormModal(prop: ProductFormModalProps) {
+export default function ProductFormModal(prop: ProductFormModalProp) {
   if (!prop.isOpen) return null
 
   const {
@@ -40,7 +40,6 @@ export default function ProductFormModal(prop: ProductFormModalProps) {
 
   const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target
-
     const isList = name === 'categories' || name === 'variants' || name === 'sizes'
     if (isList) {
       setProductChanges({
@@ -49,7 +48,6 @@ export default function ProductFormModal(prop: ProductFormModalProps) {
       })
       return
     }
-
     setProductChanges({
       ...productChanges,
       [name]: value

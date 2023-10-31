@@ -5,7 +5,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 
 import { AppDispatch } from '../../redux/store'
-import { Category, CategoryFormModalProps, CategorySchema, categorySchema } from '../../types/types'
+import { Category, CategoryFormModalProp, CategorySchema, categorySchema } from '../../types/types'
 import { addCategory, editCategory } from '../../redux/slices/categories/categorySlice'
 
 const initialState = {
@@ -13,7 +13,7 @@ const initialState = {
   name: ''
 }
 
-export default function CategoryFormModal(prop: CategoryFormModalProps) {
+export default function CategoryFormModal(prop: CategoryFormModalProp) {
   if (!prop.isOpen) return null
 
   const {

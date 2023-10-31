@@ -18,37 +18,26 @@ export const cartSlice = createSlice({
     addToCart: (state, action: { payload: { product: Product } }) => {
       const productFound = state.items.find((item) => item.id === action.payload.product.id)
       if (productFound) productFound.quantity++
-      else {
-        state.items = [{ ...action.payload.product, quantity: 1 }, ...state.items]
-      }
-      state.numberOfItems++
+      else state.items = [{ ...action.payload.product, quantity: 1 }, ...state.items]
     },
     removeFromCart: (state, action: { payload: { product: Product } }) => {
-      const filteredItems = state.items.filter((item) => item.id !== action.payload.product.id)
-      state.items = filteredItems
-      state.numberOfItems -= 1 * action.payload.product.quantity
+      state.items = state.items.filter((item) => item.id !== action.payload.product.id)
     },
     changeQuantity: (state, action: { payload: { product: Product; type: string } }) => {
       const productFound = state.items.find((item) => item.id === action.payload.product.id)
       //Check if the product found in the cart
       if (productFound) {
         //Check if the type add or remove
-        if (action.payload.type === 'add') {
-          productFound.quantity++
-          state.numberOfItems++
-        } else {
-          //Check if the quantity zero delete the product from cart
-          if (productFound.quantity > 1) {
-            productFound.quantity--
-          } else {
-            const filteredItems = state.items.filter(
-              (item) => item.id !== action.payload.product.id
-            )
-            state.items = filteredItems
-          }
-          state.numberOfItems--
-        }
+        if (action.payload.type === 'add') productFound.quantity++
+        //Check if the quantity zero delete the product from cart
+        else if (productFound.quantity > 1) productFound.quantity--
+        else state.items = state.items.filter((item) => item.id !== action.payload.product.id)
       }
+    },
+    calculateCartItems: (state) => {
+      state.numberOfItems = state.items.reduce((total, currentValue) => {
+        return total + currentValue.quantity
+      }, 0)
     }
   }
 })

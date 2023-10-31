@@ -12,51 +12,70 @@ export default function Products() {
   const categories = useSelector((state: RootState) => state.categories)
   const dispatch = useDispatch<AppDispatch>()
 
+  const [filteredItems, setFilteredItems] = useState(products.products)
   const [productsToDisplay, setProductsToDisplay] = useState<Product[]>(products.products)
   const [searchKeyWord, setSearchKeyWord] = useState('')
 
-  //Search for product
+  // Pagination setup
+  const [currentPage, setCurrentPage] = useState(1)
+  const itemsPerPage = 4
+  const totalPages = Math.ceil(filteredItems.length / itemsPerPage)
+  useEffect(() => {
+    const indexOfLastItem = currentPage * itemsPerPage
+    const indexOfFirstItem = indexOfLastItem - itemsPerPage
+    console.log(filteredItems, 'use')
+    setProductsToDisplay(filteredItems.slice(indexOfFirstItem, indexOfLastItem))
+  }, [filteredItems, currentPage])
+
+  // Search for product
   function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
     setSearchKeyWord(event.target.value)
   }
   useEffect(() => {
     if (searchKeyWord.trim() !== '') {
-      const results = products.products.filter((product) =>
-        product.name.toLowerCase().includes(searchKeyWord.toLowerCase())
+      setCurrentPage(1)
+      setFilteredItems(
+        products.products.filter((product) =>
+          product.name.toLowerCase().includes(searchKeyWord.toLowerCase())
+        )
       )
-      setProductsToDisplay(results)
-    } else setProductsToDisplay(products.products)
+      console.log(filteredItems)
+    } else setFilteredItems(products.products)
   }, [searchKeyWord, products.products])
 
-  //Sort products based on price
+  // Sort products based on price
   function sort(event: { target: { value: string } }) {
-    const sortedProducts = [...productsToDisplay]
-    sortedProducts.sort((a, b) => {
-      if (event.target.value === 'High-Low') {
-        return b.price - a.price
-      }
-      return a.price - b.price
-    })
-    setProductsToDisplay(sortedProducts)
+    setFilteredItems(
+      filteredItems.sort((a, b) => {
+        if (event.target.value === 'High-Low') {
+          return b.price - a.price
+        }
+        return a.price - b.price
+      })
+    )
+    setCurrentPage(1)
   }
 
-  //Filter products based on categories
+  // Filter products based on categories
   function filter(event: { target: { value: string } }) {
     const selectedValue = Number(event.target.value)
-
-    if (selectedValue === 0) {
-      setProductsToDisplay(products.products)
-    } else {
-      setProductsToDisplay(
+    if (selectedValue === 0) setFilteredItems(products.products)
+    else
+      setFilteredItems(
         products.products.filter((product) => product.categories.includes(selectedValue))
       )
-    }
+    setCurrentPage(1)
   }
 
-  //Add product to cart
+  // Add product to cart
   function handleAddToCart(product: Product) {
     dispatch(addToCart({ product }))
     toast.success('Awesome pick! ' + product.name + ' is now waiting in your cart')
+  }
+
+  // Changeing the page
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page)
   }
 
   //Display the products
@@ -105,6 +124,7 @@ export default function Products() {
 
       <section className="products-container">
         {products.isLoading && <h3> Loading products...</h3>}
+        {products.error && <h3> Something wrong..</h3>}
         <div className="grid gap-4">
           <ul className="py-8 flex gap-5 flex-wrap">
             {productsToDisplay.map((product) => (
@@ -147,6 +167,18 @@ export default function Products() {
           </ul>
         </div>
       </section>
+      {/* Pagenation */}
+      {Array.from({ length: totalPages }, (_, index) => {
+        return (
+          <button
+            key={index + 1}
+            onClick={() => {
+              handlePageChange(index + 1)
+            }}>
+            {index + 1}
+          </button>
+        )
+      })}
     </div>
   )
 }
