@@ -63,7 +63,7 @@ export type RegisterSchema = {
   firstName: string
   lastName: string
   email: string
-  password: string
+  password?: string
 }
 
 export const registerSchema: ZodType<RegisterSchema> = z.object({
@@ -97,6 +97,25 @@ export type LoginSchema = {
 export const loginSchema: ZodType<LoginSchema> = z.object({
   email: z.string().refine((value) => value !== '', { message: 'Email is required' }),
   password: z.string().refine((value) => value !== '', { message: 'Password name is required' })
+})
+
+export type EditUserSchema = {
+  firstName: string
+  lastName: string
+  email: string
+  password?: string
+}
+
+export const editUserSchema: ZodType<EditUserSchema> = z.object({
+  firstName: z.string().refine((value) => value !== '', { message: 'First name is required' }),
+  lastName: z.string().refine((value) => value !== '', { message: 'Last name is required' }),
+  email: z.string().refine(
+    (value) => {
+      const emailRegex = /\S+@\S+\.\S+/
+      return emailRegex.test(value)
+    },
+    { message: 'Email is not valid' }
+  )
 })
 
 export type CategorySchema = {

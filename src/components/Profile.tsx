@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux'
 import { toast } from 'react-toastify'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
-import { ProfileModalProp, RegisterSchema, User, registerSchema } from '../types/types'
+import { EditUserSchema, ProfileModalProp, User, editUserSchema } from '../types/types'
 import { AppDispatch } from '../redux/store'
 import { editUser } from '../redux/slices/users/userSlice'
 import { editLogedInUser } from '../redux/slices/users/logedinUserSlice'
@@ -16,7 +16,7 @@ export default function Profile(prop: ProfileModalProp) {
     handleSubmit,
     reset,
     formState: { errors }
-  } = useForm<RegisterSchema>({ resolver: zodResolver(registerSchema) })
+  } = useForm<EditUserSchema>({ resolver: zodResolver(editUserSchema) })
 
   const dispatch = useDispatch<AppDispatch>()
   const [userChanges, setUserChanges] = useState<User>(prop.user)
@@ -122,7 +122,6 @@ export default function Profile(prop: ProfileModalProp) {
               <div className="flex justify-center gap-4">
                 <button
                   type="submit"
-                  onClick={handleFormSubmit}
                   className="h-12 w-12 bg-[#727E7E] rounded-full text-[#D0CDD3]">
                   Save
                 </button>
