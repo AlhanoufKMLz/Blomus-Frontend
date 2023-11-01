@@ -26,6 +26,7 @@ export default function ProductFormModal(prop: ProductFormModalProp) {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors }
   } = useForm<ProductSchema>({ resolver: zodResolver(productSchema) })
 
@@ -35,6 +36,7 @@ export default function ProductFormModal(prop: ProductFormModalProp) {
   useEffect(() => {
     if (prop.product) {
       setProductChanges(prop.product)
+      reset()
     }
   }, [])
 
@@ -89,6 +91,7 @@ export default function ProductFormModal(prop: ProductFormModalProp) {
                   value={productChanges.name}
                   onChange={handleChange}
                 />
+
                 {errors.name && <span className="text-[#be9995]"> {errors.name.message} </span>}
               </label>
             </div>

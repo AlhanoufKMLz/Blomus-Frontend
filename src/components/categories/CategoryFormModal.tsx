@@ -19,6 +19,7 @@ export default function CategoryFormModal(prop: CategoryFormModalProp) {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors }
   } = useForm<CategorySchema>({ resolver: zodResolver(categorySchema) })
 
@@ -28,6 +29,7 @@ export default function CategoryFormModal(prop: CategoryFormModalProp) {
   useEffect(() => {
     if (prop.category) {
       setCategoryChanges(prop.category)
+      reset()
     }
   }, [])
 

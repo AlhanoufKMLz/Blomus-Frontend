@@ -18,7 +18,7 @@ export default function Products() {
 
   // Pagination setup
   const [currentPage, setCurrentPage] = useState(1)
-  const itemsPerPage = 4
+  const itemsPerPage = 6
   const totalPages = Math.ceil(filteredItems.length / itemsPerPage)
   useEffect(() => {
     const indexOfLastItem = currentPage * itemsPerPage
@@ -124,7 +124,7 @@ export default function Products() {
 
       <section className="products-container">
         {products.isLoading && <h3> Loading products...</h3>}
-        {products.error && <h3> Something wrong..</h3>}
+        {products.error && <h3> {products.error}</h3>}
         <div className="grid gap-4">
           <ul className="py-8 flex gap-5 flex-wrap">
             {productsToDisplay.map((product) => (

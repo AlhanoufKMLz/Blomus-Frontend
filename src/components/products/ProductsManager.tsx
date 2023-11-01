@@ -93,6 +93,7 @@ export function ProductsManager() {
         </select>
       </div>
       {products.isLoading && <h3> Loading products...</h3>}
+      {products.error && <h3> {products.error}</h3>}
       <table className="md:mx-40 md:my-8 w-9/12">
         <tbody>
           <tr className="text-left text-[#be9995]">

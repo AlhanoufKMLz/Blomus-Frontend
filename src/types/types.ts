@@ -9,7 +9,7 @@ export type Product = {
   categories: number[]
   variants: string[]
   sizes: string[]
-  quantity: number
+  quantity?: number
 }
 
 export type Category = {
@@ -119,17 +119,7 @@ export type ProductSchema = {
 
 export const productSchema: ZodType<ProductSchema> = z.object({
   name: z.string().refine((value) => value !== '', { message: 'Name is required' }),
-  image: z.string().refine(
-    (value) => {
-      try {
-        new URL(value)
-        return true
-      } catch (_) {
-        return false
-      }
-    },
-    { message: 'Input should be a valid URL' }
-  ),
+  image: z.string().refine((value) => value !== '', { message: 'Image is required' }),
   description: z.string().refine((value) => value !== '', { message: 'Description is required' }),
   price: z.number().refine((value) => value > 0, { message: 'Price is required' }),
   categories: z.string().refine(

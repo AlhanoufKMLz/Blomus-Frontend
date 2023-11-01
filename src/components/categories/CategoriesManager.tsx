@@ -69,6 +69,7 @@ export function CategoriesManager() {
         </div>
       </div>
       {categories.isLoading && <h3> Loading categories...</h3>}
+      {categories.error && <h3> {categories.error}</h3>}
       <table className="md:mx-40 md:my-8 w-9/12">
         <tbody>
           <tr className="text-left text-[#be9995]">

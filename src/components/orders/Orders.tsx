@@ -8,7 +8,8 @@ export default function Orders() {
 
   return (
     <div className="flex flex-col min-h-screen align-middle">
-      {orders.isLoading && <h3> Loading categories...</h3>}
+      {orders.isLoading && <h3> Loading orders...</h3>}
+      {orders.error && <h3> {orders.error}</h3>}
       <table className="md:mx-40 md:my-8 w-9/12">
         <tbody>
           <tr className="text-left text-[#be9995]">

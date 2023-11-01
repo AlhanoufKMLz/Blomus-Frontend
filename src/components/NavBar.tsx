@@ -13,6 +13,10 @@ export default function NavBar() {
   const [isOpen, setIsOpen] = useState(false)
   const [isProfileOpe, setIsProfileOpen] = useState(false)
 
+  const numberOfItems = cart.items.reduce((total, currentValue) => {
+    return total + currentValue.quantity
+  }, 0)
+
   function handleOpenNavBar() {
     setIsOpen(true)
   }
@@ -140,7 +144,7 @@ export default function NavBar() {
                     </svg>
                     <div className="absolute top-0 right-0">
                       <p className="absolute -top-2 left-0 flex h-0 w-1 items-center justify-center rounded-full bg-[#be9995] p-2 text-xs text-white">
-                        {cart.numberOfItems}
+                        {numberOfItems}
                       </p>
                     </div>
                   </a>

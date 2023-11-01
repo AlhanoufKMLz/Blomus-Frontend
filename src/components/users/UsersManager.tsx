@@ -54,6 +54,7 @@ export function UsersManager() {
         </div>
       </div>
       {users.isLoading && <h3> Loading categories...</h3>}
+      {users.error && <h3> {users.error}</h3>}
       <table className="md:mx-40 md:my-8 w-9/12">
         <tbody>
           <tr className="text-left text-[#be9995]">
