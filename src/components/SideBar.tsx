@@ -64,7 +64,7 @@ export default function SideBar(prop: SideBarProp) {
             </li>
             <li className="flex hover:bg-[#D0CDD3] hover:text-[#727E7E] rounded-lg py-3 px-5">
               <svg
-                className="w-5 h-5"
+                className="w-6 h-6"
                 viewBox="0 0 24 24"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg">
@@ -86,7 +86,7 @@ export default function SideBar(prop: SideBarProp) {
               )}
             </li>
             <li className="flex hover:bg-[#D0CDD3] hover:text-[#727E7E] rounded-lg py-3 px-5">
-              <svg width="20" height="20" viewBox="0 0 48 48">
+              <svg width="24" height="24" viewBox="0 0 48 48">
                 <g id="Layer_2" data-name="Layer 2">
                   <g id="invisible_box" data-name="invisible box">
                     <rect width="48" height="48" fill="none" />
@@ -119,8 +119,8 @@ export default function SideBar(prop: SideBarProp) {
             <li className="flex hover:bg-[#D0CDD3] hover:text-[#727E7E] rounded-lg py-3 px-5">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                width="20"
-                height="20"
+                width="24"
+                height="24"
                 fill="currentColor"
                 className="bi bi-people"
                 viewBox="0 0 16 16">
@@ -141,8 +141,8 @@ export default function SideBar(prop: SideBarProp) {
             <li className="flex hover:bg-[#D0CDD3] hover:text-[#727E7E] rounded-lg py-3 px-5">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                width="20"
-                height="20"
+                width="24"
+                height="24"
                 fill="#727E7E"
                 className="bi bi-boxes"
                 viewBox="0 0 16 16">

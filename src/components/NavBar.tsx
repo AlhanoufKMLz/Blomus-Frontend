@@ -36,11 +36,11 @@ export default function NavBar() {
 
   return (
     <div>
-      <nav className="relative">
-        <div className="px-3 py-6 md:justify-between md:flex md:w-screen md:items-center">
+      <nav>
+        <div className="p-6 md:justify-between md:flex md:w-screen md:items-center">
           <div className="flex">
             <Link to="/">
-              <img className="w-auto h-6 md:h-7" src="#" alt="" />
+              <img className="w-60 md:w-40" src="public/images/logo.png" alt="" />
             </Link>
 
             {/* <!-- Mobile menu button --> */}
@@ -89,14 +89,7 @@ export default function NavBar() {
                 ? 'absolute inset-x-0 z-20 w-full py-4 px-5 transition-all duration-300 ease-in-out md:mt-0 md:p-0 md:top-0 md:relative bg-zinc-100 md:w-auto md:opacity-100 md:translate-x-0 md:flex md:items-center'
                 : 'hidden md:flex md:items-center md:w-auto'
             }>
-            <div className="flex flex-col md:flex-row md:mx-6">
-              {logedinUser?.role === 'admin' && (
-                <Link
-                  className="text-[#727E7E] transition-colors duration-300 transform hover:text-[#D0CDD3] md:mx-4 md:my-0"
-                  to={'/dashboard'}>
-                  DashBoard
-                </Link>
-              )}
+            <div className="flex flex-col md:flex-row md:mx-6 items-center">
               <Link
                 className="my-2 text-[#be9995] transition-colors duration-300 transform hover:text-[#D0CDD3] md:mx-4 md:my-0"
                 to={'/'}>
@@ -114,15 +107,27 @@ export default function NavBar() {
                   Login
                 </Link>
               )}
+              {logedinUser?.role === 'admin' && (
+                <Link
+                  className="text-[#be9995] transition-colors duration-300 transform hover:text-[#D0CDD3] md:mx-4 md:my-0"
+                  to={'/dashboard'}>
+                  DashBoard
+                </Link>
+              )}
               {logedinUser !== null && (
-                <div>
+                <div className="flex items-center">
                   <Link
-                    className="my-2 text-[#be9995] transition-colors duration-300 transform hover:text-[#D0CDD3] md:mx-4 md:my-0"
+                    className="my-2 text-[#727E7E] transition-colors duration-300 transform hover:text-[#D0CDD3] md:mx-4 md:my-0"
                     onClick={handleLogout}
                     to={'/'}>
                     Logout
                   </Link>
-                  <button onClick={handleOpenProfile}>Profile</button>
+                  <button onClick={handleOpenProfile}>
+                    <img
+                      className="object-cover w-8 h-8 rounded-full ring ring-[#be9995]"
+                      src="https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=facearea&facepad=4&w=880&h=880&q=100"
+                      alt=""></img>
+                  </button>
                 </div>
               )}
               <Link to={'/cart'}>
@@ -131,7 +136,7 @@ export default function NavBar() {
                     className="relative text-[#727E7E] transition-colors duration-300 transform hover:text-[#D0CDD3]"
                     href="#">
                     <svg
-                      className="w-5 h-5"
+                      className="w-6 h-6"
                       viewBox="0 0 24 24"
                       fill="none"
                       xmlns="http://www.w3.org/2000/svg">

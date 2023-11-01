@@ -127,7 +127,7 @@ export default function Products() {
           <ul className="py-8 flex gap-5 flex-wrap">
             {productsToDisplay.map((product) => (
               <li key={product.id} className="flex flex-col items-center justify-center mx-auto">
-                <div className="flex w-80 h-80 bg-white rounded-lg shadow-md items-center justify-center">
+                <div className="flex w-80 h-80 bg-white rounded-lg shadow-lg shadow-[#c0c0c0] hover:shadow-none items-center justify-center">
                   <Link to={`/${product.id}`}>
                     <img className="w-48" src={product.image} alt={product.name} />
                   </Link>
@@ -166,17 +166,50 @@ export default function Products() {
         </div>
       </section>
       {/* Pagenation */}
-      {Array.from({ length: totalPages }, (_, index) => {
-        return (
+      <div className="flex justify-center">
+        {currentPage !== 1 && (
           <button
-            key={index + 1}
+            className={'rounded-full hover:border w-6 m-2 border-[#be9995] text-[#727E7E]'}
             onClick={() => {
-              handlePageChange(index + 1)
+              handlePageChange(currentPage - 1)
             }}>
-            {index + 1}
+            &laquo;
           </button>
-        )
-      })}
+        )}
+        {Array.from({ length: totalPages }, (_, index) => {
+          if (
+            index + 1 === currentPage ||
+            index + 1 === currentPage + 1 ||
+            index + 1 === currentPage - 1 ||
+            index + 1 == 1 ||
+            index + 1 == totalPages
+          )
+            return (
+              <button
+                key={index + 1}
+                className={
+                  index + 1 == currentPage
+                    ? 'rounded-full bg-[#727E7E] w-6 m-2 text-[#E2DFE4]'
+                    : 'rounded-full hover:border w-6 m-2 border-[#be9995] text-[#727E7E]'
+                }
+                onClick={() => {
+                  handlePageChange(index + 1)
+                }}>
+                {index + 1}
+              </button>
+            )
+          else return <span className="text-[#727E7E]">.</span>
+        })}
+        {currentPage !== totalPages && (
+          <button
+            className={'rounded-full hover:border w-6 m-2 border-[#be9995] text-[#727E7E]'}
+            onClick={() => {
+              handlePageChange(currentPage + 1)
+            }}>
+            &raquo;
+          </button>
+        )}
+      </div>
     </div>
   )
 }

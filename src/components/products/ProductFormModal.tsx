@@ -204,13 +204,15 @@ export default function ProductFormModal(prop: ProductFormModalProp) {
 
           {/* buttons container */}
           <div className="flex justify-center gap-4">
-            <button type="submit" className="h-12 w-12 bg-[#727E7E] rounded-full text-[#D0CDD3]">
+            <button
+              type="submit"
+              className="h-16 w-16 bg-[#727E7E] rounded-full text-[#D0CDD3] shadow-md hover:shadow-none hover:bg-[#D0CDD3] hover:text-[#727E7E] shadow-[#5c5c5c]">
               {prop.product ? <span>Save</span> : <span>add</span>}
             </button>
             <button
               type="button"
               onClick={handleCloseModal}
-              className="h-12 w-12 bg-[#be9995] rounded-full text-[#D0CDD3] text-sm">
+              className="h-16 w-16 bg-[#be9995] rounded-full text-[#D0CDD3] shadow-md hover:shadow-none hover:bg-[#D0CDD3] hover:text-[#be9995] shadow-[#5c5c5c]">
               Cancel
             </button>
           </div>

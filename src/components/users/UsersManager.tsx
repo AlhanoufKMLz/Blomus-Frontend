@@ -55,44 +55,46 @@ export function UsersManager() {
       </div>
       {users.isLoading && <h3> Loading categories...</h3>}
       {users.error && <h3> {users.error}</h3>}
-      <table className="md:mx-40 md:my-8 w-9/12">
-        <tbody>
-          <tr className="text-left text-[#be9995]">
-            <th>First Name</th>
-            <th>Last Name</th>
-            <th>Email</th>
-            <th>Role</th>
-          </tr>
-          {usersToDisplay.map((user) => (
-            <tr className="border-t-2" key={user.id}>
-              <td className="text-[#727E7E]">{user.firstName}</td>
-              <td className="text-[#727E7E]">{user.lastName}</td>
-              <td className="text-[#727E7E]">{user.email}</td>
-              <td className="text-[#727E7E]">{user.role}</td>
-              <td>
-                <button
-                  className="text-[#be9995]"
-                  onClick={() => dispatch(removeUser({ userid: user.id }))}>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="20"
-                    height="20"
-                    fill="currentColor"
-                    className="bi bi-trash"
-                    viewBox="0 0 16 16">
-                    {' '}
-                    <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z" />{' '}
-                    <path
-                      fillRule="evenodd"
-                      d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"
-                    />{' '}
-                  </svg>
-                </button>
-              </td>
+      <div className="max-h-[500px] overflow-y-auto ml-16">
+        <table className="md:mx-40 md:my-8 w-9/12">
+          <tbody>
+            <tr className="text-left text-[#be9995]">
+              <th>First Name</th>
+              <th>Last Name</th>
+              <th>Email</th>
+              <th>Role</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+            {usersToDisplay.map((user) => (
+              <tr className="border-t-2" key={user.id}>
+                <td className="text-[#727E7E] py-5">{user.firstName}</td>
+                <td className="text-[#727E7E]">{user.lastName}</td>
+                <td className="text-[#727E7E]">{user.email}</td>
+                <td className="text-[#727E7E]">{user.role}</td>
+                <td className="text-right">
+                  <button
+                    className="text-[#be9995]"
+                    onClick={() => dispatch(removeUser({ userid: user.id }))}>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="20"
+                      height="20"
+                      fill="currentColor"
+                      className="bi bi-trash"
+                      viewBox="0 0 16 16">
+                      {' '}
+                      <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z" />{' '}
+                      <path
+                        fillRule="evenodd"
+                        d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"
+                      />{' '}
+                    </svg>
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   )
 }

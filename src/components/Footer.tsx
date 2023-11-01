@@ -8,7 +8,7 @@ export default function Footer() {
   const logedinUser = useSelector((state: RootState) => state.logedinUser.user)
 
   return (
-    <div>
+    <div className="sticky z-50">
       <footer className="bg-[#727E7E] text-[#D0CDD3]">
         <div className="px-6 py-8 mx-auto">
           <div className="flex flex-col items-center text-center">

@@ -1,122 +1,102 @@
 [
   {
     "id": 1,
-    "name": "Laptop",
+    "name": "Fig",
     "image": "public/images/products-images/p1.png",
-    "description": "High-performance laptop for all your needs.",
-    "price": 300,
-    "categories": [1, 2],
-    "variants": ["8GB RAM", "16GB RAM"],
-    "sizes": ["13-inch", "15-inch"]
+    "description": "Rose Dust Container - Fig Fragrance - A Composition of herbal and floral aromas with a spicy, fruity note.",
+    "price": 100,
+    "categories": [1],
+    "variants": [],
+    "sizes": ["114 g/ 4 oz", "290 g/ 10 oz"]
   },
   {
     "id": 2,
-    "name": "Smartphone",
+    "name": "French Cotton",
     "image": "public/images/products-images/p2.png",
-    "description": "Latest smartphone with advanced features.",
-    "price": 200,
-    "categories": [1, 3],
-    "variants": ["64GB", "128GB"],
-    "sizes": []
+    "description": "Lily White Container - French Cotton Fragrance - Floral aromas with a sweet herbal note. ",
+    "price": 100,
+    "categories": [1],
+    "variants": [],
+    "sizes": ["114 g/ 4 oz", "290 g/ 10 oz"]
   },
   {
     "id": 3,
-    "name": "Tablet",
+    "name": "Sea Salt & Sage",
     "image": "public/images/products-images/p3.png",
-    "description": "Compact and powerful tablet for work and entertainment.",
-    "price": 500,
-    "categories": [1, 2],
-    "variants": ["32GB", "64GB"],
-    "sizes": ["10-inch", "12-inch"]
+    "description": "Withered Rose Container - Sea Salt & Sage Fragrance - A refreshing herbal and fruit mix with woody notes and a hint of lavender.",
+    "price": 100,
+    "categories": [1],
+    "variants": [],
+    "sizes": ["114 g/ 4 oz", "290 g/ 10 oz"]
   },
   {
     "id": 4,
-    "name": "Gaming Console",
+    "name": "Rose & White Musk",
     "image": "public/images/products-images/p4.png",
-    "description": "Next-gen gaming console for immersive gameplay.",
-    "price": 700,
-    "categories": [4],
-    "variants": ["500GB", "1TB"],
-    "sizes": []
+    "description": "Flintstone (blue) Container - Rose & White Musk Fragrance - Herbal and floral aromas with a rosy citrus note.",
+    "price": 100,
+    "categories": [1],
+    "variants": [],
+    "sizes": ["114 g/ 4 oz", "290 g/ 10 oz"]
   },
   {
     "id": 5,
-    "name": "Camera",
+    "name": "Sandalwood Myrrh",
     "image": "public/images/products-images/p5.png",
-    "description": "High-resolution camera for capturing memories.",
+    "description": "Micro Chip Grey Container - Sandalwood Myrrh Fragrance - A warm, woody scent.",
     "price": 100,
-    "categories": [5],
-    "variants": ["24MP", "36MP"],
-    "sizes": []
+    "categories": [1],
+    "variants": [],
+    "sizes": ["114 g/ 4 oz", "290 g/ 10 oz"]
   },
   {
     "id": 6,
-    "name": "Fitness Tracker",
+    "name": "Soft Linen",
     "image": "public/images/products-images/p6.png",
-    "description": "Track your health and fitness goals with this smart tracker.",
-    "price": 900,
-    "categories": [6],
-    "variants": ["Small", "Large"],
-    "sizes": []
+    "description": "Magnet (charcoal) Container - Soft Linen Fragrance - A clean, fresh scent with light floral aromas and a sweet herbal note.",
+    "price": 100,
+    "categories": [1],
+    "variants": [],
+    "sizes": ["114 g/ 4 oz", "290 g/ 10 oz"]
   },
   {
     "id": 7,
-    "name": "Home Theater System",
+    "name": "Basil & Bergamot",
     "image": "public/images/products-images/p7.png",
-    "description": "Create a cinematic experience at home with this system.",
-    "price": 1000,
-    "categories": [7],
-    "variants": ["5.1 Surround Sound", "7.1 Surround Sound"],
-    "sizes": []
+    "description": "Pine Grey Container - Basil & Bergamot Fragrance - A touch of basil spice combined with bergamot citrus.",
+    "price": 100,
+    "categories": [1],
+    "variants": [],
+    "sizes": ["114 g/ 4 oz", "290 g/ 10 oz"]
   },
   {
     "id": 8,
-    "name": "Coffee Maker",
+    "name": "Kyoto Yume",
     "image": "public/images/products-images/p8.png",
-    "description": "Brew your favorite coffee at home with ease.",
-    "price": 400,
-    "categories": [8],
-    "variants": ["Single Serve", "Drip Coffee Maker"],
-    "sizes": []
+    "description": "Tarmac (olive) Container - Kyoto Yume Fragrance - Floral scent with a composition of spicy aromas and a woody note with a hint of vanilla.",
+    "price": 100,
+    "categories": [1],
+    "variants": [],
+    "sizes": ["114 g/ 4 oz", "290 g/ 10 oz"]
   },
   {
     "id": 9,
-    "name": "Bluetooth Speaker",
+    "name": "Cinnamon & Apple",
     "image": "public/images/products-images/p9.png",
-    "description": "Portable speaker for music on the go.",
-    "price": 400,
-    "categories": [9],
-    "variants": ["Black", "White"],
-    "sizes": []
+    "description": "Port Container - Cinnamon & Apple Fragrance - Warm and spicy fragrance of cinnamon and apples.",
+    "price": 100,
+    "categories": [1],
+    "variants": [],
+    "sizes": ["114 g/ 4 oz", "290 g/ 10 oz"]
   },
   {
     "id": 10,
-    "name": "External Hard Drive",
+    "name": "Royal Leather",
     "image": "public/images/products-images/p10.png",
-    "description": "Store and backup your data with high-capacity storage.",
-    "price": 400,
-    "categories": [10],
-    "variants": ["1TB", "2TB"],
-    "sizes": []
-  },
-  {
-    "id": 11,
-    "name": "Headphones",
-    "image": "https://m.media-amazon.com/images/I/51j7l0QISqL._SL1000_.jpg",
-    "description": "Noise-cancelling headphones for immersive audio experience.",
-    "price": 400,
-    "categories": [9],
-    "variants": ["Over-Ear", "In-Ear"],
-    "sizes": []
-  },
-  {
-    "id": 12,
-    "name": "Smartwatch",
-    "image": "https://m.media-amazon.com/images/I/811GOkDSOaL._SL1500_.jpg",
-    "description": "Stay connected and track your activities with this smartwatch.",
-    "price": 400,
-    "categories": [6],
-    "variants": ["Titanium"],
-    "sizes": []
+    "description": "Satellite (taupe) Container - Royal Leather Fragrance - Rich earthy scent with a light smoky note.",
+    "price": 100,
+    "categories": [1],
+    "variants": [],
+    "sizes": ["114 g/ 4 oz", "290 g/ 10 oz"]
   }
 ]

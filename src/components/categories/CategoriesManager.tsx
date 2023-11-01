@@ -70,69 +70,72 @@ export function CategoriesManager() {
       </div>
       {categories.isLoading && <h3> Loading categories...</h3>}
       {categories.error && <h3> {categories.error}</h3>}
-      <table className="md:mx-40 md:my-8 w-9/12">
-        <tbody>
-          <tr className="text-left text-[#be9995]">
-            <th>Name</th>
-            <th>ID</th>
-          </tr>
-          {categoriesToDisplay.map((category) => (
-            <tr className="border-t-2" key={category.id}>
-              <td className="text-[#727E7E]">{category.name}</td>
-              <td className="text-[#727E7E]">{category.id}</td>
-              <td>
-                <button className="text-[#727E7E]" onClick={() => handleEdit(category)}>
-                  <svg
-                    width="20"
-                    height="20"
-                    viewBox="0 0 48 48"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg">
-                    <rect width="48" height="48" fill="white" fillOpacity="0.01" />
-                    <path
-                      d="M42 26V40C42 41.1046 41.1046 42 40 42H8C6.89543 42 6 41.1046 6 40V8C6 6.89543 6.89543 6 8 6L22 6"
-                      stroke="#727E7E"
-                      strokeWidth="3"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                    <path
-                      d="M14 26.7199V34H21.3172L42 13.3081L34.6951 6L14 26.7199Z"
-                      fill="none"
-                      stroke="#727E7E"
-                      strokeWidth="3"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-                </button>
-              </td>
-              <td>
-                <button
-                  className="text-[#be9995]"
-                  onClick={() => dispatch(removeCategory({ categoryid: category.id }))}>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="20"
-                    height="20"
-                    fill="currentColor"
-                    className="bi bi-trash"
-                    viewBox="0 0 16 16">
-                    {' '}
-                    <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z" />{' '}
-                    <path
-                      fillRule="evenodd"
-                      d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"
-                    />{' '}
-                  </svg>
-                </button>
-              </td>
+      <div className="max-h-[500px] overflow-y-auto ml-16">
+        <table className="md:mx-40 md:my-8 w-9/12">
+          <tbody>
+            <tr className="text-left text-[#be9995]">
+              <th>Name</th>
+              <th>ID</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
-
+            {categoriesToDisplay.map((category) => (
+              <tr className="border-t-2" key={category.id}>
+                <td className="text-[#727E7E] py-5">{category.name}</td>
+                <td className="text-[#727E7E]">{category.id}</td>
+                <td className="text-right">
+                  <button
+                    className="text-[#727E7E] hover:text-[#be9995]"
+                    onClick={() => handleEdit(category)}>
+                    <svg
+                      width="20"
+                      height="20"
+                      viewBox="0 0 48 48"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg">
+                      <rect width="48" height="48" fill="white" fillOpacity="0.01" />
+                      <path
+                        d="M42 26V40C42 41.1046 41.1046 42 40 42H8C6.89543 42 6 41.1046 6 40V8C6 6.89543 6.89543 6 8 6L22 6"
+                        stroke="#727E7E"
+                        strokeWidth="3"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                      <path
+                        d="M14 26.7199V34H21.3172L42 13.3081L34.6951 6L14 26.7199Z"
+                        fill="none"
+                        stroke="#727E7E"
+                        strokeWidth="3"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                  </button>
+                </td>
+                <td className="text-right">
+                  <button
+                    className="text-[#be9995]"
+                    onClick={() => dispatch(removeCategory({ categoryid: category.id }))}>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="20"
+                      height="20"
+                      fill="currentColor"
+                      className="bi bi-trash"
+                      viewBox="0 0 16 16">
+                      {' '}
+                      <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z" />{' '}
+                      <path
+                        fillRule="evenodd"
+                        d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"
+                      />{' '}
+                    </svg>
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
       <button
-        className="fixed bg-[#727E7E] bottom-8 right-8 text-white h-14 w-14 rounded-full text-4xl text-center"
+        className="fixed bg-[#727E7E] bottom-8 right-8 text-white h-14 w-14 rounded-full text-4xl flex items-center justify-center shadow-md hover:shadow-none hover:bg-[#be9995] hover:text-[#727E7E] shadow-[#5c5c5c]"
         onClick={addCategoryForm}>
         +
       </button>
