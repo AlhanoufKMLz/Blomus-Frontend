@@ -18,12 +18,11 @@ export default function Products() {
 
   // Pagination setup
   const [currentPage, setCurrentPage] = useState(1)
-  const itemsPerPage = 6
+  const itemsPerPage = 9
   const totalPages = Math.ceil(filteredItems.length / itemsPerPage)
   useEffect(() => {
     const indexOfLastItem = currentPage * itemsPerPage
     const indexOfFirstItem = indexOfLastItem - itemsPerPage
-    console.log(filteredItems, 'use')
     setProductsToDisplay(filteredItems.slice(indexOfFirstItem, indexOfLastItem))
   }, [filteredItems, currentPage])
 
@@ -39,7 +38,6 @@ export default function Products() {
           product.name.toLowerCase().includes(searchKeyWord.toLowerCase())
         )
       )
-      console.log(filteredItems)
     } else setFilteredItems(products.products)
   }, [searchKeyWord, products.products])
 

@@ -13,6 +13,7 @@ export default function NavBar() {
   const [isOpen, setIsOpen] = useState(false)
   const [isProfileOpe, setIsProfileOpen] = useState(false)
 
+  // Calculate number of items in the cart
   const numberOfItems = cart.items.reduce((total, currentValue) => {
     return total + currentValue.quantity
   }, 0)
@@ -142,11 +143,13 @@ export default function NavBar() {
                         strokeLinejoin="round"
                       />
                     </svg>
-                    <div className="absolute top-0 right-0">
-                      <p className="absolute -top-2 left-0 flex h-0 w-1 items-center justify-center rounded-full bg-[#be9995] p-2 text-xs text-white">
-                        {numberOfItems}
-                      </p>
-                    </div>
+                    {numberOfItems > 0 && (
+                      <div className="absolute top-0 right-0">
+                        <p className="absolute -top-2 left-0 flex h-0 w-1 items-center justify-center rounded-full bg-[#be9995] p-2 text-xs text-white">
+                          {numberOfItems}
+                        </p>
+                      </div>
+                    )}
                   </a>
                 </div>
               </Link>

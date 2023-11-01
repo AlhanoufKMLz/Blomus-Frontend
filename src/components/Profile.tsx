@@ -6,6 +6,7 @@ import { useForm } from 'react-hook-form'
 import { ProfileModalProp, RegisterSchema, User, registerSchema } from '../types/types'
 import { AppDispatch } from '../redux/store'
 import { editUser } from '../redux/slices/users/userSlice'
+import { editLogedInUser } from '../redux/slices/users/logedinUserSlice'
 
 export default function Profile(prop: ProfileModalProp) {
   if (!prop.setIsProfileOpen) return null
@@ -13,6 +14,7 @@ export default function Profile(prop: ProfileModalProp) {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors }
   } = useForm<RegisterSchema>({ resolver: zodResolver(registerSchema) })
 
@@ -22,6 +24,7 @@ export default function Profile(prop: ProfileModalProp) {
 
   function handleEdit() {
     setIsEdit(true)
+    reset()
   }
 
   function handleChange(e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
@@ -34,7 +37,8 @@ export default function Profile(prop: ProfileModalProp) {
 
   function handleFormSubmit() {
     dispatch(editUser({ newUser: userChanges }))
-    toast.success('category details updated successfully!')
+    dispatch(editLogedInUser({ newUser: userChanges }))
+    toast.success('user details updated successfully!')
     // Close the form
     setIsEdit(false)
   }
@@ -74,8 +78,7 @@ export default function Profile(prop: ProfileModalProp) {
                     {...register('firstName')}
                     onChange={handleChange}
                     className="border-2 border-[#D0CDD3] h-10 px-5 pr-16 rounded-lg text-sm focus:outline-none"
-                    type="name"
-                    name="name"
+                    type="firstName"
                     value={userChanges.firstName}
                   />
                 </label>
@@ -92,8 +95,7 @@ export default function Profile(prop: ProfileModalProp) {
                     {...register('lastName')}
                     onChange={handleChange}
                     className="border-2 border-[#D0CDD3] h-10 px-5 pr-16 rounded-lg text-sm focus:outline-none"
-                    type="name"
-                    name="name"
+                    type="lastName"
                     value={userChanges.lastName}
                   />
                 </label>
@@ -110,8 +112,7 @@ export default function Profile(prop: ProfileModalProp) {
                     {...register('email')}
                     onChange={handleChange}
                     className="border-2 border-[#D0CDD3] h-10 px-5 pr-16 rounded-lg text-sm focus:outline-none"
-                    type="name"
-                    name="name"
+                    type="email"
                     value={userChanges.email}
                   />
                 </label>
@@ -121,6 +122,7 @@ export default function Profile(prop: ProfileModalProp) {
               <div className="flex justify-center gap-4">
                 <button
                   type="submit"
+                  onClick={handleFormSubmit}
                   className="h-12 w-12 bg-[#727E7E] rounded-full text-[#D0CDD3]">
                   Save
                 </button>

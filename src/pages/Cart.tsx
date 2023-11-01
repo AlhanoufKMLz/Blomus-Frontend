@@ -10,6 +10,11 @@ export default function Cart() {
   const cart = useSelector((state: RootState) => state.cart)
   const dispatch = useDispatch<AppDispatch>()
 
+  // Calculate the total price
+  const totalPrice = cart.items.reduce((total, currentValue) => {
+    return total + (currentValue.price * currentValue.quantity)
+  }, 0)
+
   function handleRemoveFromCart(product: Product) {
     dispatch(removeFromCart({ product }))
   }

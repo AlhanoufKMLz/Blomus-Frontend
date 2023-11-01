@@ -18,10 +18,13 @@ export const logedinUserSlice = createSlice({
     },
     logoutUser: (state) => {
       state.user = null
+    },
+    editLogedInUser: (state, action: { payload: { newUser: User } }) => {
+      state.user = action.payload.newUser
     }
   }
 })
 
-export const { loginUser, logoutUser } = logedinUserSlice.actions
+export const { loginUser, logoutUser, editLogedInUser } = logedinUserSlice.actions
 
 export default logedinUserSlice.reducer
