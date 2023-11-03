@@ -62,29 +62,29 @@ export default function CategoryFormModal(prop: CategoryFormModalProp) {
         <div className="modal-content">
           <form className="p-4 bg-gray-100 rounded-lg" onSubmit={handleSubmit(handleFormSubmit)}>
             <div className="mb-4">
-              <label htmlFor="name" className="flex flex-col text-[#be9995]">
-                <span className="text-[#727E7E] pl-2">Name:</span>
+              <label htmlFor="name" className="flex flex-col text-primary_pink">
+                <span className="text-primary_green pl-2">Name:</span>
                 <input
                   {...register('name')}
                   onChange={handleChange}
-                  className="border-2 border-[#D0CDD3] h-10 px-5 pr-16 rounded-lg text-sm focus:outline-none"
+                  className="border-2 border-primary_grey h-10 px-5 pr-16 rounded-lg text-sm focus:outline-none"
                   type="name"
                   name="name"
                   value={categoryChanges.name}
                 />
               </label>
             </div>
-            {errors.name && <span className="text-[#be9995]"> {errors.name.message} </span>}
+            {errors.name && <span className="text-primary_pink"> {errors.name.message} </span>}
             <div className="flex justify-center gap-4">
               <button
                 type="submit"
-                className="h-16 w-16 bg-[#727E7E] rounded-full text-[#D0CDD3] shadow-md hover:shadow-none hover:bg-[#D0CDD3] hover:text-[#727E7E] shadow-[#5c5c5c]">
+                className="h-16 w-16 bg-primary_green rounded-full text-primary_grey shadow-md hover:shadow-none hover:bg-primary_grey hover:text-primary_green shadow-shadow">
                 {prop.category ? <span>Save</span> : <span>add</span>}
               </button>
               <button
                 type="button"
                 onClick={handleCloseModal}
-                className="h-16 w-16 bg-[#be9995] rounded-full text-[#D0CDD3] shadow-md hover:shadow-none hover:bg-[#D0CDD3] hover:text-[#be9995] shadow-[#5c5c5c]">
+                className="h-16 w-16 bg-primary_pink rounded-full text-primary_grey shadow-md hover:shadow-none hover:bg-primary_grey hover:text-primary_pink shadow-shadow">
                 Cancel
               </button>
             </div>

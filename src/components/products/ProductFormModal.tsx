@@ -81,124 +81,128 @@ export default function ProductFormModal(prop: ProductFormModalProp) {
           <div className="flex justify-between">
             {/* name container */}
             <div className="mb-4">
-              <label htmlFor="name" className="flex flex-col text-[#be9995]">
-                <span className="text-[#727E7E] pl-2">Name:</span>
+              <label htmlFor="name" className="flex flex-col text-primary_pink">
+                <span className="text-primary_green pl-2">Name:</span>
                 <input
                   type="text"
                   id="name"
                   {...register('name')}
-                  className="border-2 border-[#D0CDD3] h-10 px-5 pr-16 rounded-lg text-sm focus:outline-none"
+                  className="border-2 border-primary_grey h-10 px-5 pr-16 rounded-lg text-sm focus:outline-none"
                   value={productChanges.name}
                   onChange={handleChange}
                 />
 
-                {errors.name && <span className="text-[#be9995]"> {errors.name.message} </span>}
+                {errors.name && <span className="text-primary_pink"> {errors.name.message} </span>}
               </label>
             </div>
 
             {/* price container */}
             <div className="mb-4">
-              <label htmlFor="price" className="flex flex-col text-[#be9995]">
-                <span className="text-[#727E7E] pl-2">Price:</span>
+              <label htmlFor="price" className="flex flex-col text-primary_pink">
+                <span className="text-primary_green pl-2">Price:</span>
                 <input
                   type="number"
                   id="price"
                   {...register('price', { valueAsNumber: true })}
-                  className="border-2 border-[#D0CDD3] h-10 px-5 pr-16 rounded-lg text-sm focus:outline-none"
+                  className="border-2 border-primary_grey h-10 px-5 pr-16 rounded-lg text-sm focus:outline-none"
                   value={productChanges.price}
                   onChange={handleChange}
                 />
-                {errors.price && <span className="text-[#be9995]"> {errors.price.message} </span>}
+                {errors.price && (
+                  <span className="text-primary_pink"> {errors.price.message} </span>
+                )}
               </label>
             </div>
           </div>
 
           {/* image container */}
           <div className="mb-4">
-            <label htmlFor="image" className="flex flex-col text-[#be9995]">
-              <span className="text-[#727E7E] pl-2">Image URL:</span>
+            <label htmlFor="image" className="flex flex-col text-primary_pink">
+              <span className="text-primary_green pl-2">Image URL:</span>
               <input
                 type="text"
                 id="image"
                 {...register('image')}
-                className="border-2 border-[#D0CDD3] h-10 px-5 pr-16 rounded-lg text-sm focus:outline-none"
+                className="border-2 border-primary_grey h-10 px-5 pr-16 rounded-lg text-sm focus:outline-none"
                 value={productChanges.image}
                 onChange={handleChange}
               />
-              {errors.image && <span className="text-[#be9995]"> {errors.image.message} </span>}
+              {errors.image && <span className="text-primary_pink"> {errors.image.message} </span>}
             </label>
           </div>
 
           {/* description container */}
           <div className="mb-4">
-            <label htmlFor="description" className="flex flex-col text-[#be9995]">
-              <span className="text-[#727E7E] pl-2">Description:</span>
+            <label htmlFor="description" className="flex flex-col text-primary_pink">
+              <span className="text-primary_green pl-2">Description:</span>
               <textarea
                 id="description"
                 {...register('description')}
-                className="border-2 border-[#D0CDD3] h-10 px-5 pr-16 rounded-lg text-sm focus:outline-none"
+                className="border-2 border-primary_grey h-10 px-5 pr-16 rounded-lg text-sm focus:outline-none"
                 value={productChanges.description}
                 onChange={handleChange}
               />
               {errors.description && (
-                <span className="text-[#be9995]"> {errors.description.message} </span>
+                <span className="text-primary_pink"> {errors.description.message} </span>
               )}
             </label>
           </div>
 
           {/* categories container */}
           <div className="mb-4">
-            <label htmlFor="categories" className="flex flex-col text-[#be9995]">
-              <span className="text-[#727E7E] pl-2">
+            <label htmlFor="categories" className="flex flex-col text-primary_pink">
+              <span className="text-primary_green pl-2">
                 Categories: (use comma , to create multiple)
               </span>
               <input
                 type="text"
                 id="categories"
                 {...register('categories')}
-                className="border-2 border-[#D0CDD3] h-10 px-5 pr-16 rounded-lg text-sm focus:outline-none"
+                className="border-2 border-primary_grey h-10 px-5 pr-16 rounded-lg text-sm focus:outline-none"
                 onChange={handleChange}
                 value={productChanges.categories.join(',')}
               />
               {errors.categories && (
-                <span className="text-[#be9995]"> {errors.categories.message} </span>
+                <span className="text-primary_pink"> {errors.categories.message} </span>
               )}
             </label>
           </div>
 
           {/* variants container */}
           <div className="mb-4">
-            <label htmlFor="variants" className="flex flex-col text-[#be9995]">
-              <span className="text-[#727E7E] pl-2">
+            <label htmlFor="variants" className="flex flex-col text-primary_pink">
+              <span className="text-primary_green pl-2">
                 Variants: (use comma , to create multiple)
               </span>
               <input
                 type="text"
                 id="variants"
                 {...register('variants')}
-                className="border-2 border-[#D0CDD3] h-10 px-5 pr-16 rounded-lg text-sm focus:outline-none"
+                className="border-2 border-primary_grey h-10 px-5 pr-16 rounded-lg text-sm focus:outline-none"
                 onChange={handleChange}
                 value={productChanges.variants.join(',')}
               />
               {errors.variants && (
-                <span className="text-[#be9995]"> {errors.variants.message} </span>
+                <span className="text-primary_pink"> {errors.variants.message} </span>
               )}
             </label>
           </div>
 
           {/* sizes container */}
           <div className="mb-4">
-            <label htmlFor="sizes" className="flex flex-col text-[#be9995]">
-              <span className="text-[#727E7E] pl-2">Sizes: (use comma , to create multiple)</span>
+            <label htmlFor="sizes" className="flex flex-col text-primary_pink">
+              <span className="text-primary_green pl-2">
+                Sizes: (use comma , to create multiple)
+              </span>
               <input
                 type="text"
                 id="sizes"
                 {...register('sizes')}
-                className="border-2 border-[#D0CDD3] h-10 px-5 pr-16 rounded-lg text-sm focus:outline-none"
+                className="border-2 border-primary_grey h-10 px-5 pr-16 rounded-lg text-sm focus:outline-none"
                 onChange={handleChange}
                 value={productChanges.sizes.join(',')}
               />
-              {errors.sizes && <span className="text-[#be9995]"> {errors.sizes.message} </span>}
+              {errors.sizes && <span className="text-primary_pink"> {errors.sizes.message} </span>}
             </label>
           </div>
 
@@ -206,13 +210,13 @@ export default function ProductFormModal(prop: ProductFormModalProp) {
           <div className="flex justify-center gap-4">
             <button
               type="submit"
-              className="h-16 w-16 bg-[#727E7E] rounded-full text-[#D0CDD3] shadow-md hover:shadow-none hover:bg-[#D0CDD3] hover:text-[#727E7E] shadow-[#5c5c5c]">
+              className="h-16 w-16 bg-primary_green rounded-full text-primary_grey shadow-md hover:shadow-none hover:bg-primary_grey hover:text-primary_green shadow-shadow">
               {prop.product ? <span>Save</span> : <span>add</span>}
             </button>
             <button
               type="button"
               onClick={handleCloseModal}
-              className="h-16 w-16 bg-[#be9995] rounded-full text-[#D0CDD3] shadow-md hover:shadow-none hover:bg-[#D0CDD3] hover:text-[#be9995] shadow-[#5c5c5c]">
+              className="h-16 w-16 bg-primary_pink rounded-full text-primary_grey shadow-md hover:shadow-none hover:bg-primary_grey hover:text-primary_pink shadow-shadow">
               Cancel
             </button>
           </div>

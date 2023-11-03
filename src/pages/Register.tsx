@@ -54,13 +54,13 @@ export default function Register() {
             <div className="flex items-center justify-center mt-6">
               <Link
                 to={'/login'}
-                className="w-1/3 pb-4 font-medium text-center text-[#D0CDD3] capitalize border-b">
+                className="w-1/3 pb-4 font-medium text-center text-primary_grey capitalize border-b">
                 Login
               </Link>
 
               <Link
                 to={'/register'}
-                className="w-1/3 pb-4 font-medium text-center text-[#be9995] capitalize border-b-2 border-[#727E7E]">
+                className="w-1/3 pb-4 font-medium text-center text-primary_pink capitalize border-b-2 border-primary_green">
                 Register
               </Link>
             </div>
@@ -70,7 +70,7 @@ export default function Register() {
               <span className="absolute">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  className="w-6 h-6 mx-3 text-[#727E7E]"
+                  className="w-6 h-6 mx-3 text-primary_green"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -88,12 +88,12 @@ export default function Register() {
                 id="first-name"
                 {...register('firstName')}
                 onChange={handleChange}
-                className="block w-full py-3 border rounded-lg px-11"
+                className="block w-full py-3 border border-primary_grey rounded-lg px-11"
                 placeholder="First Name"
               />
             </div>
             {errors.firstName && (
-              <span className="text-[#be9995]"> {errors.firstName.message} </span>
+              <span className="text-primary_pink"> {errors.firstName.message} </span>
             )}
 
             {/* last name container */}
@@ -101,7 +101,7 @@ export default function Register() {
               <span className="absolute">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  className="w-6 h-6 mx-3 text-[#727E7E]"
+                  className="w-6 h-6 mx-3 text-primary_green"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -119,18 +119,20 @@ export default function Register() {
                 id="last-name"
                 {...register('lastName')}
                 onChange={handleChange}
-                className="block w-full py-3 border rounded-lg px-11"
+                className="block w-full py-3 border border-primary_grey rounded-lg px-11"
                 placeholder="Last Name"
               />
             </div>
-            {errors.lastName && <span className="text-[#be9995]"> {errors.lastName.message} </span>}
+            {errors.lastName && (
+              <span className="text-primary_pink"> {errors.lastName.message} </span>
+            )}
 
             {/* email container */}
             <div className="relative flex items-center mt-6">
               <span className="absolute">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  className="w-6 h-6 mx-3 text-[#727E7E]"
+                  className="w-6 h-6 mx-3 text-primary_green"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -149,18 +151,18 @@ export default function Register() {
                 autoComplete="email"
                 {...register('email')}
                 onChange={handleChange}
-                className="block w-full py-3 border rounded-lg px-11"
+                className="block w-full py-3 border border-primary_grey rounded-lg px-11"
                 placeholder="Email address"
               />
             </div>
-            {errors.email && <span className="text-[#be9995]"> {errors.email.message} </span>}
+            {errors.email && <span className="text-primary_pink"> {errors.email.message} </span>}
 
             {/* password container */}
             <div className="relative flex items-center mt-4">
               <span className="absolute">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  className="w-6 h-6 mx-3 text-[#727E7E]"
+                  className="w-6 h-6 mx-3 text-primary_green"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -179,18 +181,20 @@ export default function Register() {
                 autoComplete="current-password"
                 {...register('password')}
                 onChange={handleChange}
-                className="block w-full py-3 border rounded-lg px-11"
+                className="block w-full py-3 border border-primary_grey rounded-lg px-11"
                 placeholder="Password"
               />
             </div>
-            {errors.password && <span className="text-[#be9995]"> {errors.password.message} </span>}
+            {errors.password && (
+              <span className="text-primary_pink"> {errors.password.message} </span>
+            )}
 
             <div className="mt-6">
-              <button className="w-full px-6 py-3 text-sm font-medium tracking-wide text-[#D0CDD3] capitalize transition-colors duration-300 transform bg-[#be9995] rounded-lg hover:bg-[#727E7E]">
+              <button className="w-full px-6 py-3 text-sm font-medium tracking-wide text-primary_grey capitalize transition-colors duration-300 transform bg-primary_pink rounded-lg hover:bg-primary_green">
                 Register
               </button>
 
-              <div className="mt-6 text-center text-[#727E7E] hover:text-[#be9995]">
+              <div className="mt-6 text-center text-primary_green hover:text-primary_pink">
                 <Link to={'/login'}>Already have an account?</Link>
               </div>
             </div>

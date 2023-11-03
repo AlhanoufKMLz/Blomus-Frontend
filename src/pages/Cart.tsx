@@ -1,6 +1,6 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 
 import { AppDispatch, RootState } from '../redux/store'
 import { changeQuantity, removeFromCart } from '../redux/slices/cart/cartSlice'
@@ -12,7 +12,7 @@ export default function Cart() {
 
   // Calculate the total price and taxes
   const totalPrice = cart.items.reduce((total, currentValue) => {
-    return total + currentValue.price * currentValue.quantity
+    return total + currentValue.price * (currentValue.quantity || 0)
   }, 0)
   const taxes = totalPrice * 0.15
 
@@ -29,48 +29,48 @@ export default function Cart() {
       <div className="grid ">
         {cart.items.length === 0 && (
           <div className="flex flex-col gap-6 items-center">
-            <h1 className="text-[#be9995] text-2xl font-bold">
+            <h1 className="text-primary_pink text-2xl font-bold">
               You don&apos;t have any items in the cart
             </h1>
             <Link
               to={'/products'}
-              className="bg-[#727E7E] p-2 text-center rounded-lg text-[#E2DFE4] shadow-md hover:shadow-none hover:bg-[#E2DFE4] hover:text-[#727E7E] shadow-[#5c5c5c]">
-              Start Shoping
+              className="bg-primary_green p-2 text-center rounded-lg text-secondary_grey shadow-md hover:shadow-none hover:bg-secondary_grey hover:text-primary_green shadow-shadow">
+              Start Shopping
             </Link>
           </div>
         )}
         {cart.items.length > 0 && (
           <div>
-            <h1 className="text-[#be9995] font-bold">YOURE CART</h1>
+            <h1 className="text-primary_pink font-bold">YOUR CART</h1>
             <div className="flex gap-16 flex-col md:flex-row">
               <div className="overflow-y-auto max-h-[500px] w-8/12">
-                <table className="text-[#727E7E] w-full">
+                <table className="text-primary_green w-full">
                   <tbody>
                     {cart.items.map((product) => (
-                      <tr className="border-t-2" key={product.id}>
+                      <tr className="border-t-2 border-zinc_secondery" key={product.id}>
                         <td className="py-8">
                           <Link to={`/products/${product.id}`}>
                             <img src={product.image} alt={product.name} width="70" />
                           </Link>
                         </td>
                         <td>{product.name}</td>
-                        <td>{product.price * product.quantity} SAR</td>
+                        <td>{product.price * (product.quantity || 0)} SAR</td>
                         <td>
                           <button
-                            className="px-1 hover:text-[#be9995]"
+                            className="px-1 hover:text-primary_pink"
                             onClick={() => handleQuantity('remove', product)}>
                             -
                           </button>
                           <span className="px-1">{product.quantity}</span>
                           <button
-                            className="px-1 hover:text-[#be9995]"
+                            className="px-1 hover:text-primary_pink"
                             onClick={() => handleQuantity('add', product)}>
                             +
                           </button>
                         </td>
                         <td>
                           <button
-                            className="hover:text-[#be9995]"
+                            className="hover:text-primary_pink"
                             onClick={() => handleRemoveFromCart(product)}>
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
@@ -95,47 +95,47 @@ export default function Cart() {
               </div>
               <div className="bg-white rounded-lg p-10 flex flex-col w-4/12 gap-8">
                 <div className="flex flex-col gap-4">
-                  <h2 className="font-bold text-[#727E7E] text-xl">SUMMARY</h2>
-                  <div className="flex justify-between text-[#be9995]">
+                  <h2 className="font-bold text-primary_green text-xl">SUMMARY</h2>
+                  <div className="flex justify-between text-primary_pink">
                     <span>Subtotal</span>
                     <span>{totalPrice}</span>
                   </div>
-                  <div className="flex justify-between text-[#be9995]">
+                  <div className="flex justify-between text-primary_pink">
                     <span>Shipping</span>
                     <span>25</span>
                   </div>
-                  <div className="flex justify-between text-[#be9995]">
+                  <div className="flex justify-between text-primary_pink">
                     <span>Taxes</span>
                     <span>{taxes}</span>
                   </div>
-                  <div className="flex justify-between text-[#be9995]">
+                  <div className="flex justify-between text-primary_pink">
                     <span>Discount</span>
                     <span>-</span>
                   </div>
-                  <div className="flex justify-between text-[#be9995] border-y-2 font-bold">
+                  <div className="flex justify-between text-primary_pink border-y-2 border-zinc_secondery font-bold">
                     <span>Total</span>
                     <span>{totalPrice + taxes + 25}</span>
                   </div>
                 </div>
                 <div className="flex justify-between">
                   <input
-                    className="border-2 border-[#D0CDD3] h-10 p-2 w-full rounded-l-lg text-sm focus:outline-none"
+                    className="border-2 border-primary_grey h-10 p-2 w-full rounded-l-lg text-sm focus:outline-none"
                     type="code"
                     name="code"
                     placeholder="Coupon code"
                   />
-                  <button className="bg-[#727E7E] p-2 rounded-r-lg text-[#E2DFE4] shadow-lg hover:shadow-none hover:bg-[#E2DFE4] hover:text-[#727E7E]">
+                  <button className="bg-primary_green p-2 rounded-r-lg text-secondary_grey shadow-lg hover:shadow-none hover:bg-secondary_grey hover:text-primary_green">
                     Apply
                   </button>
                 </div>
                 <div className="flex flex-col gap-2">
-                  <button className="bg-[#be9995] p-2 rounded-lg text-[#E2DFE4] shadow-md hover:shadow-none hover:bg-[#E2DFE4] hover:text-[#be9995] shadow-[#5c5c5c]">
+                  <button className="bg-primary_pink p-2 rounded-lg text-secondary_grey shadow-md hover:shadow-none hover:bg-secondary_grey hover:text-primary_pink shadow-shadow">
                     Check Out
                   </button>
                   <Link
                     to={'/products'}
-                    className="bg-[#727E7E] p-2 text-center rounded-lg text-[#E2DFE4] shadow-md hover:shadow-none hover:bg-[#E2DFE4] hover:text-[#727E7E] shadow-[#5c5c5c]">
-                    Continue Shoping
+                    className="bg-primary_green p-2 text-center rounded-lg text-secondary_grey shadow-md hover:shadow-none hover:bg-secondary_grey hover:text-primary_green shadow-shadow">
+                    Continue Shopping
                   </Link>
                 </div>
               </div>

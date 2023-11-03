@@ -57,11 +57,11 @@ export function ProductsManager() {
   //Display products table
   return (
     <div className="flex flex-col min-h-screen align-middle">
-      <div className="flex flex-col justify-center md:flex-row border-b-2 pb-5">
-        <div className="pt-2 relative text-[#be9995]">
+      <div className="flex flex-col justify-center md:flex-row border-b-2 border-zinc_secondery pb-5">
+        <div className="pt-2 relative text-primary_pink">
           <input
             onChange={handleChange}
-            className="border-2 border-[#D0CDD3] h-10 px-5 pr-16 rounded-lg text-sm focus:outline-none"
+            className="border-2 border-primary_grey h-10 px-5 pr-16 rounded-lg text-sm focus:outline-none"
             type="search"
             name="search"
             placeholder="Search for products..."
@@ -83,7 +83,7 @@ export function ProductsManager() {
         </div>
         <select
           onChange={filter}
-          className="text-[#be9995] mt-2 h-10 rounded-lg text-sm bg-zinc-100">
+          className="text-primary_pink mt-2 h-10 rounded-lg text-sm bg-zinc">
           <option value={0}>All Products</option>
           {categories.categories.map((category) => (
             <option key={category.id} value={category.id}>
@@ -94,23 +94,23 @@ export function ProductsManager() {
       </div>
       {products.isLoading && <h3> Loading products...</h3>}
       {products.error && <h3> {products.error}</h3>}
-      <div className="max-h-[500px] overflow-y-auto ml-16">
+      <div className="max-h-[600px] overflow-y-auto ml-16">
         <table className="md:mx-40 md:my-8 w-9/12">
           <tbody>
-            <tr className="text-left text-[#be9995]">
+            <tr className="text-left text-primary_pink">
               <th>Image</th>
               <th>Name</th>
               <th>Price</th>
             </tr>
             {productsToDisplay.map((product) => (
-              <tr className="border-t-2" key={product.id}>
+              <tr className="border-t-2 border-zinc_secondery" key={product.id}>
                 <td className="pl-10 py-5">
                   <img src={product.image} alt={product.name} width="50" />
                 </td>
-                <td className="text-[#727E7E]">{product.name}</td>
-                <td className="text-[#727E7E]">{product.price}</td>
+                <td className="text-primary_green">{product.name}</td>
+                <td className="text-primary_green">{product.price}</td>
                 <td className="text-right">
-                  <button className="text-[#727E7E]" onClick={() => handleEdit(product)}>
+                  <button className="text-primary_green" onClick={() => handleEdit(product)}>
                     <svg
                       width="20"
                       height="20"
@@ -137,7 +137,7 @@ export function ProductsManager() {
                 </td>
                 <td className="text-right">
                   <button
-                    className="text-[#be9995]"
+                    className="text-primary_pink"
                     onClick={() => dispatch(removeProduct({ productid: product.id }))}>
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -162,7 +162,7 @@ export function ProductsManager() {
       </div>
 
       <button
-        className="fixed bg-[#727E7E] bottom-8 right-8 text-white h-14 w-14 rounded-full text-4xl flex items-center justify-center shadow-md hover:shadow-none hover:bg-[#be9995] hover:text-[#727E7E] shadow-[#5c5c5c]"
+        className="fixed bg-primary_green bottom-8 right-8 text-white h-14 w-14 rounded-full text-4xl flex items-center justify-center shadow-md hover:shadow-none hover:bg-primary_pink hover:text-primary_green shadow-shadow"
         onClick={addProductForm}>
         +
       </button>

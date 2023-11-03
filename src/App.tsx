@@ -36,7 +36,7 @@ function App() {
   }, [])
 
   return (
-    <div className="bg-zinc-100">
+    <div className="bg-zinc">
       <NavBar />
       <ToastContainer />
       <Routes>

@@ -43,11 +43,11 @@ export function CategoriesManager() {
   //Display categories table
   return (
     <div className="flex flex-col min-h-screen align-middle">
-      <div className="flex flex-col justify-center md:flex-row border-b-2 pb-5">
-        <div className="pt-2 relative text-[#be9995]">
+      <div className="flex flex-col justify-center md:flex-row border-b-2 border-zinc_secondery pb-5">
+        <div className="pt-2 relative text-primary_pink">
           <input
             onChange={handleChange}
-            className="border-2 border-[#D0CDD3] h-10 px-5 pr-16 rounded-lg text-sm focus:outline-none"
+            className="border-2 border-primary_grey h-10 px-5 pr-16 rounded-lg text-sm focus:outline-none"
             type="search"
             name="search"
             placeholder="Search for category..."
@@ -70,20 +70,20 @@ export function CategoriesManager() {
       </div>
       {categories.isLoading && <h3> Loading categories...</h3>}
       {categories.error && <h3> {categories.error}</h3>}
-      <div className="max-h-[500px] overflow-y-auto ml-16">
+      <div className="max-h-[600px] overflow-y-auto ml-16">
         <table className="md:mx-40 md:my-8 w-9/12">
           <tbody>
-            <tr className="text-left text-[#be9995]">
+            <tr className="text-left text-primary_pink">
               <th>Name</th>
               <th>ID</th>
             </tr>
             {categoriesToDisplay.map((category) => (
-              <tr className="border-t-2" key={category.id}>
-                <td className="text-[#727E7E] py-5">{category.name}</td>
-                <td className="text-[#727E7E]">{category.id}</td>
+              <tr className="border-t-2 border-zinc_secondery" key={category.id}>
+                <td className="text-primary_green py-5">{category.name}</td>
+                <td className="text-primary_green">{category.id}</td>
                 <td className="text-right">
                   <button
-                    className="text-[#727E7E] hover:text-[#be9995]"
+                    className="text-primary_green hover:text-primary_pink"
                     onClick={() => handleEdit(category)}>
                     <svg
                       width="20"
@@ -111,7 +111,7 @@ export function CategoriesManager() {
                 </td>
                 <td className="text-right">
                   <button
-                    className="text-[#be9995]"
+                    className="text-primary_pink"
                     onClick={() => dispatch(removeCategory({ categoryid: category.id }))}>
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -135,7 +135,7 @@ export function CategoriesManager() {
         </table>
       </div>
       <button
-        className="fixed bg-[#727E7E] bottom-8 right-8 text-white h-14 w-14 rounded-full text-4xl flex items-center justify-center shadow-md hover:shadow-none hover:bg-[#be9995] hover:text-[#727E7E] shadow-[#5c5c5c]"
+        className="fixed bg-primary_green bottom-8 right-8 text-white h-14 w-14 rounded-full text-4xl flex items-center justify-center shadow-md hover:shadow-none hover:bg-primary_pink hover:text-primary_green shadow-shadow"
         onClick={addCategoryForm}>
         +
       </button>

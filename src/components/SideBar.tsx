@@ -22,16 +22,16 @@ export default function SideBar(prop: SideBarProp) {
         <div
           className={
             isOpen
-              ? 'absolute shadow-md rounded-r-lg inset-x-0 h-screen w-fit py-4 px-2 transition-all duration-300 ease-in-out text-[#D0CDD3] bg-[#be9995]'
-              : 'absolute shadow-md rounded-r-lg inset-x-0 h-screen w-20 py-4 px-2 transition-all duration-300 ease-in-out text-[#D0CDD3] bg-[#be9995]'
+              ? 'absolute shadow-md rounded-r-lg inset-x-0 h-screen w-fit py-4 px-2 transition-all duration-300 ease-in-out text-primary_grey bg-primary_pink'
+              : 'absolute shadow-md rounded-r-lg inset-x-0 h-screen w-20 py-4 px-2 transition-all duration-300 ease-in-out text-primary_grey bg-primary_pink'
           }>
           <ul className="flex flex-col">
-            <li className="flex hover:text-[#727E7E] rounded-lg my-3 px-5">
+            <li className="flex hover:text-primary_green rounded-lg my-3 px-5">
               {!isOpen && (
                 <button
                   onClick={handleOpenNavBar}
                   type="button"
-                  className="text-[#727E7E] hover:text-[#D0CDD3]"
+                  className="text-primary_green hover:text-primary_grey"
                   aria-label="open menu">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -48,7 +48,7 @@ export default function SideBar(prop: SideBarProp) {
                 <button
                   onClick={handleCloseNavBar}
                   type="button"
-                  className="text-[#727E7E] hover:text-[#D0CDD3]"
+                  className="text-primary_green hover:text-primary_grey"
                   aria-label="close menu">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -62,7 +62,7 @@ export default function SideBar(prop: SideBarProp) {
                 </button>
               )}
             </li>
-            <li className="flex hover:bg-[#D0CDD3] hover:text-[#727E7E] rounded-lg py-3 px-5">
+            <li className="flex hover:bg-primary_grey hover:text-primary_green rounded-lg py-3 px-5">
               <svg
                 className="w-6 h-6"
                 viewBox="0 0 24 24"
@@ -85,7 +85,7 @@ export default function SideBar(prop: SideBarProp) {
                 </button>
               )}
             </li>
-            <li className="flex hover:bg-[#D0CDD3] hover:text-[#727E7E] rounded-lg py-3 px-5">
+            <li className="flex hover:bg-primary_grey hover:text-primary_green rounded-lg py-3 px-5">
               <svg width="24" height="24" viewBox="0 0 48 48">
                 <g id="Layer_2" data-name="Layer 2">
                   <g id="invisible_box" data-name="invisible box">
@@ -116,7 +116,7 @@ export default function SideBar(prop: SideBarProp) {
                 </button>
               )}
             </li>
-            <li className="flex hover:bg-[#D0CDD3] hover:text-[#727E7E] rounded-lg py-3 px-5">
+            <li className="flex hover:bg-primary_grey hover:text-primary_green rounded-lg py-3 px-5">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="24"
@@ -138,7 +138,7 @@ export default function SideBar(prop: SideBarProp) {
                 </button>
               )}
             </li>
-            <li className="flex hover:bg-[#D0CDD3] hover:text-[#727E7E] rounded-lg py-3 px-5">
+            <li className="flex hover:bg-primary_grey hover:text-primary_green rounded-lg py-3 px-5">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="24"

@@ -28,11 +28,11 @@ export function UsersManager() {
   //Display users table
   return (
     <div className="flex flex-col min-h-screen align-middle">
-      <div className="flex flex-col justify-center md:flex-row border-b-2 pb-5">
-        <div className="pt-2 relative text-[#be9995]">
+      <div className="flex flex-col justify-center md:flex-row border-b-2 border-zinc_secondery pb-5">
+        <div className="pt-2 relative text-primary_pink">
           <input
             onChange={handleChange}
-            className="border-2 border-[#D0CDD3] h-10 px-5 pr-16 rounded-lg text-sm focus:outline-none"
+            className="border-2 border-primary_grey h-10 px-5 pr-16 rounded-lg text-sm focus:outline-none"
             type="search"
             name="search"
             placeholder="Search for user..."
@@ -55,24 +55,24 @@ export function UsersManager() {
       </div>
       {users.isLoading && <h3> Loading categories...</h3>}
       {users.error && <h3> {users.error}</h3>}
-      <div className="max-h-[500px] overflow-y-auto ml-16">
+      <div className="max-h-[600px] overflow-y-auto ml-16">
         <table className="md:mx-40 md:my-8 w-9/12">
           <tbody>
-            <tr className="text-left text-[#be9995]">
+            <tr className="text-left text-primary_pink">
               <th>First Name</th>
               <th>Last Name</th>
               <th>Email</th>
               <th>Role</th>
             </tr>
             {usersToDisplay.map((user) => (
-              <tr className="border-t-2" key={user.id}>
-                <td className="text-[#727E7E] py-5">{user.firstName}</td>
-                <td className="text-[#727E7E]">{user.lastName}</td>
-                <td className="text-[#727E7E]">{user.email}</td>
-                <td className="text-[#727E7E]">{user.role}</td>
+              <tr className="border-t-2 border-zinc_secondery" key={user.id}>
+                <td className="text-primary_green py-5">{user.firstName}</td>
+                <td className="text-primary_green">{user.lastName}</td>
+                <td className="text-primary_green">{user.email}</td>
+                <td className="text-primary_green">{user.role}</td>
                 <td className="text-right">
                   <button
-                    className="text-[#be9995]"
+                    className="text-primary_pink"
                     onClick={() => dispatch(removeUser({ userid: user.id }))}>
                     <svg
                       xmlns="http://www.w3.org/2000/svg"

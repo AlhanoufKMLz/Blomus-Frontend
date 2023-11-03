@@ -15,7 +15,7 @@ export default function NavBar() {
 
   // Calculate number of items in the cart
   const numberOfItems = cart.items.reduce((total, currentValue) => {
-    return total + currentValue.quantity
+    return total + (currentValue.quantity || 0)
   }, 0)
 
   function handleOpenNavBar() {
@@ -49,7 +49,7 @@ export default function NavBar() {
                 <button
                   onClick={handleOpenNavBar}
                   type="button"
-                  className="text-[#727E7E] hover:text-[#D0CDD3]"
+                  className="text-primary_green hover:text-primary_grey"
                   aria-label="open menu">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -66,7 +66,7 @@ export default function NavBar() {
                 <button
                   onClick={handleCloseNavBar}
                   type="button"
-                  className="text-[#727E7E] hover:text-[#D0CDD3]"
+                  className="text-primary_green hover:text-primary_grey"
                   aria-label="close menu">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -86,30 +86,30 @@ export default function NavBar() {
           <div
             className={
               isOpen
-                ? 'absolute inset-x-0 z-20 w-full py-4 px-5 transition-all duration-300 ease-in-out md:mt-0 md:p-0 md:top-0 md:relative bg-zinc-100 md:w-auto md:opacity-100 md:translate-x-0 md:flex md:items-center'
+                ? 'absolute inset-x-0 z-20 w-full py-4 px-5 transition-all duration-300 ease-in-out md:mt-0 md:p-0 md:top-0 md:relative bg-zinc md:w-auto md:opacity-100 md:translate-x-0 md:flex md:items-center'
                 : 'hidden md:flex md:items-center md:w-auto'
             }>
             <div className="flex flex-col md:flex-row md:mx-6 items-center">
               <Link
-                className="my-2 text-[#be9995] transition-colors duration-300 transform hover:text-[#D0CDD3] md:mx-4 md:my-0"
+                className="my-2 text-primary_pink transition-colors duration-300 transform hover:text-primary_grey md:mx-4 md:my-0"
                 to={'/'}>
                 Home
               </Link>
               <Link
-                className="my-2 text-[#727E7E] transition-colors duration-300 transform  hover:text-[#D0CDD3] md:mx-4 md:my-0"
+                className="my-2 text-primary_green transition-colors duration-300 transform  hover:text-primary_grey md:mx-4 md:my-0"
                 to={'/products'}>
                 Products
               </Link>
               {logedinUser === null && (
                 <Link
-                  className="my-2 text-[#be9995] transition-colors duration-300 transform hover:text-[#D0CDD3] md:mx-4 md:my-0"
+                  className="my-2 text-primary_pink transition-colors duration-300 transform hover:text-primary_grey md:mx-4 md:my-0"
                   to={'/login'}>
                   Login
                 </Link>
               )}
               {logedinUser?.role === 'admin' && (
                 <Link
-                  className="text-[#be9995] transition-colors duration-300 transform hover:text-[#D0CDD3] md:mx-4 md:my-0"
+                  className="text-primary_pink transition-colors duration-300 transform hover:text-primary_grey md:mx-4 md:my-0"
                   to={'/dashboard'}>
                   DashBoard
                 </Link>
@@ -117,15 +117,15 @@ export default function NavBar() {
               {logedinUser !== null && (
                 <div className="flex items-center">
                   <Link
-                    className="my-2 text-[#727E7E] transition-colors duration-300 transform hover:text-[#D0CDD3] md:mx-4 md:my-0"
+                    className="my-2 text-primary_green transition-colors duration-300 transform hover:text-primary_grey md:mx-4 md:my-0"
                     onClick={handleLogout}
                     to={'/'}>
                     Logout
                   </Link>
                   <button onClick={handleOpenProfile}>
                     <img
-                      className="object-cover w-8 h-8 rounded-full ring ring-[#be9995]"
-                      src="https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=facearea&facepad=4&w=880&h=880&q=100"
+                      className="object-cover w-8 h-8 rounded-full ring ring-primary_pink"
+                      src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"
                       alt=""></img>
                   </button>
                 </div>
@@ -133,7 +133,7 @@ export default function NavBar() {
               <Link to={'/cart'}>
                 <div className="relative py-2 p-6">
                   <a
-                    className="relative text-[#727E7E] transition-colors duration-300 transform hover:text-[#D0CDD3]"
+                    className="relative text-primary_green transition-colors duration-300 transform hover:text-primary_grey"
                     href="#">
                     <svg
                       className="w-6 h-6"
@@ -150,7 +150,7 @@ export default function NavBar() {
                     </svg>
                     {numberOfItems > 0 && (
                       <div className="absolute top-0 right-0">
-                        <p className="absolute -top-2 left-0 flex h-0 w-1 items-center justify-center rounded-full bg-[#be9995] p-2 text-xs text-white">
+                        <p className="absolute -top-2 left-0 flex h-0 w-1 items-center justify-center rounded-full bg-primary_pink p-2 text-xs text-white">
                           {numberOfItems}
                         </p>
                       </div>

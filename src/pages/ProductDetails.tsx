@@ -29,7 +29,7 @@ export default function ProductDetails() {
           className="flex flex-col md:flex-row justify-center mx-auto p-20 items-center gap-10">
           <Link
             to={'/products'}
-            className="h-16 w-16 bg-[#be9995] flex justify-center items-center rounded-full text-[#D0CDD3] shadow-md hover:shadow-none hover:bg-[#D0CDD3] hover:text-[#be9995] shadow-[#5c5c5c]">
+            className="h-16 w-16 bg-primary_pink flex justify-center items-center rounded-full text-primary_grey shadow-md hover:shadow-none hover:bg-primary_grey hover:text-primary_pink shadow-shadow">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="40"
@@ -46,25 +46,25 @@ export default function ProductDetails() {
           <div className="flex w-96 h-96 bg-white rounded-lg shadow-md items-center justify-center">
             <img className="w-56" src={product.image} alt={product.name} />
           </div>
-          <table className="w-72 -mt-10 overflow-hidde text-[#727E7E] rounded-lg md:w-64">
+          <table className="w-72 -mt-10 overflow-hidde text-primary_green rounded-lg md:w-64">
             <tbody>
-              <tr className="border-b border-[#D0CDD3]">
-                <td className="py-4 font-bold tracking-wide text-[#be9995] uppercase">
+              <tr className="border-b border-primary_grey">
+                <td className="py-4 font-bold tracking-wide text-primary_pink uppercase">
                   {product.name}
                 </td>
               </tr>
-              <tr className="border-b border-[#D0CDD3]">
+              <tr className="border-b border-primary_grey">
                 <td className="py-4">
                   <span>{product.description}</span>
                 </td>
               </tr>
-              <tr className="text-[#be9995] border-b border-[#D0CDD3]">
+              <tr className="text-primary_pink border-b border-primary_grey">
                 <td className="flex justify-between py-4">
                   <span>{product?.price} SAR</span>
 
                   <button
                     onClick={() => handleAddToCart()}
-                    className="px-2 py-1 text-xs font-semibold hover:text-[#727E7E] uppercase transition-colors duration-300 transform rounded focus:bg-grey-700 dark:focus:bg-grey-600">
+                    className="px-2 py-1 text-xs font-semibold hover:text-primary_green uppercase transition-colors duration-300 transform rounded focus:bg-grey-700 dark:focus:bg-grey-600">
                     <svg
                       className="w-6 h-6"
                       viewBox="0 0 24 24"
