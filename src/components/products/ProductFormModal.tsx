@@ -9,7 +9,7 @@ import { AppDispatch } from '../../redux/store'
 import { addProduct, editProdect } from '../../redux/slices/products/productSlice'
 
 const initialState = {
-  _id: 0,
+  _id: '',
   name: '',
   image: '',
   description: '',

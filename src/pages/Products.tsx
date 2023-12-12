@@ -16,7 +16,7 @@ export default function Products() {
   const [pageNumber, setPageNumber] = useState(1)
 
   useEffect(() => {
-    dispatch(fetchProducts({searchText, category, sortBy, pageNumber}))
+    dispatch(fetchProducts({searchText, category, sortBy}))
     dispatch(fetchProductsCount())
   }, [searchText, category, sortBy, pageNumber])
 
