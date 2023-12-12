@@ -86,7 +86,7 @@ export function ProductsManager() {
           className="text-primary_pink mt-2 h-10 rounded-lg text-sm bg-zinc">
           <option value={0}>All Products</option>
           {categories.categories.map((category) => (
-            <option key={category.id} value={category.id}>
+            <option key={category._id} value={category._id}>
               {category.name}
             </option>
           ))}
@@ -103,9 +103,9 @@ export function ProductsManager() {
               <th>Price</th>
             </tr>
             {productsToDisplay.map((product) => (
-              <tr className="border-t-2 border-zinc_secondery" key={product.id}>
+              <tr className="border-t-2 border-zinc_secondery" key={product._id}>
                 <td className="pl-10 py-5">
-                  <img src={product.image} alt={product.name} width="50" />
+                  {/* <img src={product.image} alt={product.name} width="50" /> */}
                 </td>
                 <td className="text-primary_green">{product.name}</td>
                 <td className="text-primary_green">{product.price}</td>
@@ -138,7 +138,7 @@ export function ProductsManager() {
                 <td className="text-right">
                   <button
                     className="text-primary_pink"
-                    onClick={() => dispatch(removeProduct({ productid: product.id }))}>
+                    onClick={() => dispatch(removeProduct({ productid: product._id }))}>
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       width="20"

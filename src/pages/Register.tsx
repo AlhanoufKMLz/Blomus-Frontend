@@ -8,19 +8,17 @@ import { useDispatch, useSelector } from 'react-redux'
 
 import { User, registerSchema } from '../types/types'
 import { AppDispatch, RootState } from '../redux/store'
-import { addUser } from '../redux/slices/users/userSlice'
+import { registerUser } from '../redux/slices/users/userSlice'
 import { loginUser } from '../redux/slices/users/logedinUserSlice'
 
 export default function Register() {
   const dispatch = useDispatch<AppDispatch>()
   const users = useSelector((state: RootState) => state.users)
-  const [userData, setUserData] = useState<User>({
+  const [userData, setUserData] = useState({
     firstName: '',
     lastName: '',
-    id: 0,
     email: '',
     password: '',
-    role: 'visitor'
   })
   const navigate = useNavigate()
 
@@ -36,14 +34,13 @@ export default function Register() {
   }
 
   function handleFormSubmit() {
-    const userFound = users.users.find((user) => user.email == userData.email)
-    if (!userFound) {
-      navigate('/')
-      toast.success('Welcome, ' + userData.firstName + "! We're thrilled to have you here.")
-      setUserData({ ...userData, id: Number(new Date()) })
-      dispatch(addUser({ user: userData }))
-      dispatch(loginUser({ user: userData }))
-    } else console.log('An account with this email is already existed')
+    dispatch(registerUser(userData)).then((res) =>{
+    if(res.meta.requestStatus === 'fulfilled'){
+      //dispatch(loginUser({ email: userData.email, password: userData.password}))
+      //localStorage.setItem('token', res.payload.token)
+      //toast.success('Welcome, ' + res.payload.user.firstName + "! We're hrilled to have you here.")
+      navigate('/login')
+    }})
   }
 
   return (

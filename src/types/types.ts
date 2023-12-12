@@ -1,36 +1,60 @@
 import { ZodType, z } from 'zod'
 
 export type Product = {
-  id: number
+  _id: string
   name: string
   image: string
   description: string
   price: number
   categories: number[]
-  variants: string[]
   sizes: string[]
   quantity?: number
 }
 
+export type ProductState = {
+  products: Product[]
+  singleProduct: Product | undefined
+  count: number
+  error: undefined | string
+  isLoading: boolean
+}
+
 export type Category = {
-  id: number
+  _id: string
   name: string
 }
 
 export type Order = {
-  id: number
-  productid: number
-  userid: number
-  purchasedAt: string
+  _id: string
+  products: { product: string; quantity: number }[]
+  user: string
+  orderDate: Date
+  shippingInfo: {
+    country: String
+    city: String
+    address: String
+  }
+  orderStatus: 'Pending' | 'Processing' | 'Shipped' | 'Delivered' | 'Returned' | 'Canceled'
 }
 
 export type User = {
-  id: number
+  _id: number
   firstName: string
   lastName: string
   email: string
   password: string
-  role: 'visitor' | 'admin'
+  role: 'USER' | 'ADMIN'
+  isAccountVerified: boolean
+  isBlocked: boolean
+  avatar: string
+  activationToken: string
+  resetPasswordToken: string
+}
+
+export type UserState = {
+  users: User[]
+  error: undefined | string
+  isLoading: boolean
 }
 
 //props

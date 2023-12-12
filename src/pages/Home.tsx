@@ -46,14 +46,14 @@ export default function Home() {
 
         <ul className="py-8 flex gap-5 flex-wrap">
           {products.map((product) => (
-            <li key={product.id} className="flex flex-col items-center justify-center mx-auto">
+            <li key={product._id} className="flex flex-col items-center justify-center mx-auto">
               <div className="flex w-80 h-80 bg-white rounded-lg shadow-lg shadow-[#c0c0c0] hover:shadow-none items-center justify-center">
-                <Link to={`/${product.id}`}>
+                <Link to={`/${product._id}`}>
                   <img className="w-48" src={product.image} alt={product.name} />
                 </Link>
               </div>
               <div className="w-56 -mt-10 overflow-hidden rounded-lg shadow-lg md:w-64 bg-secondary_grey">
-                <Link to={`/${product.id}`}>
+                <Link to={`/${product._id}`}>
                   <h3 className="py-2 font-bold tracking-wide text-center text-primary_green uppercase">
                     {product.name}
                   </h3>

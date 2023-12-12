@@ -1,5 +1,5 @@
-import React, { ChangeEvent, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { ChangeEvent, useState } from 'react'
+import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router'
 import { Link } from 'react-router-dom'
 import { toast } from 'react-toastify'
@@ -12,9 +12,8 @@ import { LoginSchema, loginSchema } from '../types/types'
 
 export default function Login() {
   const dispatch = useDispatch<AppDispatch>()
-  const users = useSelector((state: RootState) => state.users)
-  const [userLogin, setUserLogin] = useState({ email: '', password: '' })
   const navigate = useNavigate()
+  const [userLogin, setUserLogin] = useState({ email: '', password: '' })
 
   const {
     register,
@@ -28,16 +27,15 @@ export default function Login() {
   }
 
   function handleFormSubmit() {
-    const userFound = users.users.find(
-      (user) => user.email == userLogin.email && user.password == userLogin.password
-    )
-    if (userFound) {
-      dispatch(loginUser({ user: userFound }))
-      toast.success('Welcome back ' + userFound.firstName + "! We're glad to see you again")
-      navigate('/')
-    } else {
-      toast.error('incorrect email or password')
-    }
+    dispatch(loginUser(userLogin)).then((res) => {
+      if(res.meta.requestStatus === 'fulfilled'){
+        localStorage.setItem('token', res.payload.token)
+        toast.success('Welcome back ' + res.payload.user.firstName + "! We're glad to see you again")
+        navigate('/')
+      } else if(res.meta.requestStatus === 'rejected'){
+        toast.success(res.payload.user)
+      }
+    })
   }
 
   return (

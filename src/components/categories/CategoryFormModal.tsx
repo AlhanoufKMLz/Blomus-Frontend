@@ -6,10 +6,10 @@ import { useForm } from 'react-hook-form'
 
 import { AppDispatch } from '../../redux/store'
 import { Category, CategoryFormModalProp, CategorySchema, categorySchema } from '../../types/types'
-import { addCategory, editCategory } from '../../redux/slices/categories/categorySlice'
+import { createCategory, editCategory } from '../../redux/slices/categories/categorySlice'
 
 const initialState = {
-  id: Number(new Date()),
+  _id: '',
   name: ''
 }
 
@@ -39,12 +39,13 @@ export default function CategoryFormModal(prop: CategoryFormModalProp) {
 
   const handleFormSubmit = () => {
     if (!prop.category) {
-      dispatch(addCategory({ category: categoryChanges }))
+      dispatch(createCategory({name:categoryChanges.name}))
       toast.success('category added successfully!')
     } else {
       dispatch(editCategory({ newCategory: categoryChanges }))
       toast.success('category details updated successfully!')
     }
+    
     // Reset the useState
     setCategoryChanges(initialState)
     // Close the form
@@ -52,7 +53,7 @@ export default function CategoryFormModal(prop: CategoryFormModalProp) {
   }
 
   const handleCloseModal = () => {
-    setCategoryChanges({ id: Number(new Date()), name: '' })
+    setCategoryChanges(initialState)
     prop.setIsModalOpen(false)
   }
 

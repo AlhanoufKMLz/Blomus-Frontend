@@ -14,17 +14,19 @@ export default function Orders() {
         <table className="md:mx-40 md:my-8 w-9/12">
           <tbody>
             <tr className="text-left text-primary_pink">
-              <th>Order ID</th>
-              <th>Product ID</th>
+              <th>Products</th>
               <th>Date</th>
               <th>User ID</th>
             </tr>
             {orders.orders.map((order) => (
-              <tr className="border-t-2 border-zinc_secondery" key={order.id}>
-                <td className="text-primary_green py-5">{order.id}</td>
-                <td className="text-primary_green">{order.productid}</td>
-                <td className="text-primary_green">{order.purchasedAt}</td>
-                <td className="text-primary_green">{order.userid}</td>
+              <tr className="border-t-2 border-zinc_secondery" key={order._id}>
+                <td className="text-primary_green">
+                  {order.products.map((item, index) => (
+                    <p key={index}>{item.product}</p>
+                  ))}
+                </td>
+                <td className="text-primary_green">{order.orderDate.toLocaleString()}</td>
+                <td className="text-primary_green">{order.user}</td>
               </tr>
             ))}
           </tbody>

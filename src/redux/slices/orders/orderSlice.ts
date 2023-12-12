@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { Order } from '../../../types/types'
+import api from '../../../api'
 
 export type OrderState = {
   orders: Order[]
@@ -13,10 +14,11 @@ const initialState: OrderState = {
   isLoading: false
 }
 
-export const fetchOrders = createAsyncThunk('product/fetchOrders', async () => {
-  const response = await fetch('/mock/e-commerce/orders.json')
-  const data = await response.json()
-  return data
+// Fetch all orders
+export const fetchOrders = createAsyncThunk('orders/fetchOrders', async () => {
+  const response = await api.get(`/api/orders`)
+  console.log(response.data.payload)
+  return response.data.payload
 })
 
 export const orderSlice = createSlice({

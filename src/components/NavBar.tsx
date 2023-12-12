@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { AppDispatch, RootState } from '../redux/store'
-import { logoutUser } from '../redux/slices/users/logedinUserSlice'
+import { logout } from '../redux/slices/users/logedinUserSlice'
 import Profile from './Profile'
 
 export default function NavBar() {
@@ -27,7 +27,8 @@ export default function NavBar() {
   }
 
   function handleLogout() {
-    dispatch(logoutUser())
+    dispatch(logout())
+    localStorage.removeItem('token')
   }
 
   function handleOpenProfile() {
@@ -107,7 +108,7 @@ export default function NavBar() {
                   Login
                 </Link>
               )}
-              {logedinUser?.role === 'admin' && (
+              {logedinUser?.role === 'ADMIN' && (
                 <Link
                   className="text-primary_pink transition-colors duration-300 transform hover:text-primary_grey md:mx-4 md:my-0"
                   to={'/dashboard'}>

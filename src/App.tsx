@@ -19,7 +19,6 @@ import { UsersManager } from './components/users/UsersManager'
 import { ProductsManager } from './components/products/ProductsManager'
 import { CategoriesManager } from './components/categories/CategoriesManager'
 import { AppDispatch, RootState } from './redux/store'
-import { fetchProducts } from './redux/slices/products/productSlice'
 import { fetchCategories } from './redux/slices/categories/categorySlice'
 import { fetchUsers } from './redux/slices/users/userSlice'
 import { fetchOrders } from './redux/slices/orders/orderSlice'
@@ -28,12 +27,11 @@ function App() {
   const logedinUser = useSelector((state: RootState) => state.logedinUser.user)
   const dispatch = useDispatch<AppDispatch>()
 
-  useEffect(() => {
-    dispatch(fetchProducts())
-    dispatch(fetchCategories())
-    dispatch(fetchUsers())
-    dispatch(fetchOrders())
-  }, [])
+  // useEffect(() => {
+  //   dispatch(fetchCategories())
+  //   dispatch(fetchUsers())
+  //   dispatch(fetchOrders())
+  // }, [])
 
   return (
     <div className="bg-zinc">

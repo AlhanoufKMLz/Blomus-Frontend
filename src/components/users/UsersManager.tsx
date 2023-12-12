@@ -65,7 +65,7 @@ export function UsersManager() {
               <th>Role</th>
             </tr>
             {usersToDisplay.map((user) => (
-              <tr className="border-t-2 border-zinc_secondery" key={user.id}>
+              <tr className="border-t-2 border-zinc_secondery" key={user._id}>
                 <td className="text-primary_green py-5">{user.firstName}</td>
                 <td className="text-primary_green">{user.lastName}</td>
                 <td className="text-primary_green">{user.email}</td>
@@ -73,7 +73,7 @@ export function UsersManager() {
                 <td className="text-right">
                   <button
                     className="text-primary_pink"
-                    onClick={() => dispatch(removeUser({ userid: user.id }))}>
+                    onClick={() => dispatch(removeUser({ userid: user._id }))}>
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       width="20"

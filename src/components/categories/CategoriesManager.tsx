@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 
 import { AppDispatch, RootState } from '../../redux/store'
 import { Category } from '../../types/types'
-import { removeCategory } from '../../redux/slices/categories/categorySlice'
+import { deleteCategory } from '../../redux/slices/categories/categorySlice'
 import CategoryFormModal from './CategoryFormModal'
 
 export function CategoriesManager() {
@@ -78,9 +78,9 @@ export function CategoriesManager() {
               <th>ID</th>
             </tr>
             {categoriesToDisplay.map((category) => (
-              <tr className="border-t-2 border-zinc_secondery" key={category.id}>
+              <tr className="border-t-2 border-zinc_secondery" key={category._id}>
                 <td className="text-primary_green py-5">{category.name}</td>
-                <td className="text-primary_green">{category.id}</td>
+                <td className="text-primary_green">{category._id}</td>
                 <td className="text-right">
                   <button
                     className="text-primary_green hover:text-primary_pink"
@@ -112,7 +112,7 @@ export function CategoriesManager() {
                 <td className="text-right">
                   <button
                     className="text-primary_pink"
-                    onClick={() => dispatch(removeCategory({ categoryid: category.id }))}>
+                    onClick={() => dispatch(deleteCategory(category._id))}>
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       width="20"

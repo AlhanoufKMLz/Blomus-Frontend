@@ -6,63 +6,75 @@ import { toast } from 'react-toastify'
 import { AppDispatch, RootState } from '../redux/store'
 import { addToCart } from '../redux/slices/cart/cartSlice'
 import { Product } from '../types/types'
+import { fetchProducts, fetchProductsCount } from '../redux/slices/products/productSlice'
 
 export default function Products() {
+  const dispatch = useDispatch<AppDispatch>()
+  const [searchText, setSearchText] = useState('')
+  const [category, setCategory] = useState('')
+  const [sortBy, setSortBy] = useState('')
+  const [pageNumber, setPageNumber] = useState(1)
+
+  useEffect(() => {
+    dispatch(fetchProducts({searchText, category, sortBy, pageNumber}))
+    dispatch(fetchProductsCount())
+  }, [searchText, category, sortBy, pageNumber])
+
   const products = useSelector((state: RootState) => state.products)
   const categories = useSelector((state: RootState) => state.categories)
-  const dispatch = useDispatch<AppDispatch>()
 
-  const [filteredItems, setFilteredItems] = useState(products.products)
+
+  const [filteredItems, setFilteredItems] = useState<Product[]>(products.products)
   const [productsToDisplay, setProductsToDisplay] = useState<Product[]>(products.products)
-  const [searchKeyWord, setSearchKeyWord] = useState('')
 
   // Pagination setup
-  const [currentPage, setCurrentPage] = useState(1)
-  const itemsPerPage = 9
-  const totalPages = Math.ceil(filteredItems.length / itemsPerPage)
+  const itemsPerPage = 2
+  const totalPages = Math.ceil(products.count / itemsPerPage)
   useEffect(() => {
-    const indexOfLastItem = currentPage * itemsPerPage
+    const indexOfLastItem = pageNumber * itemsPerPage
     const indexOfFirstItem = indexOfLastItem - itemsPerPage
     setProductsToDisplay(filteredItems.slice(indexOfFirstItem, indexOfLastItem))
-  }, [filteredItems, currentPage])
+  }, [filteredItems, pageNumber])
 
   // Search for product
   function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
-    setSearchKeyWord(event.target.value)
+    setSearchText (event.target.value)
   }
   useEffect(() => {
-    if (searchKeyWord.trim() !== '') {
-      setCurrentPage(1)
+    if (searchText.trim() !== '') {
+      setPageNumber(1)
       setFilteredItems(
         products.products.filter((product) =>
-          product.name.toLowerCase().includes(searchKeyWord.toLowerCase())
+          product.name.toLowerCase().includes(searchText.toLowerCase())
         )
       )
     } else setFilteredItems(products.products)
-  }, [searchKeyWord, products.products])
+  }, [searchText, products.products])
 
   // Sort products based on price
   function sort(event: { target: { value: string } }) {
-    setFilteredItems(
-      filteredItems.sort((a, b) => {
-        if (event.target.value === 'High-Low') {
-          return b.price - a.price
-        }
-        return a.price - b.price
-      })
-    )
-    setCurrentPage(1)
+    setSortBy(event.target.value)
+    // setFilteredItems(
+    //   filteredItems.sort((a, b) => {
+    //     if (event.target.value === 'High-Low') {
+    //       return b.price - a.price
+    //     }
+    //     return a.price - b.price
+    //   })
+    // )
+    setPageNumber(1)
   }
 
   // Filter products based on categories
   function filter(event: { target: { value: string } }) {
-    const selectedValue = Number(event.target.value)
-    if (selectedValue === 0) setFilteredItems(products.products)
-    else
-      setFilteredItems(
-        products.products.filter((product) => product.categories.includes(selectedValue))
-      )
-    setCurrentPage(1)
+    setCategory(event.target.value)
+    setPageNumber(1)
+    // const selectedValue = event.target.value
+    // if (selectedValue === '') setFilteredItems(products.products)
+    // else
+    //   setFilteredItems(
+    //     products.products.filter((product) => product.categories.includes(selectedValue))
+    //   )
   }
 
   // Add product to cart
@@ -73,7 +85,7 @@ export default function Products() {
 
   // Changeing the page
   const handlePageChange = (page: number) => {
-    setCurrentPage(page)
+    setPageNumber(page)
   }
 
   //Display the products
@@ -105,15 +117,15 @@ export default function Products() {
         </div>
         <select onChange={sort} className="text-primary_pink mt-2 h-10 rounded-lg text-sm bg-zinc">
           <option>Sort By</option>
-          <option value={'Low-High'}>Low-High</option>
-          <option value={'High-Low'}>High-Low</option>
+          <option value={'lowestPrice'}>Low-High</option>
+          <option value={'highestPrice'}>High-Low</option>
         </select>
         <select
           onChange={filter}
           className="text-primary_pink mt-2 h-10 rounded-lg text-sm bg-zinc">
-          <option value={0}>All Products</option>
+          <option value={''}>All Products</option>
           {categories.categories.map((category) => (
-            <option key={category.id} value={category.id}>
+            <option key={category._id} value={category.name}>
               {category.name}
             </option>
           ))}
@@ -126,14 +138,14 @@ export default function Products() {
         <div className="grid gap-4">
           <ul className="py-8 flex gap-5 flex-wrap">
             {productsToDisplay.map((product) => (
-              <li key={product.id} className="flex flex-col items-center justify-center mx-auto">
+              <li key={product._id} className="flex flex-col items-center justify-center mx-auto">
                 <div className="flex w-80 h-80 bg-white rounded-lg shadow-lg shadow-[#c0c0c0] hover:shadow-none items-center justify-center">
-                  <Link to={`/${product.id}`}>
-                    <img className="w-48" src={product.image} alt={product.name} />
+                  <Link to={`/${product._id}`}>
+                    {/* <img className="w-48" src={product.image} alt={product.name} /> */}
                   </Link>
                 </div>
                 <div className="w-56 -mt-10 overflow-hidden rounded-lg shadow-lg md:w-64 bg-secondary_grey">
-                  <Link to={`/${product.id}`}>
+                  <Link to={`/${product._id}`}>
                     <h3 className="py-2 font-bold tracking-wide text-center text-primary_green uppercase">
                       {product.name}
                     </h3>
@@ -167,20 +179,20 @@ export default function Products() {
       </section>
       {/* Pagenation */}
       <div className="flex justify-center">
-        {currentPage !== 1 && (
+        {pageNumber !== 1 && (
           <button
             className={'rounded-full hover:border w-6 m-2 border-primary_pink text-primary_green'}
             onClick={() => {
-              handlePageChange(currentPage - 1)
+              handlePageChange(pageNumber - 1)
             }}>
             &laquo;
           </button>
         )}
         {Array.from({ length: totalPages }, (_, index) => {
           if (
-            index + 1 === currentPage ||
-            index + 1 === currentPage + 1 ||
-            index + 1 === currentPage - 1 ||
+            index + 1 === pageNumber ||
+            index + 1 === pageNumber + 1 ||
+            index + 1 === pageNumber - 1 ||
             index + 1 == 1 ||
             index + 1 == totalPages
           )
@@ -188,7 +200,7 @@ export default function Products() {
               <button
                 key={index + 1}
                 className={
-                  index + 1 == currentPage
+                  index + 1 == pageNumber
                     ? 'rounded-full bg-primary_green w-6 m-2 text-secondary_grey'
                     : 'rounded-full hover:border w-6 m-2 border-primary_pink text-primary_green'
                 }
@@ -200,11 +212,11 @@ export default function Products() {
             )
           else return <span className="text-primary_green">.</span>
         })}
-        {currentPage !== totalPages && (
+        {pageNumber !== totalPages && (
           <button
             className={'rounded-full hover:border w-6 m-2 border-primary_pink text-primary_green'}
             onClick={() => {
-              handlePageChange(currentPage + 1)
+              handlePageChange(pageNumber + 1)
             }}>
             &raquo;
           </button>

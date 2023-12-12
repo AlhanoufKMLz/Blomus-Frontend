@@ -1,18 +1,24 @@
 import { useParams } from 'react-router'
 import { useDispatch, useSelector } from 'react-redux'
 import { toast } from 'react-toastify'
+import { Link } from 'react-router-dom'
+import { useEffect } from 'react'
 
 import { AppDispatch, RootState } from '../redux/store'
 import { addToCart } from '../redux/slices/cart/cartSlice'
-import { Link } from 'react-router-dom'
+import { fetchSingleProduct } from '../redux/slices/products/productSlice'
 
 export default function ProductDetails() {
-  const { productid } = useParams()
-
-  const dispatch = useDispatch<AppDispatch>()
-
-  const products = useSelector((state: RootState) => state.products)
-  const product = products.products.find((item) => Number(productid) === item.id)
+  const { productid } = useParams();
+  const dispatch = useDispatch<AppDispatch>();
+  
+  useEffect(() => {
+    if (productid) {
+      dispatch(fetchSingleProduct(productid));
+    }
+  }, [dispatch, productid]);
+  
+  const product = useSelector((state: RootState) => state.products.singleProduct)
 
   function handleAddToCart() {
     if (product) {
@@ -25,7 +31,7 @@ export default function ProductDetails() {
     <div>
       {product && (
         <div
-          key={product?.id}
+          key={product?._id}
           className="flex flex-col md:flex-row justify-center mx-auto p-20 items-center gap-10">
           <Link
             to={'/products'}
@@ -44,7 +50,7 @@ export default function ProductDetails() {
             </svg>
           </Link>
           <div className="flex w-96 h-96 bg-white rounded-lg shadow-md items-center justify-center">
-            <img className="w-56" src={product.image} alt={product.name} />
+            {/* <img className="w-56" src={product.image} alt={product.name} /> */}
           </div>
           <table className="w-72 -mt-10 overflow-hidde text-primary_green rounded-lg md:w-64">
             <tbody>

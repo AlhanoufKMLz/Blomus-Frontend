@@ -47,10 +47,10 @@ export default function Cart() {
                 <table className="text-primary_green w-full">
                   <tbody>
                     {cart.items.map((product) => (
-                      <tr className="border-t-2 border-zinc_secondery" key={product.id}>
+                      <tr className="border-t-2 border-zinc_secondery" key={product._id}>
                         <td className="py-8">
-                          <Link to={`/products/${product.id}`}>
-                            <img src={product.image} alt={product.name} width="70" />
+                          <Link to={`/products/${product._id}`}>
+                            {/* <img src={product.image} alt={product.name} width="70" /> */}
                           </Link>
                         </td>
                         <td>{product.name}</td>

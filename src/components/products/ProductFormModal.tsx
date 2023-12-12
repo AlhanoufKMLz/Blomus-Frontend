@@ -9,7 +9,7 @@ import { AppDispatch } from '../../redux/store'
 import { addProduct, editProdect } from '../../redux/slices/products/productSlice'
 
 const initialState = {
-  id: Number(new Date()),
+  _id: 0,
   name: '',
   image: '',
   description: '',
@@ -174,14 +174,6 @@ export default function ProductFormModal(prop: ProductFormModalProp) {
               <span className="text-primary_green pl-2">
                 Variants: (use comma , to create multiple)
               </span>
-              <input
-                type="text"
-                id="variants"
-                {...register('variants')}
-                className="border-2 border-primary_grey h-10 px-5 pr-16 rounded-lg text-sm focus:outline-none"
-                onChange={handleChange}
-                value={productChanges.variants.join(',')}
-              />
               {errors.variants && (
                 <span className="text-primary_pink"> {errors.variants.message} </span>
               )}
