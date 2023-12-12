@@ -15,7 +15,7 @@ export function getDecodedTokenFromStorage() {
       firstName: decodedUser.firstName,
       lastName: decodedUser.lastName,
       email: decodedUser.email,
-      id: decodedUser.user_id,
+      _id: decodedUser.user_id,
       password: decodedUser.password,
       role: decodedUser.role
     }

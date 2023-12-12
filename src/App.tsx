@@ -1,9 +1,8 @@
 import './App.css'
-import { useEffect } from 'react'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import { Route, Routes } from 'react-router'
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 
 import Home from './pages/Home'
 import NavBar from './components/NavBar'
@@ -18,20 +17,10 @@ import Footer from './components/Footer'
 import { UsersManager } from './components/users/UsersManager'
 import { ProductsManager } from './components/products/ProductsManager'
 import { CategoriesManager } from './components/categories/CategoriesManager'
-import { AppDispatch, RootState } from './redux/store'
-import { fetchCategories } from './redux/slices/categories/categorySlice'
-import { fetchUsers } from './redux/slices/users/userSlice'
-import { fetchOrders } from './redux/slices/orders/orderSlice'
+import { RootState } from './redux/store'
 
 function App() {
   const logedinUser = useSelector((state: RootState) => state.logedinUser.user)
-  const dispatch = useDispatch<AppDispatch>()
-
-  // useEffect(() => {
-  //   dispatch(fetchCategories())
-  //   dispatch(fetchUsers())
-  //   dispatch(fetchOrders())
-  // }, [])
 
   return (
     <div className="bg-zinc">

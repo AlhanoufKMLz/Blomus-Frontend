@@ -3,14 +3,14 @@ import { useDispatch, useSelector } from 'react-redux'
 
 import { AppDispatch, RootState } from '../../redux/store'
 import { User } from '../../types/types'
-import { removeUser } from '../../redux/slices/users/userSlice'
+import { deleteUser, fetchUsers } from '../../redux/slices/users/userSlice'
 
 export function UsersManager() {
-  const users = useSelector((state: RootState) => state.users)
   const dispatch = useDispatch<AppDispatch>()
-
-  const [usersToDisplay, setUsersToDisplay] = useState<User[]>(users.users)
   const [searchKeyWord, setSearchKeyWord] = useState('')
+
+  const users = useSelector((state: RootState) => state.users)
+  const [usersToDisplay, setUsersToDisplay] = useState<User[]>(users.users)
 
   //Search for user
   function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
@@ -73,7 +73,7 @@ export function UsersManager() {
                 <td className="text-right">
                   <button
                     className="text-primary_pink"
-                    onClick={() => dispatch(removeUser({ userid: user._id }))}>
+                    onClick={() => dispatch(deleteUser(user._id))}>
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       width="20"

@@ -34,6 +34,14 @@ export const registerUser = createAsyncThunk(
   }
 )
 
+// Delete user
+export const deleteUser = createAsyncThunk('users/deleteUser', async (userId: string) => {
+  const response = await api.delete(`/api/users/${userId}`)
+
+  console.log(response.data.payload)
+  return response.data.payload
+})
+
 const initialState: UserState = {
   users: [],
   error: undefined,
@@ -44,12 +52,6 @@ export const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
-    addUser: (state, action: { payload: { user: User } }) => {
-      state.users = [action.payload.user, ...state.users]
-    },
-    removeUser: (state, action: { payload: { userid: number } }) => {
-      state.users = state.users.filter((user) => user._id !== action.payload.userid)
-    },
     editUser: (state, action: { payload: { newUser: User } }) => {
       state.users = state.users.filter((user) => user._id !== action.payload.newUser._id)
       state.users = [action.payload.newUser, ...state.users]
@@ -82,9 +84,24 @@ export const userSlice = createSlice({
         state.error = action.error.message
         state.isLoading = false
       })
+
+      // Delete user
+      .addCase(deleteUser.pending, (state) => {
+        state.isLoading = true
+      })
+      .addCase(deleteUser.fulfilled, (state, action) => {
+        state.users = state.users.filter(
+          (user) => user._id !== action.payload.userId
+        )
+        state.isLoading = false
+      })
+      .addCase(deleteUser.rejected, (state, action) => {
+        state.error = action.error.message
+        state.isLoading = false
+      })
   }
 })
 
-export const { removeUser, addUser, editUser } = userSlice.actions
+export const { editUser } = userSlice.actions
 
 export default userSlice.reducer
