@@ -26,7 +26,7 @@ export const loginUser = createAsyncThunk(
       return response.data
     } catch (error) {
       if (error instanceof AxiosError) {
-        rejectWithValue(error.response?.data.msg)
+        return rejectWithValue(error.response?.data.msg)
       }
     }
   }

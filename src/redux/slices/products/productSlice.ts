@@ -4,7 +4,7 @@ import { Product, ProductState } from '../../../types/types'
 import api from '../../../api';
 
 // Fetch all products
-export const fetchProducts = createAsyncThunk('product/fetchProducts', async ({ searchText, category, sortBy }:{searchText: string, category:string, sortBy:string}) => {
+export const fetchProducts = createAsyncThunk('products/fetchProducts', async ({ searchText, category, sortBy }:{searchText: string, category:string, sortBy:string}) => {
     const queryParams = new URLSearchParams();
     // queryParams.append('limit', '2')
     // queryParams.append('pageNumber', String(pageNumber))
@@ -14,13 +14,12 @@ export const fetchProducts = createAsyncThunk('product/fetchProducts', async ({ 
 
     const response = await api.get(`/api/products?${queryParams.toString()}`);
 
-  console.log(response.data)
   return response.data.payload
 })
 
 // Fetch products count
 export const fetchProductsCount = createAsyncThunk(
-  'product/fetchProductsCount',
+  'products/fetchProductsCount',
   async () => {
     const response = await api.get(`/api/products/count`)
 
@@ -30,10 +29,40 @@ export const fetchProductsCount = createAsyncThunk(
 
 // Fetch single product
 export const fetchSingleProduct = createAsyncThunk(
-  'product/fetchSigleProduct',
+  'products/fetchSigleProduct',
   async (productId: string) => {
     const response = await api.get(`/api/products/${productId}`)
 
+    return response.data.payload
+  }
+)
+
+// Create new product
+export const createProduct = createAsyncThunk(
+  'products/createProduct',
+  async (product: { name: Product }) => {
+    const response = await api.post('/api/products', product)
+    
+    return response.data.payload
+  }
+)
+
+// Update product
+export const updateProduct = createAsyncThunk(
+  'products/updateProduct',
+  async ({ product, productId }: { product: Product; productId: string }) => {
+    const response = await api.put(`/api/products/${productId}`, product)
+
+    return response.data.payload
+  }
+)
+
+// Delete product
+export const deleteProduct = createAsyncThunk(
+  'products/deleteProduct',
+  async (productId: string) => {
+    const response = await api.delete(`/api/products/${productId}`)
+    
     return response.data.payload
   }
 )
@@ -102,7 +131,51 @@ export const productSlice = createSlice({
       .addCase(fetchProductsCount.rejected, (state, action) => {
         state.error = action.error.message;
         state.isLoading = false;
-      });
+      })
+
+      // Create new product
+      .addCase(createProduct.pending, (state) => {
+        state.isLoading = true
+      })
+      .addCase(createProduct.fulfilled, (state, action) => {
+        state.products = [action.payload, ...state.products]
+        state.isLoading = false
+      })
+      .addCase(createProduct.rejected, (state, action) => {
+        state.error = action.error.message
+        state.isLoading = false
+      })
+
+      // Update category
+      .addCase(updateProduct.pending, (state) => {
+        state.isLoading = true
+      })
+      .addCase(updateProduct.fulfilled, (state, action) => {
+        state.products = state.products.filter(
+          (product) => product._id !== action.payload._id
+        )
+        state.products = [action.payload, ...state.products]
+        state.isLoading = false
+      })
+      .addCase(updateProduct.rejected, (state, action) => {
+        state.error = action.error.message
+        state.isLoading = false
+      })
+
+      // Delete category
+      .addCase(deleteProduct.pending, (state) => {
+        state.isLoading = true
+      })
+      .addCase(deleteProduct.fulfilled, (state, action) => {
+        state.products = state.products.filter(
+          (product) => product._id !== action.payload._id
+        )
+        state.isLoading = false
+      })
+      .addCase(deleteProduct.rejected, (state, action) => {
+        state.error = action.error.message
+        state.isLoading = false
+      })
   }
 })
 

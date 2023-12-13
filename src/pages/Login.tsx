@@ -36,7 +36,6 @@ export default function Login() {
       } 
       if(res.meta.requestStatus === 'rejected'){
         toast.error(error)
-        console.log(error)
       }
     })
   }

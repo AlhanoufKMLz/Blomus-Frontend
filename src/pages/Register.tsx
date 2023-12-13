@@ -9,18 +9,17 @@ import { useDispatch, useSelector } from 'react-redux'
 import { User, registerSchema } from '../types/types'
 import { AppDispatch, RootState } from '../redux/store'
 import { registerUser } from '../redux/slices/users/userSlice'
-import { loginUser } from '../redux/slices/users/logedinUserSlice'
 
 export default function Register() {
   const dispatch = useDispatch<AppDispatch>()
-  const users = useSelector((state: RootState) => state.users)
   const [userData, setUserData] = useState({
     firstName: '',
     lastName: '',
     email: '',
-    password: '',
+    password: ''
   })
   const navigate = useNavigate()
+  const { error, isLoading } = useSelector((state: RootState) => state.users)
 
   const {
     register,
@@ -34,13 +33,19 @@ export default function Register() {
   }
 
   function handleFormSubmit() {
-    dispatch(registerUser(userData)).then((res) =>{
-    if(res.meta.requestStatus === 'fulfilled'){
-      //dispatch(loginUser({ email: userData.email, password: userData.password}))
-      //localStorage.setItem('token', res.payload.token)
-      //toast.success('Welcome, ' + res.payload.user.firstName + "! We're hrilled to have you here.")
-      navigate('/login')
-    }})
+    dispatch(registerUser(userData)).then((res) => {
+      if (res.meta.requestStatus === 'fulfilled') {
+        toast.success(
+          'Welcome, ' +
+            res.payload.user.firstName +
+            "! We're hrilled to have you here. Check your email to activate your account"
+        )
+        navigate('/login')
+      }
+      if (res.meta.requestStatus === 'rejected') {
+        toast.error(error)
+      }
+    })
   }
 
   return (
@@ -188,7 +193,7 @@ export default function Register() {
 
             <div className="mt-6">
               <button className="w-full px-6 py-3 text-sm font-medium tracking-wide text-primary_grey capitalize transition-colors duration-300 transform bg-primary_pink rounded-lg hover:bg-primary_green">
-                Register
+                {isLoading ? 'Registering...' : 'Register'}
               </button>
 
               <div className="mt-6 text-center text-primary_green hover:text-primary_pink">

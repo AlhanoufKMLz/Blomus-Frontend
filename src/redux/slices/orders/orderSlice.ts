@@ -17,7 +17,7 @@ const initialState: OrderState = {
 // Fetch all orders
 export const fetchOrders = createAsyncThunk('orders/fetchOrders', async () => {
   const response = await api.get(`/api/orders`)
-  console.log(response.data.payload)
+
   return response.data.payload
 })
 

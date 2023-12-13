@@ -1,19 +1,25 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import { User, UserState } from '../../../types/types'
-import api from '../../../api'
 import { AxiosError } from 'axios'
 
-// Fetch all users
-export const fetchUsers = createAsyncThunk('users/fetchUsers', async () => {
-  const response = await api.get('/api/users')
+import { User, UserState } from '../../../types/types'
+import api from '../../../api'
 
-  console.log(response.data.payload)
-  return response.data.payload
+// Fetch all users
+export const fetchUsers = createAsyncThunk('users/fetchUsers', async (_, { rejectWithValue }) => {
+  try {
+    const response = await api.get('/api/users')
+
+    return response.data.payload
+  } catch (error) {
+    if (error instanceof AxiosError) {
+      return rejectWithValue(error.response?.data.msg)
+    }
+  }
 })
 
 // Register users
 export const registerUser = createAsyncThunk(
-  'user/register',
+  'users/register',
   async (
     user: {
       firstName: string
@@ -26,20 +32,26 @@ export const registerUser = createAsyncThunk(
     try {
       const response = await api.post('/api/auth/register', user)
 
-      console.log(response.data)
       return response.data
     } catch (error) {
-      if (error instanceof AxiosError) return rejectWithValue('rejected')
+      if (error instanceof AxiosError) {
+        return rejectWithValue(error.response?.data.msg)
+      }
     }
   }
 )
 
 // Delete user
-export const deleteUser = createAsyncThunk('users/deleteUser', async (userId: string) => {
-  const response = await api.delete(`/api/users/${userId}`)
+export const deleteUser = createAsyncThunk('users/deleteUser', async (userId: string, { rejectWithValue }) => {
+  try {
+    const response = await api.delete(`/api/users/${userId}`)
 
-  console.log(response.data.payload)
-  return response.data.payload
+    return response.data.payload
+  } catch (error) {
+    if (error instanceof AxiosError) {
+      return rejectWithValue(error.response?.data.msg)
+    }
+  }
 })
 
 const initialState: UserState = {
@@ -68,8 +80,12 @@ export const userSlice = createSlice({
         state.isLoading = false
       })
       .addCase(fetchUsers.rejected, (state, action) => {
-        state.error = action.error.message
+        const errorMessage = action.payload
+        if (typeof errorMessage === 'string') {
+          state.error = errorMessage
+        }
         state.isLoading = false
+        return state
       })
 
       // Register users
@@ -77,12 +93,18 @@ export const userSlice = createSlice({
         state.isLoading = true
       })
       .addCase(registerUser.fulfilled, (state, action) => {
-        state.users = action.payload
+        console.log("fulfilled")
+        state.users = [action.payload.user, ...state.users]
         state.isLoading = false
       })
       .addCase(registerUser.rejected, (state, action) => {
-        state.error = action.error.message
+        console.log("rejected")
+        const errorMessage = action.payload
+        if (typeof errorMessage === 'string') {
+          state.error = errorMessage
+        }
         state.isLoading = false
+        return state
       })
 
       // Delete user
@@ -90,14 +112,16 @@ export const userSlice = createSlice({
         state.isLoading = true
       })
       .addCase(deleteUser.fulfilled, (state, action) => {
-        state.users = state.users.filter(
-          (user) => user._id !== action.payload.userId
-        )
+        state.users = state.users.filter((user) => user._id !== action.payload._id)
         state.isLoading = false
       })
       .addCase(deleteUser.rejected, (state, action) => {
-        state.error = action.error.message
+        const errorMessage = action.payload
+        if (typeof errorMessage === 'string') {
+          state.error = errorMessage
+        }
         state.isLoading = false
+        return state
       })
   }
 })
