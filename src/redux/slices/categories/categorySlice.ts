@@ -17,7 +17,7 @@ const initialState: CategoryState = {
 // Fetch all categories
 export const fetchCategories = createAsyncThunk('categories/fetchCategoreis', async () => {
   const response = await api.get('/api/categories')
-  console.log(response.data.payload)
+  
   return response.data.payload
 })
 
@@ -26,7 +26,7 @@ export const createCategory = createAsyncThunk(
   'categories/createCategory',
   async (category: { name: string }) => {
     const response = await api.post('/api/categories', category)
-    console.log(response.data.payload)
+    
     return response.data.payload
   }
 )
@@ -36,7 +36,7 @@ export const updateCategory = createAsyncThunk(
   'categories/updateCategory',
   async ({ category, categoryId }: { category: { name: string }; categoryId: string }) => {
     const response = await api.put(`/api/categories/${categoryId}`, category)
-    console.log(response.data.payload)
+
     return response.data.payload
   }
 )
@@ -46,7 +46,7 @@ export const deleteCategory = createAsyncThunk(
   'categories/deleteCategory',
   async (categoryId: string) => {
     const response = await api.delete(`/api/categories/${categoryId}`)
-    console.log(response.data.payload)
+    
     return response.data.payload
   }
 )
@@ -82,7 +82,7 @@ export const categorySlice = createSlice({
         state.isLoading = true
       })
       .addCase(createCategory.fulfilled, (state, action) => {
-        state.categories = [action.payload.category, ...state.categories]
+        state.categories = [action.payload, ...state.categories]
         state.isLoading = false
       })
       .addCase(createCategory.rejected, (state, action) => {
@@ -96,9 +96,9 @@ export const categorySlice = createSlice({
       })
       .addCase(updateCategory.fulfilled, (state, action) => {
         state.categories = state.categories.filter(
-          (catecory) => catecory._id !== action.payload.category._id
+          (catecory) => catecory._id !== action.payload._id
         )
-        state.categories = [action.payload.category, ...state.categories]
+        state.categories = [action.payload, ...state.categories]
         state.isLoading = false
       })
       .addCase(updateCategory.rejected, (state, action) => {
@@ -112,7 +112,7 @@ export const categorySlice = createSlice({
       })
       .addCase(deleteCategory.fulfilled, (state, action) => {
         state.categories = state.categories.filter(
-          (category) => category._id !== action.payload.categoryid
+          (catecory) => catecory._id !== action.payload._id
         )
         state.isLoading = false
       })

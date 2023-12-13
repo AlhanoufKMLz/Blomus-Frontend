@@ -1,5 +1,5 @@
 import { ChangeEvent, useState } from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router'
 import { Link } from 'react-router-dom'
 import { toast } from 'react-toastify'
@@ -14,6 +14,7 @@ export default function Login() {
   const dispatch = useDispatch<AppDispatch>()
   const navigate = useNavigate()
   const [userLogin, setUserLogin] = useState({ email: '', password: '' })
+  const {error, isLoading} = useSelector((state: RootState) => state.logedinUser)
 
   const {
     register,
@@ -32,8 +33,10 @@ export default function Login() {
         localStorage.setItem('token', res.payload.token)
         toast.success('Welcome back ' + res.payload.user.firstName + "! We're glad to see you again")
         navigate('/')
-      } else if(res.meta.requestStatus === 'rejected'){
-        toast.success(res.payload.user)
+      } 
+      if(res.meta.requestStatus === 'rejected'){
+        toast.error(error)
+        console.log(error)
       }
     })
   }
@@ -121,7 +124,7 @@ export default function Login() {
 
             <div className="mt-6">
               <button className="w-full px-6 py-3 text-sm font-medium tracking-wide text-primary_grey capitalize transition-colors duration-300 transform bg-primary_pink rounded-lg hover:bg-primary_green">
-                Login
+                {isLoading? "Loging in..." : "Login"}
               </button>
               <div className="mt-6 text-center text-primary_green hover:text-primary_pink">
                 <Link to={'/register'}>You don&lsquo;t have an account?</Link>

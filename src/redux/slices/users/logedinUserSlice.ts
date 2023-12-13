@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 
 import { User } from '../../../types/types'
 import api from '../../../api'
+import { AxiosError } from 'axios'
 
 export type UserState = {
   user: User | null
@@ -21,11 +22,12 @@ export const loginUser = createAsyncThunk(
   async (user: { email: string; password: string }, { rejectWithValue }) => {
     try {
       const response = await api.post('/api/auth/login', user)
-
-      console.log(response.data)
+      
       return response.data
-    } catch {
-       
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        rejectWithValue(error.response?.data.msg)
+      }
     }
   }
 )
@@ -52,8 +54,12 @@ export const logedinUserSlice = createSlice({
         state.isLoading = false
       })
       .addCase(loginUser.rejected, (state, action) => {
-        state.error = action.error.message
+        const errorMessage = action.payload
+        if (typeof errorMessage === 'string') {
+          state.error = errorMessage
+        }
         state.isLoading = false
+        return state
       })
   }
 })

@@ -7,6 +7,7 @@ import { AppDispatch, RootState } from '../redux/store'
 import { addToCart } from '../redux/slices/cart/cartSlice'
 import { Product } from '../types/types'
 import { fetchProducts, fetchProductsCount } from '../redux/slices/products/productSlice'
+import { fetchCategories } from '../redux/slices/categories/categorySlice'
 
 export default function Products() {
   const dispatch = useDispatch<AppDispatch>()
@@ -16,13 +17,16 @@ export default function Products() {
   const [pageNumber, setPageNumber] = useState(1)
 
   useEffect(() => {
-    dispatch(fetchProducts({searchText, category, sortBy}))
+    dispatch(fetchCategories())
     dispatch(fetchProductsCount())
+  },[])
+
+  useEffect(() => {
+    dispatch(fetchProducts({searchText, category, sortBy}))
   }, [searchText, category, sortBy, pageNumber])
 
   const products = useSelector((state: RootState) => state.products)
   const categories = useSelector((state: RootState) => state.categories)
-
 
   const [filteredItems, setFilteredItems] = useState<Product[]>(products.products)
   const [productsToDisplay, setProductsToDisplay] = useState<Product[]>(products.products)
@@ -37,7 +41,7 @@ export default function Products() {
   }, [filteredItems, pageNumber])
 
   // Search for product
-  function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
+  function handleSearchTextChange(event: React.ChangeEvent<HTMLInputElement>) {
     setSearchText (event.target.value)
   }
   useEffect(() => {
@@ -51,41 +55,23 @@ export default function Products() {
     } else setFilteredItems(products.products)
   }, [searchText, products.products])
 
-  // Sort products based on price
-  function sort(event: { target: { value: string } }) {
+  function handleSortChange(event: { target: { value: string } }) {
     setSortBy(event.target.value)
-    // setFilteredItems(
-    //   filteredItems.sort((a, b) => {
-    //     if (event.target.value === 'High-Low') {
-    //       return b.price - a.price
-    //     }
-    //     return a.price - b.price
-    //   })
-    // )
     setPageNumber(1)
   }
 
-  // Filter products based on categories
-  function filter(event: { target: { value: string } }) {
+  function handleFilterChange(event: { target: { value: string } }) {
     setCategory(event.target.value)
     setPageNumber(1)
-    // const selectedValue = event.target.value
-    // if (selectedValue === '') setFilteredItems(products.products)
-    // else
-    //   setFilteredItems(
-    //     products.products.filter((product) => product.categories.includes(selectedValue))
-    //   )
   }
 
-  // Add product to cart
+  const handlePageChange = (page: number) => {
+    setPageNumber(page)
+  }
+
   function handleAddToCart(product: Product) {
     dispatch(addToCart({ product }))
     toast.success('Awesome pick! ' + product.name + ' is now waiting in your cart')
-  }
-
-  // Changeing the page
-  const handlePageChange = (page: number) => {
-    setPageNumber(page)
   }
 
   //Display the products
@@ -94,7 +80,7 @@ export default function Products() {
       <div className="flex flex-col justify-center md:flex-row border-b-2 border-zinc_secondery pb-5">
         <div className="pt-2 relative text-primary_pink">
           <input
-            onChange={handleChange}
+            onChange={handleSearchTextChange}
             className="border-2 border-primary_grey h-10 px-5 pr-16 rounded-lg text-sm focus:outline-none"
             type="search"
             name="search"
@@ -115,13 +101,13 @@ export default function Products() {
             <path d="M55.146,51.887L41.588,37.786c3.486-4.144,5.396-9.358,5.396-14.786c0-12.682-10.318-23-23-23s-23,10.318-23,23  s10.318,23,23,23c4.761,0,9.298-1.436,13.177-4.162l13.661,14.208c0.571,0.593,1.339,0.92,2.162,0.92  c0.779,0,1.518-0.297,2.079-0.837C56.255,54.982,56.293,53.08,55.146,51.887z M23.984,6c9.374,0,17,7.626,17,17s-7.626,17-17,17  s-17-7.626-17-17S14.61,6,23.984,6z" />
           </svg>
         </div>
-        <select onChange={sort} className="text-primary_pink mt-2 h-10 rounded-lg text-sm bg-zinc">
+        <select onChange={handleSortChange} className="text-primary_pink mt-2 h-10 rounded-lg text-sm bg-zinc">
           <option>Sort By</option>
           <option value={'lowestPrice'}>Low-High</option>
           <option value={'highestPrice'}>High-Low</option>
         </select>
         <select
-          onChange={filter}
+          onChange={handleFilterChange}
           className="text-primary_pink mt-2 h-10 rounded-lg text-sm bg-zinc">
           <option value={''}>All Products</option>
           {categories.categories.map((category) => (
