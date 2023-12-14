@@ -54,6 +54,18 @@ export const deleteUser = createAsyncThunk('users/deleteUser', async (userId: st
   }
 })
 
+export const blockUser = createAsyncThunk('users/blockUser', async (userId: string, { rejectWithValue }) => {
+  try {
+    const response = await api.put(`/api/users/${userId}/block`)
+
+    return response.data.payload
+  } catch (error) {
+    if (error instanceof AxiosError) {
+      return rejectWithValue(error.response?.data.msg)
+    }
+  }
+})
+
 // Switch user role
 export const switchUserRole = createAsyncThunk('users/switchRole', async (userId: string, { rejectWithValue }) => {
   try {
@@ -129,6 +141,25 @@ export const userSlice = createSlice({
         state.isLoading = false
       })
       .addCase(deleteUser.rejected, (state, action) => {
+        const errorMessage = action.payload
+        if (typeof errorMessage === 'string') {
+          state.error = errorMessage
+        }
+        state.isLoading = false
+        return state
+      })
+
+      // block user
+      .addCase(blockUser.pending, (state) => {
+        state.isLoading = true
+      })
+      .addCase(blockUser.fulfilled, (state, action) => {
+        state.users = state.users.filter((user) => user._id !== action.payload._id)
+        state.users = [action.payload, ...state.users]
+        
+        state.isLoading = false
+      })
+      .addCase(blockUser.rejected, (state, action) => {
         const errorMessage = action.payload
         if (typeof errorMessage === 'string') {
           state.error = errorMessage

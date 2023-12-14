@@ -2,8 +2,7 @@ import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
 import { AppDispatch, RootState } from '../../redux/store'
-import { User } from '../../types/types'
-import { deleteUser, fetchUsers, switchUserRole } from '../../redux/slices/users/userSlice'
+import { blockUser, deleteUser, switchUserRole } from '../../redux/slices/users/userSlice'
 
 export function UsersManager() {
   const dispatch = useDispatch<AppDispatch>()
@@ -91,6 +90,7 @@ export function UsersManager() {
                     </svg>
                   </button>
                 </td>
+                <td><button onClick={() => dispatch(blockUser(user._id))}>{user.isBlocked? "unBlock" : "Block"}</button></td>
               </tr>
             ))}
           </tbody>
