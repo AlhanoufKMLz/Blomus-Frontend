@@ -3,27 +3,25 @@ import { useDispatch, useSelector } from 'react-redux'
 
 import { AppDispatch, RootState } from '../../redux/store'
 import { User } from '../../types/types'
-import { deleteUser, fetchUsers } from '../../redux/slices/users/userSlice'
+import { deleteUser, fetchUsers, switchUserRole } from '../../redux/slices/users/userSlice'
 
 export function UsersManager() {
   const dispatch = useDispatch<AppDispatch>()
-  const [searchKeyWord, setSearchKeyWord] = useState('')
-
   const users = useSelector((state: RootState) => state.users)
-  const [usersToDisplay, setUsersToDisplay] = useState<User[]>(users.users)
+  const [searchKeyWord, setSearchKeyWord] = useState('')
 
   //Search for user
   function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
     setSearchKeyWord(event.target.value)
   }
-  useEffect(() => {
-    if (searchKeyWord.trim() !== '') {
-      const results = users.users.filter((user) =>
-        user.firstName.toLowerCase().includes(searchKeyWord.toLowerCase())
-      )
-      setUsersToDisplay(results)
-    } else setUsersToDisplay(users.users)
-  }, [searchKeyWord, users.users])
+  // useEffect(() => {
+  //   if (searchKeyWord.trim() !== '') {
+  //     const results = users.users.filter((user) =>
+  //       user.firstName.toLowerCase().includes(searchKeyWord.toLowerCase())
+  //     )
+  //     setUsersToDisplay(results)
+  //   } else setUsersToDisplay(users.users)
+  // }, [searchKeyWord, users.users])
 
   //Display users table
   return (
@@ -53,7 +51,7 @@ export function UsersManager() {
           </svg>
         </div>
       </div>
-      {users.isLoading && <h3> Loading categories...</h3>}
+      {users.isLoading && <h3> Loading users...</h3>}
       {users.error && <h3> {users.error}</h3>}
       <div className="max-h-[600px] overflow-y-auto ml-16">
         <table className="md:mx-40 md:my-8 w-9/12">
@@ -64,12 +62,15 @@ export function UsersManager() {
               <th>Email</th>
               <th>Role</th>
             </tr>
-            {usersToDisplay.map((user) => (
+            {users.users.map((user) => (
               <tr className="border-t-2 border-zinc_secondery" key={user._id}>
                 <td className="text-primary_green py-5">{user.firstName}</td>
                 <td className="text-primary_green">{user.lastName}</td>
                 <td className="text-primary_green">{user.email}</td>
-                <td className="text-primary_green">{user.role}</td>
+                <td className="text-primary_green">
+                  <p>{user.role}</p>
+                  <p><button onClick={() => dispatch(switchUserRole(user._id))}>Switch Role</button></p>
+                </td>
                 <td className="text-right">
                   <button
                     className="text-primary_pink"
