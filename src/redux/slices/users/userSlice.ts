@@ -54,6 +54,7 @@ export const deleteUser = createAsyncThunk('users/deleteUser', async (userId: st
   }
 })
 
+// Block user
 export const blockUser = createAsyncThunk('users/blockUser', async (userId: string, { rejectWithValue }) => {
   try {
     const response = await api.put(`/api/users/${userId}/block`)
@@ -156,7 +157,7 @@ export const userSlice = createSlice({
       .addCase(blockUser.fulfilled, (state, action) => {
         state.users = state.users.filter((user) => user._id !== action.payload._id)
         state.users = [action.payload, ...state.users]
-        
+
         state.isLoading = false
       })
       .addCase(blockUser.rejected, (state, action) => {

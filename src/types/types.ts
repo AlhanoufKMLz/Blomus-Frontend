@@ -14,7 +14,7 @@ export type Product = {
 export type ProductState = {
   products: Product[]
   singleProduct: Product | undefined
-  count: number
+  totalPages: number
   error: undefined | string
   isLoading: boolean
 }

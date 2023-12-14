@@ -6,7 +6,7 @@ import { toast } from 'react-toastify'
 import { AppDispatch, RootState } from '../redux/store'
 import { addToCart } from '../redux/slices/cart/cartSlice'
 import { Product } from '../types/types'
-import { fetchProducts, fetchProductsCount } from '../redux/slices/products/productSlice'
+import { fetchProducts } from '../redux/slices/products/productSlice'
 import { fetchCategories } from '../redux/slices/categories/categorySlice'
 
 export default function Products() {
@@ -18,42 +18,18 @@ export default function Products() {
 
   useEffect(() => {
     dispatch(fetchCategories())
-    dispatch(fetchProductsCount())
   },[])
 
   useEffect(() => {
-    dispatch(fetchProducts({searchText, category, sortBy}))
+    dispatch(fetchProducts({searchText, category, sortBy, pageNumber}))
   }, [searchText, category, sortBy, pageNumber])
 
-  const products = useSelector((state: RootState) => state.products)
+  const {products, totalPages, isLoading, error} = useSelector((state: RootState) => state.products)
   const categories = useSelector((state: RootState) => state.categories)
 
-  const [filteredItems, setFilteredItems] = useState<Product[]>(products.products)
-  const [productsToDisplay, setProductsToDisplay] = useState<Product[]>(products.products)
-
-  // Pagination setup
-  const itemsPerPage = 2
-  const totalPages = Math.ceil(products.count / itemsPerPage)
-  useEffect(() => {
-    const indexOfLastItem = pageNumber * itemsPerPage
-    const indexOfFirstItem = indexOfLastItem - itemsPerPage
-    setProductsToDisplay(filteredItems.slice(indexOfFirstItem, indexOfLastItem))
-  }, [filteredItems, pageNumber])
-
-  // Search for product
   function handleSearchTextChange(event: React.ChangeEvent<HTMLInputElement>) {
     setSearchText (event.target.value)
   }
-  useEffect(() => {
-    if (searchText.trim() !== '') {
-      setPageNumber(1)
-      setFilteredItems(
-        products.products.filter((product) =>
-          product.name.toLowerCase().includes(searchText.toLowerCase())
-        )
-      )
-    } else setFilteredItems(products.products)
-  }, [searchText, products.products])
 
   function handleSortChange(event: { target: { value: string } }) {
     setSortBy(event.target.value)
@@ -119,11 +95,11 @@ export default function Products() {
       </div>
 
       <section className="products-container">
-        {products.isLoading && <h3> Loading products...</h3>}
-        {products.error && <h3> {products.error}</h3>}
+        {isLoading && <h3> Loading products...</h3>}
+        {error && <h3> {error}</h3>}
         <div className="grid gap-4">
           <ul className="py-8 flex gap-5 flex-wrap">
-            {productsToDisplay.map((product) => (
+            {products.map((product) => (
               <li key={product._id} className="flex flex-col items-center justify-center mx-auto">
                 <div className="flex w-80 h-80 bg-white rounded-lg shadow-lg shadow-[#c0c0c0] hover:shadow-none items-center justify-center">
                   <Link to={`/${product._id}`}>

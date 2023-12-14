@@ -4,28 +4,18 @@ import { Product, ProductState } from '../../../types/types'
 import api from '../../../api';
 
 // Fetch all products
-export const fetchProducts = createAsyncThunk('products/fetchProducts', async ({ searchText, category, sortBy }:{searchText: string, category:string, sortBy:string}) => {
+export const fetchProducts = createAsyncThunk('products/fetchProducts', async ({ searchText, category, sortBy, pageNumber }:{searchText: string, category:string, sortBy:string, pageNumber:number}) => {
     const queryParams = new URLSearchParams();
-    // queryParams.append('limit', '2')
-    // queryParams.append('pageNumber', String(pageNumber))
+    queryParams.append('pageNumber', String(pageNumber))
     {searchText !== '' && queryParams.append('searchText', searchText)}
     {category !== '' && queryParams.append('category', category)}
     {sortBy !== '' && queryParams.append('sortBy', sortBy)}
 
     const response = await api.get(`/api/products?${queryParams.toString()}`);
 
-  return response.data.payload
+    console.log(response.data)
+  return response.data
 })
-
-// Fetch products count
-export const fetchProductsCount = createAsyncThunk(
-  'products/fetchProductsCount',
-  async () => {
-    const response = await api.get(`/api/products/count`)
-
-    return response.data.usersCount
-  }
-)
 
 // Fetch single product
 export const fetchSingleProduct = createAsyncThunk(
@@ -70,7 +60,7 @@ export const deleteProduct = createAsyncThunk(
 const initialState: ProductState = {
   products: [],
   singleProduct: undefined,
-  count: 0,
+  totalPages: 0,
   error: undefined,
   isLoading: false
 }
@@ -99,7 +89,8 @@ export const productSlice = createSlice({
         state.isLoading = true 
       })
       .addCase(fetchProducts.fulfilled, (state, action) => {
-        state.products = action.payload;
+        state.products = action.payload.payload;
+        state.totalPages = action.payload.totalPages
         state.isLoading = false;
       })
       .addCase(fetchProducts.rejected, (state, action) => {
@@ -116,19 +107,6 @@ export const productSlice = createSlice({
         state.isLoading = false;
       })
       .addCase(fetchSingleProduct.rejected, (state, action) => {
-        state.error = action.error.message;
-        state.isLoading = false;
-      })
-
-      // Fetch products count
-      .addCase(fetchProductsCount.pending, (state) => {
-        state.isLoading = true;
-      })
-      .addCase(fetchProductsCount.fulfilled, (state, action) => {
-        state.count = action.payload;
-        state.isLoading = false;
-      })
-      .addCase(fetchProductsCount.rejected, (state, action) => {
         state.error = action.error.message;
         state.isLoading = false;
       })
