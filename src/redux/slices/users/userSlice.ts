@@ -42,43 +42,52 @@ export const registerUser = createAsyncThunk(
 )
 
 // Delete user
-export const deleteUser = createAsyncThunk('users/deleteUser', async (userId: string, { rejectWithValue }) => {
-  try {
-    const response = await api.delete(`/api/users/${userId}`)
+export const deleteUser = createAsyncThunk(
+  'users/deleteUser',
+  async (userId: string, { rejectWithValue }) => {
+    try {
+      const response = await api.delete(`/api/users/${userId}`)
 
-    return response.data.payload
-  } catch (error) {
-    if (error instanceof AxiosError) {
-      return rejectWithValue(error.response?.data.msg)
+      return response.data.payload
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        return rejectWithValue(error.response?.data.msg)
+      }
     }
   }
-})
+)
 
 // Block user
-export const blockUser = createAsyncThunk('users/blockUser', async (userId: string, { rejectWithValue }) => {
-  try {
-    const response = await api.put(`/api/users/${userId}/block`)
+export const blockUser = createAsyncThunk(
+  'users/blockUser',
+  async (userId: string, { rejectWithValue }) => {
+    try {
+      const response = await api.put(`/api/users/${userId}/block`)
 
-    return response.data.payload
-  } catch (error) {
-    if (error instanceof AxiosError) {
-      return rejectWithValue(error.response?.data.msg)
+      return response.data.payload
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        return rejectWithValue(error.response?.data.msg)
+      }
     }
   }
-})
+)
 
 // Switch user role
-export const switchUserRole = createAsyncThunk('users/switchRole', async (userId: string, { rejectWithValue }) => {
-  try {
-    const response = await api.put(`/api/users/${userId}/switch-role`)
+export const switchUserRole = createAsyncThunk(
+  'users/switchRole',
+  async (userId: string, { rejectWithValue }) => {
+    try {
+      const response = await api.put(`/api/users/${userId}/switch-role`)
 
-    return response.data.payload
-  } catch (error) {
-    if (error instanceof AxiosError) {
-      return rejectWithValue(error.response?.data.msg)
+      return response.data.payload
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        return rejectWithValue(error.response?.data.msg)
+      }
     }
   }
-})
+)
 
 const initialState: UserState = {
   users: [],
@@ -119,12 +128,10 @@ export const userSlice = createSlice({
         state.isLoading = true
       })
       .addCase(registerUser.fulfilled, (state, action) => {
-        console.log("fulfilled")
         state.users = [action.payload, ...state.users]
         state.isLoading = false
       })
       .addCase(registerUser.rejected, (state, action) => {
-        console.log("rejected")
         const errorMessage = action.payload
         if (typeof errorMessage === 'string') {
           state.error = errorMessage
@@ -155,9 +162,11 @@ export const userSlice = createSlice({
         state.isLoading = true
       })
       .addCase(blockUser.fulfilled, (state, action) => {
-        state.users = state.users.filter((user) => user._id !== action.payload._id)
-        state.users = [action.payload, ...state.users]
-
+        const updatedUsers = state.users.map((user) => {
+          if (user._id === action.payload._id) return action.payload
+          return user
+        })
+        state.users = updatedUsers
         state.isLoading = false
       })
       .addCase(blockUser.rejected, (state, action) => {
@@ -174,9 +183,11 @@ export const userSlice = createSlice({
         state.isLoading = true
       })
       .addCase(switchUserRole.fulfilled, (state, action) => {
-        state.users = state.users.filter((user) => user._id !== action.payload._id)
-        state.users = [action.payload, ...state.users]
-        
+        const updatedUsers = state.users.map((user) => {
+          if (user._id === action.payload._id) return action.payload
+          return user
+        })
+        state.users = updatedUsers
         state.isLoading = false
       })
       .addCase(switchUserRole.rejected, (state, action) => {

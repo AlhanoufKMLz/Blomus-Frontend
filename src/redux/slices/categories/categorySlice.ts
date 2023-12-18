@@ -13,7 +13,7 @@ const initialState: CategoryState = {
 // Fetch all categories
 export const fetchCategories = createAsyncThunk(
   'categories/fetchCategoreis',
-  async (_,{ rejectWithValue }) => {
+  async (_, { rejectWithValue }) => {
     try {
       const response = await api.get('/api/categories')
 
@@ -45,8 +45,11 @@ export const createCategory = createAsyncThunk(
 // Update category
 export const updateCategory = createAsyncThunk(
   'categories/updateCategory',
-  async ({category, categoryId}: {category: {name:string}, categoryId:string}, { rejectWithValue }) => {
-    try { 
+  async (
+    { category, categoryId }: { category: { name: string }; categoryId: string },
+    { rejectWithValue }
+  ) => {
+    try {
       const response = await api.put(`/api/categories/${categoryId}`, category)
 
       return response.data.payload

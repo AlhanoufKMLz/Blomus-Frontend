@@ -1,46 +1,32 @@
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
-import { removeProduct } from '../../redux/slices/products/productSlice'
+import { deleteProduct, fetchProducts } from '../../redux/slices/products/productSlice'
 import { AppDispatch, RootState } from '../../redux/store'
 import { Product } from '../../types/types'
 import ProductFormModal from './ProductFormModal'
+import { fetchCategories } from '../../redux/slices/categories/categorySlice'
 
 export function ProductsManager() {
-  const products = useSelector((state: RootState) => state.products)
-  const categories = useSelector((state: RootState) => state.categories)
   const dispatch = useDispatch<AppDispatch>()
 
-  const [productsToDisplay, setProductsToDisplay] = useState<Product[]>(products.products)
-  const [searchKeyWord, setSearchKeyWord] = useState('')
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [selectedProduct, setSelectedProduct] = useState<Product | null>()
+  const [searchText, setSearchText] = useState('')
+  const [category, setCategory] = useState('')
+  const [sortBy, setSortBy] = useState('')
+  const [pageNumber, setPageNumber] = useState(1)
 
-  //Filter products pased on category
-  function filter(event: { target: { value: string } }) {
-    const selectedValue = Number(event.target.value)
-
-    if (selectedValue === 0) {
-      setProductsToDisplay(products.products)
-    } else {
-      setProductsToDisplay(
-        products.products.filter((product) => product.categories.includes(selectedValue))
-      )
-    }
-  }
-
-  //Search for product
-  function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
-    setSearchKeyWord(event.target.value)
-  }
   useEffect(() => {
-    if (searchKeyWord.trim() !== '') {
-      const results = products.products.filter((product) =>
-        product.name.toLowerCase().includes(searchKeyWord.toLowerCase())
-      )
-      setProductsToDisplay(results)
-    } else setProductsToDisplay(products.products)
-  }, [searchKeyWord, products.products])
+    dispatch(fetchCategories())
+  },[])
+
+  useEffect(() => {
+    dispatch(fetchProducts({searchText, category, sortBy, pageNumber}))
+  }, [searchText, category, sortBy, pageNumber])
+
+  const products = useSelector((state: RootState) => state.products)
+  const categories = useSelector((state: RootState) => state.categories)
 
   //Open edit product modal
   function handleEdit(product: Product) {
@@ -54,13 +40,17 @@ export function ProductsManager() {
     setIsModalOpen(true)
   }
 
+  function handleSearchTextChange(event: React.ChangeEvent<HTMLInputElement>) {
+    setSearchText (event.target.value)
+  }
+
   //Display products table
   return (
     <div className="flex flex-col min-h-screen align-middle">
       <div className="flex flex-col justify-center md:flex-row border-b-2 border-zinc_secondery pb-5">
         <div className="pt-2 relative text-primary_pink">
           <input
-            onChange={handleChange}
+            onChange={handleSearchTextChange}
             className="border-2 border-primary_grey h-10 px-5 pr-16 rounded-lg text-sm focus:outline-none"
             type="search"
             name="search"
@@ -82,7 +72,7 @@ export function ProductsManager() {
           </svg>
         </div>
         <select
-          onChange={filter}
+          //onChange={filter}
           className="text-primary_pink mt-2 h-10 rounded-lg text-sm bg-zinc">
           <option value={0}>All Products</option>
           {categories.categories.map((category) => (
@@ -102,7 +92,7 @@ export function ProductsManager() {
               <th>Name</th>
               <th>Price</th>
             </tr>
-            {productsToDisplay.map((product) => (
+            {products.products.map((product) => (
               <tr className="border-t-2 border-zinc_secondery" key={product._id}>
                 <td className="pl-10 py-5">
                   {/* <img src={product.image} alt={product.name} width="50" /> */}
@@ -138,7 +128,7 @@ export function ProductsManager() {
                 <td className="text-right">
                   <button
                     className="text-primary_pink"
-                    onClick={() => dispatch(removeProduct({ productid: product._id }))}>
+                    onClick={() => dispatch(deleteProduct(product._id))}>
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       width="20"

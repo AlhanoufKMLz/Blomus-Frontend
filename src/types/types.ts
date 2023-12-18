@@ -6,7 +6,7 @@ export type Product = {
   image: string
   description: string
   price: number
-  categories: number[]
+  categories: string[]
   sizes: string[]
   quantity?: number
 }
@@ -158,35 +158,26 @@ export const categorySchema: ZodType<CategorySchema> = z.object({
 
 export type ProductSchema = {
   name: string
-  image: string
+  //image: string
   description: string
   price: number
-  categories: string
-  variants: string
+  //categories: string
   sizes: string
 }
 
 export const productSchema: ZodType<ProductSchema> = z.object({
   name: z.string().refine((value) => value !== '', { message: 'Name is required' }),
-  image: z.string().refine((value) => value !== '', { message: 'Image is required' }),
+  //image: z.string().refine((value) => value !== '', { message: 'Image is required' }),
   description: z.string().refine((value) => value !== '', { message: 'Description is required' }),
   price: z.number().refine((value) => value > 0, { message: 'Price is required' }),
-  categories: z.string().refine(
-    (value) => {
-      if (value === '') return true
-      const pattern = /^\d+(?:\s*,\s*\d+)*$/
-      return pattern.test(value)
-    },
-    { message: 'Input should be in the format "1,2" or "1,2,3,..."' }
-  ),
-  variants: z.string().refine(
-    (value) => {
-      if (value === '') return true
-      const pattern = /^(\s*[^,]+\s*,)*\s*[^,]+\s*$/
-      return pattern.test(value)
-    },
-    { message: 'Input should be in the format "x,y" or "x,y,z,...' }
-  ),
+  // categories: z.string().refine(
+  //   (value) => {
+  //     if (value === '') return true
+  //     const pattern = /^\d+(?:\s*,\s*\d+)*$/
+  //     return pattern.test(value)
+  //   },
+  //   { message: 'Input should be in the format "1,2" or "1,2,3,..."' }
+  // ),
   sizes: z.string().refine(
     (value) => {
       if (value === '') return true
