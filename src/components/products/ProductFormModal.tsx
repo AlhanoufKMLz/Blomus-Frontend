@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useEffect, useState } from 'react'
+import { ChangeEvent, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { toast } from 'react-toastify'
 import { useForm } from 'react-hook-form'
@@ -6,7 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 
 import { ProductFormModalProp, Product, ProductSchema, productSchema } from '../../types/types'
 import { AppDispatch, RootState } from '../../redux/store'
-import { createProduct, editProdect } from '../../redux/slices/products/productSlice'
+import { createProduct, updateProduct } from '../../redux/slices/products/productSlice'
 import { fetchCategories } from '../../redux/slices/categories/categorySlice'
 
 const initialState = {
@@ -83,22 +83,22 @@ export default function ProductFormModal(prop: ProductFormModalProp) {
   }
 
   const handleFormSubmit = () => {
+    const productData = new FormData()
+      productData.append('name', productChanges.name)
+      productData.append('price', String(productChanges.price))
+      productData.append('description', productChanges.description)
+      if (productImage) productData.append('image', productImage)
+      productData.append('categories', productChanges.categories.join(','))
+      productData.append('sizes', productChanges.sizes.toString())
+
     // Add new product
     if (!prop.product) {
-      const newProduct = new FormData()
-      newProduct.append('name', productChanges.name)
-      newProduct.append('price', String(productChanges.price))
-      newProduct.append('description', productChanges.description)
-      if (productImage) newProduct.append('image', productImage)
-      newProduct.append('categories', productChanges.categories.join(','))
-      newProduct.append('sizes', productChanges.sizes.toString())
-
-      dispatch(createProduct(newProduct))
+      dispatch(createProduct(productData))
       toast.success('Product added successfully!')
 
     // Update product
     } else {
-      dispatch(editProdect({ newProduct: productChanges }))
+      dispatch(updateProduct({product: productData, productId: productChanges._id}))
       toast.success('Product details updated successfully!')
     }
     // Reset the useState
@@ -189,14 +189,11 @@ export default function ProductFormModal(prop: ProductFormModalProp) {
                     type="checkbox"
                     id={category.name}
                     onChange={() => handleAddCategroy(category._id)}
+                    checked={productChanges.categories.some((item) => category._id === item)}
                   />
                   <label htmlFor={category.name}> {category.name}</label>
                 </div>
               ))}
-
-              {/* {errors.categories && (
-                <span className="text-primary_pink"> {errors.categories.message} </span>
-              )} */}
             </label>
           </div>
 

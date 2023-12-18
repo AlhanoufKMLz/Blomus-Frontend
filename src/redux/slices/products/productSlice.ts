@@ -1,8 +1,8 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+import { AxiosError } from 'axios'
 
 import { Product, ProductState } from '../../../types/types'
 import api from '../../../api'
-import { AxiosError } from 'axios'
 
 // Fetch all products
 export const fetchProducts = createAsyncThunk(
@@ -68,7 +68,7 @@ export const createProduct = createAsyncThunk(
     try {
       const response = await api.post('/api/products', product)
 
-      return response.data.payloa
+      return response.data.payload
     } catch (error) {
       if (error instanceof AxiosError) {
         return rejectWithValue(error.response?.data.msg)
@@ -80,7 +80,7 @@ export const createProduct = createAsyncThunk(
 // Update product
 export const updateProduct = createAsyncThunk(
   'products/updateProduct',
-  async ({ product, productId }: { product: Product; productId: string }, { rejectWithValue }) => {
+  async ({product, productId}:{product: FormData, productId: string}, { rejectWithValue }) => {
     try {
       const response = await api.put(`/api/products/${productId}`, product)
 
@@ -120,20 +120,7 @@ const initialState: ProductState = {
 export const productSlice = createSlice({
   name: 'product',
   initialState,
-  reducers: {
-    // addProduct: (state, action: { payload: { product: Product } }) => {
-    //   state.products = [action.payload.product, ...state.products]
-    // },
-    // removeProduct: (state, action: { payload: { productid: string } }) => {
-    //   state.products = state.products.filter((product) => product._id !== action.payload.productid)
-    // },
-    editProdect: (state, action: { payload: { newProduct: Product } }) => {
-      state.products = state.products.filter(
-        (product) => product._id !== action.payload.newProduct._id
-      )
-      state.products = [action.payload.newProduct, ...state.products]
-    }
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder
       // Fetch all products
@@ -193,8 +180,11 @@ export const productSlice = createSlice({
         state.isLoading = true
       })
       .addCase(updateProduct.fulfilled, (state, action) => {
-        state.products = state.products.filter((product) => product._id !== action.payload._id)
-        state.products = [action.payload, ...state.products]
+        const updatedProducts = state.products.map((product) => {
+          if (product._id === action.payload._id) return action.payload
+          return product
+        })
+        state.products = updatedProducts
         state.isLoading = false
       })
       .addCase(updateProduct.rejected, (state, action) => {
@@ -225,6 +215,6 @@ export const productSlice = createSlice({
   }
 })
 
-export const { editProdect } = productSlice.actions
+export const { } = productSlice.actions
 
 export default productSlice.reducer
