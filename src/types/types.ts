@@ -1,5 +1,10 @@
 import { ZodType, z } from 'zod'
 
+import { ROLES, STATUS } from '../constants'
+
+export type Role = keyof typeof ROLES
+export type Status = keyof typeof STATUS
+
 export type Product = {
   _id: string
   name: string
@@ -8,26 +13,14 @@ export type Product = {
   price: number
   categories: string[]
   sizes: string[]
-  quantity?: number
-}
-
-export type ProductState = {
-  products: Product[]
-  singleProduct: Product | undefined
-  totalPages: number
-  error: undefined | string
-  isLoading: boolean
+  quantityInStock: number
+  itemsSold: number
+  discount: number
 }
 
 export type Category = {
   _id: string
   name: string
-}
-
-export type CategoryState = {
-  categories: Category[]
-  error: undefined | string
-  isLoading: boolean
 }
 
 export type Order = {
@@ -40,7 +33,7 @@ export type Order = {
     city: String
     address: String
   }
-  orderStatus: 'Pending' | 'Processing' | 'Shipped' | 'Delivered' | 'Returned' | 'Canceled'
+  orderStatus: Status
 }
 
 export type User = {
@@ -49,12 +42,45 @@ export type User = {
   lastName: string
   email: string
   password: string
-  role: 'USER' | 'ADMIN'
+  role: Role
   isAccountVerified: boolean
   isBlocked: boolean
   avatar: string
   activationToken: string
   resetPasswordToken: string
+}
+
+export type DiscountCode = {
+  code: string
+  discountPercentage: number
+  expirationDate: Date
+}
+
+export type DecodedUser = {
+  firstName: string,
+  lastName: string,
+  email: string
+  userId: string
+  role: Role
+  isBlocked: boolean
+  exp: number
+  iat: number
+}
+
+//-----------STATES-----------
+
+export type ProductState = {
+  products: Product[]
+  singleProduct: Product | undefined
+  totalPages: number
+  error: undefined | string
+  isLoading: boolean
+}
+
+export type CategoryState = {
+  categories: Category[]
+  error: undefined | string
+  isLoading: boolean
 }
 
 export type UserState = {
@@ -63,7 +89,25 @@ export type UserState = {
   isLoading: boolean
 }
 
-//props
+export type LogedinUserState = {
+  user: User | null
+  error: undefined | string
+  isLoading: boolean
+  decodedUser: DecodedUser | null
+}
+
+export type CartState = {
+  items: { product: Product; quantity: number }[]
+  totalPrice: number
+  savedAmount: number
+  totalAfterDiscount: number
+  error: undefined | string
+  isLoading: boolean
+  itemsCount: number
+}
+
+
+//-----------PROPS-----------
 
 export type ProductFormModalProp = {
   isOpen: boolean
@@ -87,7 +131,7 @@ export type SideBarProp = {
   setSelectedComponent: React.Dispatch<React.SetStateAction<string>>
 }
 
-//schemas
+//-----------SCHEMAS-----------
 
 export type RegisterSchema = {
   firstName: string
@@ -170,14 +214,6 @@ export const productSchema: ZodType<ProductSchema> = z.object({
   //image: z.string().refine((value) => value !== '', { message: 'Image is required' }),
   description: z.string().refine((value) => value !== '', { message: 'Description is required' }),
   price: z.number().refine((value) => value > 0, { message: 'Price is required' }),
-  // categories: z.string().refine(
-  //   (value) => {
-  //     if (value === '') return true
-  //     const pattern = /^\d+(?:\s*,\s*\d+)*$/
-  //     return pattern.test(value)
-  //   },
-  //   { message: 'Input should be in the format "1,2" or "1,2,3,..."' }
-  // ),
   sizes: z.string().refine(
     (value) => {
       if (value === '') return true

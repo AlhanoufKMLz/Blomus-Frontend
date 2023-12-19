@@ -11,7 +11,7 @@ const initialState: CategoryState = {
 }
 
 // Fetch all categories
-export const fetchCategories = createAsyncThunk(
+export const fetchCategoriesThunk = createAsyncThunk(
   'categories/fetchCategoreis',
   async (_, { rejectWithValue }) => {
     try {
@@ -27,7 +27,7 @@ export const fetchCategories = createAsyncThunk(
 )
 
 // Create new category
-export const createCategory = createAsyncThunk(
+export const createCategoryThunk = createAsyncThunk(
   'categories/createCategory',
   async (category: { name: string }, { rejectWithValue }) => {
     try {
@@ -43,7 +43,7 @@ export const createCategory = createAsyncThunk(
 )
 
 // Update category
-export const updateCategory = createAsyncThunk(
+export const updateCategoryThunk = createAsyncThunk(
   'categories/updateCategory',
   async (
     { category, categoryId }: { category: { name: string }; categoryId: string },
@@ -62,7 +62,7 @@ export const updateCategory = createAsyncThunk(
 )
 
 // Delete category
-export const deleteCategory = createAsyncThunk(
+export const deleteCategoryThunk = createAsyncThunk(
   'categories/deleteCategory',
   async (categoryId: string, { rejectWithValue }) => {
     try {
@@ -84,14 +84,14 @@ export const categorySlice = createSlice({
   extraReducers: (builder) => {
     builder
       // Fetch all categories
-      .addCase(fetchCategories.pending, (state) => {
+      .addCase(fetchCategoriesThunk.pending, (state) => {
         state.isLoading = true
       })
-      .addCase(fetchCategories.fulfilled, (state, action) => {
+      .addCase(fetchCategoriesThunk.fulfilled, (state, action) => {
         state.categories = action.payload
         state.isLoading = false
       })
-      .addCase(fetchCategories.rejected, (state, action) => {
+      .addCase(fetchCategoriesThunk.rejected, (state, action) => {
         const errorMessage = action.payload
         if (typeof errorMessage === 'string') {
           state.error = errorMessage
@@ -101,14 +101,14 @@ export const categorySlice = createSlice({
       })
 
       // Create new category
-      .addCase(createCategory.pending, (state) => {
+      .addCase(createCategoryThunk.pending, (state) => {
         state.isLoading = true
       })
-      .addCase(createCategory.fulfilled, (state, action) => {
+      .addCase(createCategoryThunk.fulfilled, (state, action) => {
         state.categories = [action.payload, ...state.categories]
         state.isLoading = false
       })
-      .addCase(createCategory.rejected, (state, action) => {
+      .addCase(createCategoryThunk.rejected, (state, action) => {
         const errorMessage = action.payload
         if (typeof errorMessage === 'string') {
           state.error = errorMessage
@@ -118,17 +118,17 @@ export const categorySlice = createSlice({
       })
 
       // Update category
-      .addCase(updateCategory.pending, (state) => {
+      .addCase(updateCategoryThunk.pending, (state) => {
         state.isLoading = true
       })
-      .addCase(updateCategory.fulfilled, (state, action) => {
+      .addCase(updateCategoryThunk.fulfilled, (state, action) => {
         state.categories = state.categories.filter(
           (catecory) => catecory._id !== action.payload._id
         )
         state.categories = [action.payload, ...state.categories]
         state.isLoading = false
       })
-      .addCase(updateCategory.rejected, (state, action) => {
+      .addCase(updateCategoryThunk.rejected, (state, action) => {
         const errorMessage = action.payload
         if (typeof errorMessage === 'string') {
           state.error = errorMessage
@@ -138,16 +138,16 @@ export const categorySlice = createSlice({
       })
 
       // Delete category
-      .addCase(deleteCategory.pending, (state) => {
+      .addCase(deleteCategoryThunk.pending, (state) => {
         state.isLoading = true
       })
-      .addCase(deleteCategory.fulfilled, (state, action) => {
+      .addCase(deleteCategoryThunk.fulfilled, (state, action) => {
         state.categories = state.categories.filter(
           (catecory) => catecory._id !== action.payload._id
         )
         state.isLoading = false
       })
-      .addCase(deleteCategory.rejected, (state, action) => {
+      .addCase(deleteCategoryThunk.rejected, (state, action) => {
         const errorMessage = action.payload
         if (typeof errorMessage === 'string') {
           state.error = errorMessage

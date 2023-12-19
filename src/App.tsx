@@ -1,7 +1,7 @@
 import './App.css'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
-import { Route, Routes } from 'react-router'
+import { Navigate, Route, Routes } from 'react-router'
 import { useSelector } from 'react-redux'
 
 import Home from './pages/Home'
@@ -18,9 +18,10 @@ import { UsersManager } from './components/users/UsersManager'
 import { ProductsManager } from './components/products/ProductsManager'
 import { CategoriesManager } from './components/categories/CategoriesManager'
 import { RootState } from './redux/store'
+import { ROLES } from './constants'
 
 function App() {
-  const logedinUser = useSelector((state: RootState) => state.logedinUser.user)
+  const logedinUser = useSelector((state: RootState) => state.logedinUser.decodedUser)
 
   return (
     <div className="bg-zinc">
@@ -28,7 +29,7 @@ function App() {
       <ToastContainer />
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/dashboard" element={logedinUser ? <Dashboard /> : <Home />} />
+        <Route path="/dashboard" element={logedinUser?.role == ROLES.ADMIN ? <Dashboard /> : <Navigate to="/" />} />
 
         <Route path="/products" element={<Products />}></Route>
         <Route path="/:productid" element={<ProductDetails />}></Route>

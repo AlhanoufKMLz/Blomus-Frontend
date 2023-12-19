@@ -15,7 +15,7 @@ const initialState: OrderState = {
 }
 
 // Fetch all orders
-export const fetchOrders = createAsyncThunk('orders/fetchOrders', async () => {
+export const fetchOrdersThunk = createAsyncThunk('orders/fetchOrders', async () => {
   const response = await api.get(`/api/orders`)
 
   return response.data.payload
@@ -27,14 +27,14 @@ export const orderSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(fetchOrders.pending, (state) => {
+      .addCase(fetchOrdersThunk.pending, (state) => {
         state.isLoading = true
       })
-      .addCase(fetchOrders.fulfilled, (state, action) => {
+      .addCase(fetchOrdersThunk.fulfilled, (state, action) => {
         state.orders = action.payload
         state.isLoading = false
       })
-      .addCase(fetchOrders.rejected, (state, action) => {
+      .addCase(fetchOrdersThunk.rejected, (state, action) => {
         state.error = action.error.message
         state.isLoading = false
       })

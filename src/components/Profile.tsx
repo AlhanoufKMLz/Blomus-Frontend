@@ -5,8 +5,9 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { EditUserSchema, ProfileModalProp, User, editUserSchema } from '../types/types'
 import { AppDispatch } from '../redux/store'
-import { editUser } from '../redux/slices/users/userSlice'
+import { updateUserThunk } from '../redux/slices/users/userSlice'
 import { editLogedInUser } from '../redux/slices/users/logedinUserSlice'
+//import { editLogedInUser } from '../redux/slices/users/logedinUserSlice'
 
 export default function Profile(prop: ProfileModalProp) {
   if (!prop.setIsProfileOpen) return null
@@ -20,6 +21,7 @@ export default function Profile(prop: ProfileModalProp) {
 
   const dispatch = useDispatch<AppDispatch>()
   const [userChanges, setUserChanges] = useState<User>(prop.user)
+  const [newAvatar, setNewAvatar] = useState<File | undefined>(undefined)
   const [isEdit, setIsEdit] = useState(false)
 
   function handleEdit() {
@@ -35,8 +37,17 @@ export default function Profile(prop: ProfileModalProp) {
     })
   }
 
+  const handleUploadAvatar = (e: ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files.length > 0) setNewAvatar(e.target.files[0])
+  }
+
   function handleFormSubmit() {
-    dispatch(editUser({ newUser: userChanges }))
+    const userData = new FormData()
+    userData.append('firstName', userChanges.firstName)
+    userData.append('lastName', userChanges.lastName)
+    if (newAvatar) userData.append('avatar', userChanges.avatar)
+
+    dispatch(updateUserThunk({ user: userData, userId: userChanges._id}))
     dispatch(editLogedInUser({ newUser: userChanges }))
     toast.success('user details updated successfully!')
     // Close the form
@@ -121,6 +132,8 @@ export default function Profile(prop: ProfileModalProp) {
           {/* Edit form */}
           {isEdit && (
             <form className="p-4 bg-gray-100 rounded-lg" onSubmit={handleSubmit(handleFormSubmit)}>
+              <input type="file" id="image" onChange={handleUploadAvatar} />
+
               {/* first name container */}
               <div className="mb-4">
                 <label htmlFor="name" className="flex flex-col text-primary_pink">

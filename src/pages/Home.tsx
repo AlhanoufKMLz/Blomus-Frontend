@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { AppDispatch, RootState } from '../redux/store'
 import { Product } from '../types/types'
-import { addToCart } from '../redux/slices/cart/cartSlice'
+import { addToCartThunk } from '../redux/slices/cart/cartSlice'
 import { toast } from 'react-toastify'
 
 export default function Home() {
@@ -13,7 +13,8 @@ export default function Home() {
 
   // Add product to cart
   function handleAddToCart(product: Product) {
-    dispatch(addToCart({ product }))
+    const productId = product._id
+    dispatch(addToCartThunk({productId}))
     toast.success('Awesome pick! ' + product.name + ' is now waiting in your cart')
   }
 

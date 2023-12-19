@@ -1,8 +1,8 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
 import { AppDispatch, RootState } from '../../redux/store'
-import { blockUser, deleteUser, switchUserRole } from '../../redux/slices/users/userSlice'
+import { blockUserThunk, deleteUserThunk, switchUserRoleThunk } from '../../redux/slices/users/userSlice'
 
 export function UsersManager() {
   const dispatch = useDispatch<AppDispatch>()
@@ -13,14 +13,6 @@ export function UsersManager() {
   function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
     setSearchKeyWord(event.target.value)
   }
-  // useEffect(() => {
-  //   if (searchKeyWord.trim() !== '') {
-  //     const results = users.users.filter((user) =>
-  //       user.firstName.toLowerCase().includes(searchKeyWord.toLowerCase())
-  //     )
-  //     setUsersToDisplay(results)
-  //   } else setUsersToDisplay(users.users)
-  // }, [searchKeyWord, users.users])
 
   //Display users table
   return (
@@ -68,12 +60,12 @@ export function UsersManager() {
                 <td className="text-primary_green">{user.email}</td>
                 <td className="text-primary_green">
                   <p>{user.role}</p>
-                  <p><button onClick={() => dispatch(switchUserRole(user._id))}>Switch Role</button></p>
+                  <p><button onClick={() => dispatch(switchUserRoleThunk(user._id))}>Switch Role</button></p>
                 </td>
                 <td className="text-right">
                   <button
                     className="text-primary_pink"
-                    onClick={() => dispatch(deleteUser(user._id))}>
+                    onClick={() => dispatch(deleteUserThunk(user._id))}>
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       width="20"
@@ -90,7 +82,7 @@ export function UsersManager() {
                     </svg>
                   </button>
                 </td>
-                <td><button onClick={() => dispatch(blockUser(user._id))}>{user.isBlocked? "unBlock" : "Block"}</button></td>
+                <td><button onClick={() => dispatch(blockUserThunk(user._id))}>{user.isBlocked? "unBlock" : "Block"}</button></td>
               </tr>
             ))}
           </tbody>

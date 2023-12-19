@@ -4,10 +4,10 @@ import { Link } from 'react-router-dom'
 import { toast } from 'react-toastify'
 
 import { AppDispatch, RootState } from '../redux/store'
-import { addToCart } from '../redux/slices/cart/cartSlice'
+import { addToCartThunk } from '../redux/slices/cart/cartSlice'
 import { Product } from '../types/types'
-import { fetchProducts } from '../redux/slices/products/productSlice'
-import { fetchCategories } from '../redux/slices/categories/categorySlice'
+import { fetchProductsThunk } from '../redux/slices/products/productSlice'
+import { fetchCategoriesThunk } from '../redux/slices/categories/categorySlice'
 
 export default function Products() {
   const dispatch = useDispatch<AppDispatch>()
@@ -17,11 +17,11 @@ export default function Products() {
   const [pageNumber, setPageNumber] = useState(1)
 
   useEffect(() => {
-    dispatch(fetchCategories())
+    dispatch(fetchCategoriesThunk())
   },[])
 
   useEffect(() => {
-    dispatch(fetchProducts({searchText, category, sortBy, pageNumber}))
+    dispatch(fetchProductsThunk({searchText, category, sortBy, pageNumber}))
   }, [searchText, category, sortBy, pageNumber])
 
   const {products, totalPages, isLoading, error} = useSelector((state: RootState) => state.products)
@@ -46,8 +46,15 @@ export default function Products() {
   }
 
   function handleAddToCart(product: Product) {
-    dispatch(addToCart({ product }))
-    toast.success('Awesome pick! ' + product.name + ' is now waiting in your cart')
+    const productId = product._id
+    dispatch(addToCartThunk({productId})).then((res) => {
+      if(res.meta.requestStatus === 'fulfilled'){
+        toast.success('Awesome pick! ' + product.name + ' is now waiting in your cart')
+      } 
+      if(res.meta.requestStatus === 'rejected'){
+        toast.error(error)
+      }
+    })
   }
 
   //Display the products

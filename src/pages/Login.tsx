@@ -7,8 +7,9 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 
 import { AppDispatch, RootState } from '../redux/store'
-import { loginUser } from '../redux/slices/users/logedinUserSlice'
+import { loginUserThunk } from '../redux/slices/users/logedinUserSlice'
 import { LoginSchema, loginSchema } from '../types/types'
+import { fetchCartItemsThunk } from '../redux/slices/cart/cartSlice'
 
 export default function Login() {
   const dispatch = useDispatch<AppDispatch>()
@@ -28,11 +29,12 @@ export default function Login() {
   }
 
   function handleFormSubmit() {
-    dispatch(loginUser(userLogin)).then((res) => {
+    dispatch(loginUserThunk(userLogin)).then((res) => {
       if(res.meta.requestStatus === 'fulfilled'){
         localStorage.setItem('token', res.payload.token)
         toast.success('Welcome back ' + res.payload.user.firstName + "! We're glad to see you again")
         navigate('/')
+        dispatch(fetchCartItemsThunk())
       } 
       if(res.meta.requestStatus === 'rejected'){
         toast.error(error)

@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
-import { deleteProduct, fetchProducts } from '../../redux/slices/products/productSlice'
+import { deleteProductThunk, fetchProductsThunk } from '../../redux/slices/products/productSlice'
 import { AppDispatch, RootState } from '../../redux/store'
 import { Product } from '../../types/types'
 import ProductFormModal from './ProductFormModal'
-import { fetchCategories } from '../../redux/slices/categories/categorySlice'
+import { fetchCategoriesThunk } from '../../redux/slices/categories/categorySlice'
 
 export function ProductsManager() {
   const dispatch = useDispatch<AppDispatch>()
@@ -18,11 +18,11 @@ export function ProductsManager() {
   const [pageNumber, setPageNumber] = useState(1)
 
   useEffect(() => {
-    dispatch(fetchCategories())
+    dispatch(fetchCategoriesThunk())
   },[])
 
   useEffect(() => {
-    dispatch(fetchProducts({searchText, category, sortBy, pageNumber}))
+    dispatch(fetchProductsThunk({searchText, category, sortBy, pageNumber}))
   }, [searchText, category, sortBy, pageNumber])
 
   const products = useSelector((state: RootState) => state.products)
@@ -128,7 +128,7 @@ export function ProductsManager() {
                 <td className="text-right">
                   <button
                     className="text-primary_pink"
-                    onClick={() => dispatch(deleteProduct(product._id))}>
+                    onClick={() => dispatch(deleteProductThunk(product._id))}>
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       width="20"

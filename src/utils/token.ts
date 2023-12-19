@@ -10,14 +10,8 @@ export function getDecodedTokenFromStorage() {
     const decodedUser = jwt_decode(token)
     if (!isDecodedUser(decodedUser)) return null
 
-    const user = {
-      email: decodedUser.email,
-      _id: decodedUser.user_id,
-      role: decodedUser.role,
-      isBlocked: decodedUser.isBlocked
-    }
-
-    return user
+    console.log("🚀 ~ file: token.ts:17 ~ getDecodedTokenFromStorage ~ decodedUser:", decodedUser)
+    return decodedUser
   } catch (error) {
     return null
   }

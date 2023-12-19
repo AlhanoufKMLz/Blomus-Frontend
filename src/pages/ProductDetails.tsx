@@ -5,24 +5,25 @@ import { Link } from 'react-router-dom'
 import { useEffect } from 'react'
 
 import { AppDispatch, RootState } from '../redux/store'
-import { addToCart } from '../redux/slices/cart/cartSlice'
-import { fetchSingleProduct } from '../redux/slices/products/productSlice'
+import { addToCartThunk } from '../redux/slices/cart/cartSlice'
+import { fetchSingleProductThunk } from '../redux/slices/products/productSlice'
 
 export default function ProductDetails() {
-  const { productid } = useParams();
-  const dispatch = useDispatch<AppDispatch>();
-  
+  const { productid } = useParams()
+  const dispatch = useDispatch<AppDispatch>()
+
   useEffect(() => {
     if (productid) {
-      dispatch(fetchSingleProduct(productid));
+      dispatch(fetchSingleProductThunk(productid))
     }
-  }, [dispatch, productid]);
-  
+  }, [dispatch, productid])
+
   const product = useSelector((state: RootState) => state.products.singleProduct)
 
   function handleAddToCart() {
     if (product) {
-      dispatch(addToCart({ product }))
+      const productId = product._id
+      dispatch(addToCartThunk({ productId }))
       toast.success('Awesome pick! ' + product.name + ' is now waiting in your cart')
     }
   }

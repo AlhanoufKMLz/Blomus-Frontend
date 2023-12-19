@@ -5,7 +5,7 @@ import { User, UserState } from '../../../types/types'
 import api from '../../../api'
 
 // Fetch all users
-export const fetchUsers = createAsyncThunk('users/fetchUsers', async (_, { rejectWithValue }) => {
+export const fetchUsersThunk = createAsyncThunk('users/fetchUsers', async (_, { rejectWithValue }) => {
   try {
     const response = await api.get('/api/users')
 
@@ -18,7 +18,7 @@ export const fetchUsers = createAsyncThunk('users/fetchUsers', async (_, { rejec
 })
 
 // Register users
-export const registerUser = createAsyncThunk(
+export const registerUserThunk = createAsyncThunk(
   'users/register',
   async (
     user: {
@@ -42,7 +42,7 @@ export const registerUser = createAsyncThunk(
 )
 
 // Delete user
-export const deleteUser = createAsyncThunk(
+export const deleteUserThunk = createAsyncThunk(
   'users/deleteUser',
   async (userId: string, { rejectWithValue }) => {
     try {
@@ -58,7 +58,7 @@ export const deleteUser = createAsyncThunk(
 )
 
 // Block user
-export const blockUser = createAsyncThunk(
+export const blockUserThunk = createAsyncThunk(
   'users/blockUser',
   async (userId: string, { rejectWithValue }) => {
     try {
@@ -74,11 +74,27 @@ export const blockUser = createAsyncThunk(
 )
 
 // Switch user role
-export const switchUserRole = createAsyncThunk(
+export const switchUserRoleThunk = createAsyncThunk(
   'users/switchRole',
   async (userId: string, { rejectWithValue }) => {
     try {
       const response = await api.put(`/api/users/${userId}/switch-role`)
+
+      return response.data.payload
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        return rejectWithValue(error.response?.data.msg)
+      }
+    }
+  }
+)
+
+// Update user
+export const updateUserThunk= createAsyncThunk(
+  'users/updateUser',
+  async ({user, userId}:{user: FormData, userId: string}, { rejectWithValue }) => {
+    try {
+      const response = await api.put(`/api/users/${userId}`, user)
 
       return response.data.payload
     } catch (error) {
@@ -107,14 +123,14 @@ export const userSlice = createSlice({
   extraReducers: (builder) => {
     builder
       // Fetch all users
-      .addCase(fetchUsers.pending, (state) => {
+      .addCase(fetchUsersThunk.pending, (state) => {
         state.isLoading = true
       })
-      .addCase(fetchUsers.fulfilled, (state, action) => {
+      .addCase(fetchUsersThunk.fulfilled, (state, action) => {
         state.users = action.payload
         state.isLoading = false
       })
-      .addCase(fetchUsers.rejected, (state, action) => {
+      .addCase(fetchUsersThunk.rejected, (state, action) => {
         const errorMessage = action.payload
         if (typeof errorMessage === 'string') {
           state.error = errorMessage
@@ -124,14 +140,14 @@ export const userSlice = createSlice({
       })
 
       // Register users
-      .addCase(registerUser.pending, (state) => {
+      .addCase(registerUserThunk.pending, (state) => {
         state.isLoading = true
       })
-      .addCase(registerUser.fulfilled, (state, action) => {
+      .addCase(registerUserThunk.fulfilled, (state, action) => {
         state.users = [action.payload, ...state.users]
         state.isLoading = false
       })
-      .addCase(registerUser.rejected, (state, action) => {
+      .addCase(registerUserThunk.rejected, (state, action) => {
         const errorMessage = action.payload
         if (typeof errorMessage === 'string') {
           state.error = errorMessage
@@ -141,14 +157,14 @@ export const userSlice = createSlice({
       })
 
       // Delete user
-      .addCase(deleteUser.pending, (state) => {
+      .addCase(deleteUserThunk.pending, (state) => {
         state.isLoading = true
       })
-      .addCase(deleteUser.fulfilled, (state, action) => {
+      .addCase(deleteUserThunk.fulfilled, (state, action) => {
         state.users = state.users.filter((user) => user._id !== action.payload._id)
         state.isLoading = false
       })
-      .addCase(deleteUser.rejected, (state, action) => {
+      .addCase(deleteUserThunk.rejected, (state, action) => {
         const errorMessage = action.payload
         if (typeof errorMessage === 'string') {
           state.error = errorMessage
@@ -158,10 +174,10 @@ export const userSlice = createSlice({
       })
 
       // block user
-      .addCase(blockUser.pending, (state) => {
+      .addCase(blockUserThunk.pending, (state) => {
         state.isLoading = true
       })
-      .addCase(blockUser.fulfilled, (state, action) => {
+      .addCase(blockUserThunk.fulfilled, (state, action) => {
         const updatedUsers = state.users.map((user) => {
           if (user._id === action.payload._id) return action.payload
           return user
@@ -169,7 +185,7 @@ export const userSlice = createSlice({
         state.users = updatedUsers
         state.isLoading = false
       })
-      .addCase(blockUser.rejected, (state, action) => {
+      .addCase(blockUserThunk.rejected, (state, action) => {
         const errorMessage = action.payload
         if (typeof errorMessage === 'string') {
           state.error = errorMessage
@@ -179,10 +195,10 @@ export const userSlice = createSlice({
       })
 
       // Switch user role
-      .addCase(switchUserRole.pending, (state) => {
+      .addCase(switchUserRoleThunk.pending, (state) => {
         state.isLoading = true
       })
-      .addCase(switchUserRole.fulfilled, (state, action) => {
+      .addCase(switchUserRoleThunk.fulfilled, (state, action) => {
         const updatedUsers = state.users.map((user) => {
           if (user._id === action.payload._id) return action.payload
           return user
@@ -190,7 +206,28 @@ export const userSlice = createSlice({
         state.users = updatedUsers
         state.isLoading = false
       })
-      .addCase(switchUserRole.rejected, (state, action) => {
+      .addCase(switchUserRoleThunk.rejected, (state, action) => {
+        const errorMessage = action.payload
+        if (typeof errorMessage === 'string') {
+          state.error = errorMessage
+        }
+        state.isLoading = false
+        return state
+      })
+
+      // Update user
+      .addCase(updateUserThunk.pending, (state) => {
+        state.isLoading = true
+      })
+      .addCase(updateUserThunk.fulfilled, (state, action) => {
+        const updatedUsers = state.users.map((user) => {
+          if (user._id === action.payload._id) return action.payload
+          return user
+        })
+        state.users = updatedUsers
+        state.isLoading = false
+      })
+      .addCase(updateUserThunk.rejected, (state, action) => {
         const errorMessage = action.payload
         if (typeof errorMessage === 'string') {
           state.error = errorMessage

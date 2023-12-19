@@ -1,25 +1,25 @@
 import React, { useEffect, useState } from 'react'
+import { useDispatch } from 'react-redux'
 
 import SideBar from '../components/SideBar'
 import { ProductsManager } from '../components/products/ProductsManager'
 import { CategoriesManager } from '../components/categories/CategoriesManager'
 import Orders from '../components/orders/Orders'
 import { UsersManager } from '../components/users/UsersManager'
-import { fetchUsers } from '../redux/slices/users/userSlice'
-import { fetchCategories } from '../redux/slices/categories/categorySlice'
-import { fetchOrders } from '../redux/slices/orders/orderSlice'
-import { useDispatch } from 'react-redux'
+import { fetchUsersThunk } from '../redux/slices/users/userSlice'
+import { fetchCategoriesThunk } from '../redux/slices/categories/categorySlice'
+import { fetchOrdersThunk } from '../redux/slices/orders/orderSlice'
 import { AppDispatch } from '../redux/store'
-import { fetchProducts } from '../redux/slices/products/productSlice'
+import { fetchCartItemsThunk } from '../redux/slices/cart/cartSlice'
 
 export default function Admin() {
   const dispatch = useDispatch<AppDispatch>()
   const [selectedComponent, setSelectedComponent] = useState('products')
 
   useEffect(() => {
-    dispatch(fetchCategories())
-    dispatch(fetchUsers())
-    dispatch(fetchOrders())
+    dispatch(fetchCategoriesThunk())
+    dispatch(fetchUsersThunk())
+    dispatch(fetchOrdersThunk())
   }, [])
   
   return (

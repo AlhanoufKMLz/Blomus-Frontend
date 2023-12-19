@@ -4,19 +4,16 @@ import { Link } from 'react-router-dom'
 import { AppDispatch, RootState } from '../redux/store'
 import { logout } from '../redux/slices/users/logedinUserSlice'
 import Profile from './Profile'
+import { ROLES } from '../constants'
 
 export default function NavBar() {
   const dispatch = useDispatch<AppDispatch>()
   const cart = useSelector((state: RootState) => state.cart)
-  const logedinUser = useSelector((state: RootState) => state.logedinUser.user)
+  const state = useSelector((state: RootState) => state.logedinUser)
 
   const [isOpen, setIsOpen] = useState(false)
   const [isProfileOpe, setIsProfileOpen] = useState(false)
 
-  // Calculate number of items in the cart
-  const numberOfItems = cart.items.reduce((total, currentValue) => {
-    return total + (currentValue.quantity || 0)
-  }, 0)
 
   function handleOpenNavBar() {
     setIsOpen(true)
@@ -101,21 +98,21 @@ export default function NavBar() {
                 to={'/products'}>
                 Products
               </Link>
-              {logedinUser === null && (
+              {!state.decodedUser && (
                 <Link
                   className="my-2 text-primary_pink transition-colors duration-300 transform hover:text-primary_grey md:mx-4 md:my-0"
                   to={'/login'}>
                   Login
                 </Link>
               )}
-              {logedinUser?.role === 'ADMIN' && (
+              {state.decodedUser?.role === ROLES.ADMIN && (
                 <Link
                   className="text-primary_pink transition-colors duration-300 transform hover:text-primary_grey md:mx-4 md:my-0"
                   to={'/dashboard'}>
                   DashBoard
                 </Link>
               )}
-              {logedinUser !== null && (
+              {state.decodedUser && (
                 <div className="flex items-center">
                   <Link
                     className="my-2 text-primary_green transition-colors duration-300 transform hover:text-primary_grey md:mx-4 md:my-0"
@@ -149,10 +146,10 @@ export default function NavBar() {
                         strokeLinejoin="round"
                       />
                     </svg>
-                    {numberOfItems > 0 && (
+                    {cart.itemsCount > 0 && (
                       <div className="absolute top-0 right-0">
                         <p className="absolute -top-2 left-0 flex h-0 w-1 items-center justify-center rounded-full bg-primary_pink p-2 text-xs text-white">
-                          {numberOfItems}
+                          {cart.itemsCount}
                         </p>
                       </div>
                     )}
@@ -164,10 +161,10 @@ export default function NavBar() {
         </div>
       </nav>
 
-      {isProfileOpe && logedinUser && (
+      {isProfileOpe && state.user && (
         <Profile
           isProfileOpen={isProfileOpe}
-          user={logedinUser}
+          user={state.user}
           setIsProfileOpen={setIsProfileOpen}
         />
       )}

@@ -1,8 +1,11 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 
-import { User } from '../../../types/types'
+import { LogedinUserState, User } from '../../../types/types'
 import api from '../../../api'
 import { AxiosError } from 'axios'
+import { getDecodedTokenFromStorage } from '../../../utils/token'
+
+const decodedUser = getDecodedTokenFromStorage()
 
 export type UserState = {
   user: User | null
@@ -10,14 +13,15 @@ export type UserState = {
   isLoading: boolean
 }
 
-const initialState: UserState = {
+const initialState: LogedinUserState = {
   user: null,
   error: undefined,
-  isLoading: false
+  isLoading: false,
+  decodedUser
 }
 
 // Login user
-export const loginUser = createAsyncThunk(
+export const loginUserThunk = createAsyncThunk(
   'user/loginUser',
   async (user: { email: string; password: string }, { rejectWithValue }) => {
     try {
@@ -38,6 +42,7 @@ export const logedinUserSlice = createSlice({
   reducers: {
     logout: (state) => {
       state.user = null
+      state.decodedUser = null
     },
     editLogedInUser: (state, action: { payload: { newUser: User } }) => {
       state.user = action.payload.newUser
@@ -46,14 +51,16 @@ export const logedinUserSlice = createSlice({
   extraReducers: (builder) => {
     builder
       // Login user
-      .addCase(loginUser.pending, (state) => {
+      .addCase(loginUserThunk.pending, (state) => {
         state.isLoading = true
       })
-      .addCase(loginUser.fulfilled, (state, action) => {
+      .addCase(loginUserThunk.fulfilled, (state, action) => {
         state.user = action.payload.user
+        state.decodedUser = decodedUser
         state.isLoading = false
+        return state
       })
-      .addCase(loginUser.rejected, (state, action) => {
+      .addCase(loginUserThunk.rejected, (state, action) => {
         const errorMessage = action.payload
         if (typeof errorMessage === 'string') {
           state.error = errorMessage

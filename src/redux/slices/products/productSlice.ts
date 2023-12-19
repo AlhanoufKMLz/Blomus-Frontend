@@ -1,22 +1,23 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { AxiosError } from 'axios'
 
-import { Product, ProductState } from '../../../types/types'
+import { ProductState } from '../../../types/types'
+import productService from '../../../services/products'
 import api from '../../../api'
 
 // Fetch all products
-export const fetchProducts = createAsyncThunk(
+export const fetchProductsThunk = createAsyncThunk(
   'products/fetchProducts',
   async (
     {
-      searchText,
-      category,
-      sortBy,
+      searchText = '',
+      category = '',
+      sortBy = '',
       pageNumber
     }: {
-      searchText: string
-      category: string
-      sortBy: string
+      searchText?: string
+      category?: string
+      sortBy?: string
       pageNumber: number
     },
     { rejectWithValue }
@@ -24,17 +25,11 @@ export const fetchProducts = createAsyncThunk(
     try {
       const queryParams = new URLSearchParams()
       queryParams.append('pageNumber', String(pageNumber))
-      {
-        searchText !== '' && queryParams.append('searchText', searchText)
-      }
-      {
-        category !== '' && queryParams.append('category', category)
-      }
-      {
-        sortBy !== '' && queryParams.append('sortBy', sortBy)
-      }
+      searchText && queryParams.append('searchText', searchText)
+      category && queryParams.append('category', category)
+      sortBy && queryParams.append('sortBy', sortBy)
 
-      const response = await api.get(`/api/products?${queryParams.toString()}`)
+      const response = await productService.findAll(queryParams.toString())
 
       return response.data
     } catch (error) {
@@ -46,11 +41,11 @@ export const fetchProducts = createAsyncThunk(
 )
 
 // Fetch single product
-export const fetchSingleProduct = createAsyncThunk(
+export const fetchSingleProductThunk = createAsyncThunk(
   'products/fetchSigleProduct',
   async (productId: string, { rejectWithValue }) => {
     try {
-      const response = await api.get(`/api/products/${productId}`)
+      const response = await productService.findOne(productId)
 
       return response.data.payload
     } catch (error) {
@@ -62,7 +57,7 @@ export const fetchSingleProduct = createAsyncThunk(
 )
 
 // Create new product
-export const createProduct = createAsyncThunk(
+export const createProductThunk = createAsyncThunk(
   'products/createProduct',
   async (product: FormData, { rejectWithValue }) => {
     try {
@@ -78,9 +73,9 @@ export const createProduct = createAsyncThunk(
 )
 
 // Update product
-export const updateProduct = createAsyncThunk(
+export const updateProductThunk = createAsyncThunk(
   'products/updateProduct',
-  async ({product, productId}:{product: FormData, productId: string}, { rejectWithValue }) => {
+  async ({ product, productId }: { product: FormData; productId: string }, { rejectWithValue }) => {
     try {
       const response = await api.put(`/api/products/${productId}`, product)
 
@@ -94,7 +89,7 @@ export const updateProduct = createAsyncThunk(
 )
 
 // Delete product
-export const deleteProduct = createAsyncThunk(
+export const deleteProductThunk = createAsyncThunk(
   'products/deleteProduct',
   async (productId: string, { rejectWithValue }) => {
     try {
@@ -124,15 +119,15 @@ export const productSlice = createSlice({
   extraReducers: (builder) => {
     builder
       // Fetch all products
-      .addCase(fetchProducts.pending, (state) => {
+      .addCase(fetchProductsThunk.pending, (state) => {
         state.isLoading = true
       })
-      .addCase(fetchProducts.fulfilled, (state, action) => {
+      .addCase(fetchProductsThunk.fulfilled, (state, action) => {
         state.products = action.payload.payload
         state.totalPages = action.payload.totalPages
         state.isLoading = false
       })
-      .addCase(fetchProducts.rejected, (state, action) => {
+      .addCase(fetchProductsThunk.rejected, (state, action) => {
         const errorMessage = action.payload
         if (typeof errorMessage === 'string') {
           state.error = errorMessage
@@ -142,14 +137,14 @@ export const productSlice = createSlice({
       })
 
       // Fetch single product
-      .addCase(fetchSingleProduct.pending, (state) => {
+      .addCase(fetchSingleProductThunk.pending, (state) => {
         state.isLoading = true
       })
-      .addCase(fetchSingleProduct.fulfilled, (state, action) => {
+      .addCase(fetchSingleProductThunk.fulfilled, (state, action) => {
         state.singleProduct = action.payload
         state.isLoading = false
       })
-      .addCase(fetchSingleProduct.rejected, (state, action) => {
+      .addCase(fetchSingleProductThunk.rejected, (state, action) => {
         const errorMessage = action.payload
         if (typeof errorMessage === 'string') {
           state.error = errorMessage
@@ -159,14 +154,14 @@ export const productSlice = createSlice({
       })
 
       // Create new product
-      .addCase(createProduct.pending, (state) => {
+      .addCase(createProductThunk.pending, (state) => {
         state.isLoading = true
       })
-      .addCase(createProduct.fulfilled, (state, action) => {
+      .addCase(createProductThunk.fulfilled, (state, action) => {
         state.products = [action.payload, ...state.products]
         state.isLoading = false
       })
-      .addCase(createProduct.rejected, (state, action) => {
+      .addCase(createProductThunk.rejected, (state, action) => {
         const errorMessage = action.payload
         if (typeof errorMessage === 'string') {
           state.error = errorMessage
@@ -175,11 +170,11 @@ export const productSlice = createSlice({
         return state
       })
 
-      // Update category
-      .addCase(updateProduct.pending, (state) => {
+      // Update product
+      .addCase(updateProductThunk.pending, (state) => {
         state.isLoading = true
       })
-      .addCase(updateProduct.fulfilled, (state, action) => {
+      .addCase(updateProductThunk.fulfilled, (state, action) => {
         const updatedProducts = state.products.map((product) => {
           if (product._id === action.payload._id) return action.payload
           return product
@@ -187,7 +182,7 @@ export const productSlice = createSlice({
         state.products = updatedProducts
         state.isLoading = false
       })
-      .addCase(updateProduct.rejected, (state, action) => {
+      .addCase(updateProductThunk.rejected, (state, action) => {
         const errorMessage = action.payload
         if (typeof errorMessage === 'string') {
           state.error = errorMessage
@@ -196,15 +191,15 @@ export const productSlice = createSlice({
         return state
       })
 
-      // Delete category
-      .addCase(deleteProduct.pending, (state) => {
+      // Delete product
+      .addCase(deleteProductThunk.pending, (state) => {
         state.isLoading = true
       })
-      .addCase(deleteProduct.fulfilled, (state, action) => {
+      .addCase(deleteProductThunk.fulfilled, (state, action) => {
         state.products = state.products.filter((product) => product._id !== action.payload._id)
         state.isLoading = false
       })
-      .addCase(deleteProduct.rejected, (state, action) => {
+      .addCase(deleteProductThunk.rejected, (state, action) => {
         const errorMessage = action.payload
         if (typeof errorMessage === 'string') {
           state.error = errorMessage
@@ -215,6 +210,6 @@ export const productSlice = createSlice({
   }
 })
 
-export const { } = productSlice.actions
+export const {} = productSlice.actions
 
 export default productSlice.reducer

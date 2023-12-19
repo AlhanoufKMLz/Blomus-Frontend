@@ -6,8 +6,8 @@ import { zodResolver } from '@hookform/resolvers/zod'
 
 import { ProductFormModalProp, Product, ProductSchema, productSchema } from '../../types/types'
 import { AppDispatch, RootState } from '../../redux/store'
-import { createProduct, updateProduct } from '../../redux/slices/products/productSlice'
-import { fetchCategories } from '../../redux/slices/categories/categorySlice'
+import { createProductThunk, updateProductThunk } from '../../redux/slices/products/productSlice'
+import { fetchCategoriesThunk } from '../../redux/slices/categories/categorySlice'
 
 const initialState = {
   _id: '',
@@ -16,10 +16,12 @@ const initialState = {
   description: '',
   price: 0,
   categories: [],
-  variants: [],
   sizes: [],
-  quantity: 0
+  quantityInStock: 0,
+  itemsSold: 0,
+  discount: 0
 }
+
 
 export default function ProductFormModal(prop: ProductFormModalProp) {
   if (!prop.isOpen) return null
@@ -43,7 +45,7 @@ export default function ProductFormModal(prop: ProductFormModalProp) {
   }, [])
 
   useEffect(() => {
-    dispatch(fetchCategories())
+    dispatch(fetchCategoriesThunk())
   }, [])
   const categories = useSelector((state: RootState) => state.categories.categories)
 
@@ -89,16 +91,16 @@ export default function ProductFormModal(prop: ProductFormModalProp) {
       productData.append('description', productChanges.description)
       if (productImage) productData.append('image', productImage)
       productData.append('categories', productChanges.categories.join(','))
-      productData.append('sizes', productChanges.sizes.toString())
+      productData.append('sizes', productChanges.sizes.join(','))
 
     // Add new product
     if (!prop.product) {
-      dispatch(createProduct(productData))
+      dispatch(createProductThunk(productData))
       toast.success('Product added successfully!')
 
     // Update product
     } else {
-      dispatch(updateProduct({product: productData, productId: productChanges._id}))
+      dispatch(updateProductThunk({product: productData, productId: productChanges._id}))
       toast.success('Product details updated successfully!')
     }
     // Reset the useState

@@ -6,7 +6,7 @@ import { useForm } from 'react-hook-form'
 
 import { AppDispatch } from '../../redux/store'
 import { Category, CategoryFormModalProp, CategorySchema, categorySchema } from '../../types/types'
-import { createCategory, updateCategory } from '../../redux/slices/categories/categorySlice'
+import { createCategoryThunk, updateCategoryThunk } from '../../redux/slices/categories/categorySlice'
 
 const initialState = {
   _id: '',
@@ -39,11 +39,11 @@ export default function CategoryFormModal(prop: CategoryFormModalProp) {
 
   const handleFormSubmit = () => {
     if (!prop.category) {
-      dispatch(createCategory({ name: categoryChanges.name }))
+      dispatch(createCategoryThunk({ name: categoryChanges.name }))
       toast.success('category added successfully!')
     } else {
       dispatch(
-        updateCategory({
+        updateCategoryThunk({
           category: { name: categoryChanges.name },
           categoryId: categoryChanges._id
         })

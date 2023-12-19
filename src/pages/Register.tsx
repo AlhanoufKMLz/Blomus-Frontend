@@ -8,7 +8,7 @@ import { useDispatch, useSelector } from 'react-redux'
 
 import { User, registerSchema } from '../types/types'
 import { AppDispatch, RootState } from '../redux/store'
-import { registerUser } from '../redux/slices/users/userSlice'
+import { registerUserThunk } from '../redux/slices/users/userSlice'
 
 export default function Register() {
   const dispatch = useDispatch<AppDispatch>()
@@ -33,7 +33,7 @@ export default function Register() {
   }
 
   function handleFormSubmit() {
-    dispatch(registerUser(userData)).then((res) => {
+    dispatch(registerUserThunk(userData)).then((res) => {
       if (res.meta.requestStatus === 'fulfilled') {
         toast.success(
           'Welcome, ' +
