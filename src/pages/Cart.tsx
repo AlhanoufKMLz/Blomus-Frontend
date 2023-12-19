@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom'
 
 import { AppDispatch, RootState } from '../redux/store'
 import { fetchCartItemsThunk, removeFromCartThunk, updateItemQuantityThunk } from '../redux/slices/cart/cartSlice'
+import Checkout from '../components/Checkout'
 
 export default function Cart() {
   const dispatch = useDispatch<AppDispatch>()
@@ -13,10 +14,6 @@ export default function Cart() {
   }, [])
   
   const cart = useSelector((state: RootState) => state.cart)
-  
-  const shippingFee = 25
-  const taxes = cart.totalPrice * 0.15
-  const finalPrice = cart.totalAfterDiscount + taxes + shippingFee
 
   function handleRemoveFromCart(productId: string) {
     dispatch(removeFromCartThunk(productId))
@@ -45,7 +42,7 @@ export default function Cart() {
           <div>
             <h1 className="text-primary_pink font-bold">YOUR CART</h1>
             <div className="flex gap-16 flex-col md:flex-row">
-              <div className="overflow-y-auto max-h-[500px] w-8/12">
+              <div className="overflow-y-auto max-h-[500px] w-full md:w-8/12">
                 <table className="text-primary_green w-full">
                   <tbody>
                     {cart.items.map((item) => (
@@ -94,52 +91,7 @@ export default function Cart() {
                   </tbody>
                 </table>
               </div>
-              <div className="bg-white rounded-lg p-10 flex flex-col w-4/12 gap-8">
-                <div className="flex flex-col gap-4">
-                  <h2 className="font-bold text-primary_green text-xl">SUMMARY</h2>
-                  <div className="flex justify-between text-primary_pink">
-                    <span>Subtotal</span>
-                    <span>{cart.totalPrice}</span> 
-                  </div>
-                  <div className="flex justify-between text-primary_pink">
-                    <span>Shipping</span>
-                    <span>{shippingFee}</span>
-                  </div>
-                  <div className="flex justify-between text-primary_pink">
-                    <span>Taxes</span>
-                    <span>{taxes}</span>
-                  </div>
-                  <div className="flex justify-between text-primary_pink">
-                    <span>Discount</span>
-                    <span>-{cart.savedAmount}</span>
-                  </div>
-                  <div className="flex justify-between text-primary_pink border-y-2 border-zinc_secondery font-bold">
-                    <span>Total</span>
-                    <span>{finalPrice}</span>
-                  </div>
-                </div>
-                <div className="flex justify-between">
-                  <input
-                    className="border-2 border-primary_grey h-10 p-2 w-full rounded-l-lg text-sm focus:outline-none"
-                    type="code"
-                    name="code"
-                    placeholder="Coupon code"
-                  />
-                  <button className="bg-primary_green p-2 rounded-r-lg text-secondary_grey shadow-lg hover:shadow-none hover:bg-secondary_grey hover:text-primary_green">
-                    Apply
-                  </button>
-                </div>
-                <div className="flex flex-col gap-2">
-                  <button className="bg-primary_pink p-2 rounded-lg text-secondary_grey shadow-md hover:shadow-none hover:bg-secondary_grey hover:text-primary_pink shadow-shadow">
-                    Check Out
-                  </button>
-                  <Link
-                    to={'/products'}
-                    className="bg-primary_green p-2 text-center rounded-lg text-secondary_grey shadow-md hover:shadow-none hover:bg-secondary_grey hover:text-primary_green shadow-shadow">
-                    Continue Shopping
-                  </Link>
-                </div>
-              </div>
+              <Checkout />
             </div>
           </div>
         )}

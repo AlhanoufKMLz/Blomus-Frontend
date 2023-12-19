@@ -1,12 +1,24 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import { Order } from '../../../types/types'
+import { Order, OrderState } from '../../../types/types'
 import api from '../../../api'
+import { AxiosError } from 'axios'
 
-export type OrderState = {
-  orders: Order[]
-  error: undefined | string
-  isLoading: boolean
-}
+// Create new product
+export const createOrderThunk = createAsyncThunk(
+  'orders/createOrder',
+  async (shippingInfo: { country: string, city: string, address: string }, { rejectWithValue }) => {
+    try {
+      console.log("🚀 ~ file: orderSlice.ts:12 ~ shippingInfo:", shippingInfo)
+      const response = await api.post('/api/orders', shippingInfo)
+
+      return response.data.payload
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        return rejectWithValue(error.response?.data.msg)
+      }
+    }
+  }
+)
 
 const initialState: OrderState = {
   orders: [],
@@ -37,6 +49,23 @@ export const orderSlice = createSlice({
       .addCase(fetchOrdersThunk.rejected, (state, action) => {
         state.error = action.error.message
         state.isLoading = false
+      })
+      
+      // Create new product
+      .addCase(createOrderThunk.pending, (state) => {
+        state.isLoading = true
+      })
+      .addCase(createOrderThunk.fulfilled, (state, action) => {
+        state.orders = [action.payload, ...state.orders]
+        state.isLoading = false
+      })
+      .addCase(createOrderThunk.rejected, (state, action) => {
+        const errorMessage = action.payload
+        if (typeof errorMessage === 'string') {
+          state.error = errorMessage
+        }
+        state.isLoading = false
+        return state
       })
   }
 })

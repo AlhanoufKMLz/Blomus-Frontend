@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 
-import { SideBarProp } from '../types/types'
+import { SideBarProp } from '../../types/types'
 
 export default function SideBar(prop: SideBarProp) {
   const [isOpen, setIsOpen] = useState(false)

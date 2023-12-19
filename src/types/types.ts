@@ -106,6 +106,11 @@ export type CartState = {
   itemsCount: number
 }
 
+export type OrderState = {
+  orders: Order[]
+  error: undefined | string
+  isLoading: boolean
+}
 
 //-----------PROPS-----------
 

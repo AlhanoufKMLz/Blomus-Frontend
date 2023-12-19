@@ -1,8 +1,8 @@
 import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
-import { AppDispatch, RootState } from '../../redux/store'
-import { blockUserThunk, deleteUserThunk, switchUserRoleThunk } from '../../redux/slices/users/userSlice'
+import { AppDispatch, RootState } from '../../../redux/store'
+import { blockUserThunk, deleteUserThunk, switchUserRoleThunk } from '../../../redux/slices/users/userSlice'
 
 export function UsersManager() {
   const dispatch = useDispatch<AppDispatch>()

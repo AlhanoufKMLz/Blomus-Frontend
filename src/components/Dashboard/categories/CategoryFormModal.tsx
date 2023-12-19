@@ -4,9 +4,9 @@ import { toast } from 'react-toastify'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 
-import { AppDispatch } from '../../redux/store'
-import { Category, CategoryFormModalProp, CategorySchema, categorySchema } from '../../types/types'
-import { createCategoryThunk, updateCategoryThunk } from '../../redux/slices/categories/categorySlice'
+import { AppDispatch } from '../../../redux/store'
+import { Category, CategoryFormModalProp, CategorySchema, categorySchema } from '../../../types/types'
+import { createCategoryThunk, updateCategoryThunk } from '../../../redux/slices/categories/categorySlice'
 
 const initialState = {
   _id: '',

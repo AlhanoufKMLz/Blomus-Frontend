@@ -4,10 +4,10 @@ import { toast } from 'react-toastify'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 
-import { ProductFormModalProp, Product, ProductSchema, productSchema } from '../../types/types'
-import { AppDispatch, RootState } from '../../redux/store'
-import { createProductThunk, updateProductThunk } from '../../redux/slices/products/productSlice'
-import { fetchCategoriesThunk } from '../../redux/slices/categories/categorySlice'
+import { ProductFormModalProp, Product, ProductSchema, productSchema } from '../../../types/types'
+import { AppDispatch, RootState } from '../../../redux/store'
+import { createProductThunk, updateProductThunk } from '../../../redux/slices/products/productSlice'
+import { fetchCategoriesThunk } from '../../../redux/slices/categories/categorySlice'
 
 const initialState = {
   _id: '',
