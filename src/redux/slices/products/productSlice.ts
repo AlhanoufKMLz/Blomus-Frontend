@@ -56,6 +56,22 @@ export const fetchSingleProductThunk = createAsyncThunk(
   }
 )
 
+// Fetch best selling products
+export const fetchBestSellingProductsThunk = createAsyncThunk(
+  'products/fetchBestSellingProducts',
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await api.get(`/api/products/highest-sold?limit=${6}`)
+
+      return response.data.payload
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        return rejectWithValue(error.response?.data.msg)
+      }
+    }
+  }
+)
+
 // Create new product
 export const createProductThunk = createAsyncThunk(
   'products/createProduct',
@@ -106,6 +122,7 @@ export const deleteProductThunk = createAsyncThunk(
 
 const initialState: ProductState = {
   products: [],
+  bestSellers: [],
   singleProduct: undefined,
   totalPages: 0,
   error: undefined,
@@ -200,6 +217,23 @@ export const productSlice = createSlice({
         state.isLoading = false
       })
       .addCase(deleteProductThunk.rejected, (state, action) => {
+        const errorMessage = action.payload
+        if (typeof errorMessage === 'string') {
+          state.error = errorMessage
+        }
+        state.isLoading = false
+        return state
+      })
+
+      // Fetch best selling products
+      .addCase(fetchBestSellingProductsThunk.pending, (state) => {
+        state.isLoading = true
+      })
+      .addCase(fetchBestSellingProductsThunk.fulfilled, (state, action) => {
+        state.bestSellers = action.payload.highestSoldProducts
+        state.isLoading = false
+      })
+      .addCase(fetchBestSellingProductsThunk.rejected, (state, action) => {
         const errorMessage = action.payload
         if (typeof errorMessage === 'string') {
           state.error = errorMessage

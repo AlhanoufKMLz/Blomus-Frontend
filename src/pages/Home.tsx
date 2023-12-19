@@ -1,15 +1,20 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { AppDispatch, RootState } from '../redux/store'
 import { Product } from '../types/types'
 import { addToCartThunk } from '../redux/slices/cart/cartSlice'
 import { toast } from 'react-toastify'
+import { fetchBestSellingProductsThunk } from '../redux/slices/products/productSlice'
 
 export default function Home() {
-  const productsList = useSelector((state: RootState) => state.products)
-  const products = productsList.products.slice(0, 6)
   const dispatch = useDispatch<AppDispatch>()
+
+  useEffect(() => {
+    dispatch(fetchBestSellingProductsThunk())
+  },[])
+  const bestSellers = useSelector((state: RootState) => state.products.bestSellers)
+
 
   // Add product to cart
   function handleAddToCart(product: Product) {
@@ -46,11 +51,11 @@ export default function Home() {
         </h1>
 
         <ul className="py-8 flex gap-5 flex-wrap">
-          {products.map((product) => (
+          {bestSellers.map((product) => (
             <li key={product._id} className="flex flex-col items-center justify-center mx-auto">
               <div className="flex w-80 h-80 bg-white rounded-lg shadow-lg shadow-[#c0c0c0] hover:shadow-none items-center justify-center">
                 <Link to={`/${product._id}`}>
-                  <img className="w-48" src={product.image} alt={product.name} />
+                  {/* <img className="w-48" src={product.image} alt={product.name} /> */}
                 </Link>
               </div>
               <div className="w-56 -mt-10 overflow-hidden rounded-lg shadow-lg md:w-64 bg-secondary_grey">

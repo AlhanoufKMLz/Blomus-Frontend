@@ -71,6 +71,7 @@ export type DecodedUser = {
 
 export type ProductState = {
   products: Product[]
+  bestSellers: Product[]
   singleProduct: Product | undefined
   totalPages: number
   error: undefined | string
