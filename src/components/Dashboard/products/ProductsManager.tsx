@@ -91,6 +91,7 @@ export function ProductsManager() {
               <th>Image</th>
               <th>Name</th>
               <th>Price</th>
+              <th>Stock</th>
             </tr>
             {products.products.map((product) => (
               <tr className="border-t-2 border-zinc_secondery" key={product._id}>
@@ -99,6 +100,7 @@ export function ProductsManager() {
                 </td>
                 <td className="text-primary_green">{product.name}</td>
                 <td className="text-primary_green">{product.price}</td>
+                <td className="text-primary_green">{product.quantityInStock}</td>
                 <td className="text-right">
                   <button className="text-primary_green" onClick={() => handleEdit(product)}>
                     <svg
@@ -157,7 +159,7 @@ export function ProductsManager() {
         +
       </button>
 
-      {/* Edit prodact modal */}
+      {/* Prodact modal */}
       {selectedProduct && (
         <ProductFormModal
           isOpen={isModalOpen}

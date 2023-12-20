@@ -22,7 +22,6 @@ const initialState = {
   discount: 0
 }
 
-
 export default function ProductFormModal(prop: ProductFormModalProp) {
   if (!prop.isOpen) return null
 
@@ -36,6 +35,7 @@ export default function ProductFormModal(prop: ProductFormModalProp) {
   const dispatch = useDispatch<AppDispatch>()
   const [productChanges, setProductChanges] = useState<Product>(initialState)
   const [productImage, setProductImage] = useState<File | undefined>(undefined)
+  const [numberOfSizes, setNumberOfSizes] = useState(1)
 
   useEffect(() => {
     if (prop.product) {
@@ -49,13 +49,14 @@ export default function ProductFormModal(prop: ProductFormModalProp) {
   }, [])
   const categories = useSelector((state: RootState) => state.categories.categories)
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, index?: number) => {
     const { name, value } = e.target
-    const isList = name === 'sizes'
-    if (isList) {
+    if (index != undefined) {
+      let updatedSizes = [...productChanges.sizes]
+      updatedSizes[index] = value
       setProductChanges({
         ...productChanges,
-        [name]: value.split(',')
+        sizes: updatedSizes
       })
       return
     }
@@ -84,23 +85,31 @@ export default function ProductFormModal(prop: ProductFormModalProp) {
       })
   }
 
+  const handleAddSizeField = () => {
+    setNumberOfSizes(numberOfSizes + 1)
+  }
+
+  const handleRemoveSizeField = () => {
+    setNumberOfSizes(numberOfSizes - 1)
+  }
+
   const handleFormSubmit = () => {
     const productData = new FormData()
-      productData.append('name', productChanges.name)
-      productData.append('price', String(productChanges.price))
-      productData.append('description', productChanges.description)
-      if (productImage) productData.append('image', productImage)
-      productData.append('categories', productChanges.categories.join(','))
-      productData.append('sizes', productChanges.sizes.join(','))
+    productData.append('name', productChanges.name)
+    productData.append('price', String(productChanges.price))
+    productData.append('description', productChanges.description)
+    if (productImage) productData.append('image', productImage)
+    productData.append('categories', productChanges.categories.join(','))
+    productData.append('sizes', productChanges.sizes.join(','))
 
     // Add new product
     if (!prop.product) {
       dispatch(createProductThunk(productData))
       toast.success('Product added successfully!')
 
-    // Update product
+      // Update product
     } else {
-      dispatch(updateProductThunk({product: productData, productId: productChanges._id}))
+      dispatch(updateProductThunk({ product: productData, productId: productChanges._id }))
       toast.success('Product details updated successfully!')
     }
     // Reset the useState
@@ -111,40 +120,66 @@ export default function ProductFormModal(prop: ProductFormModalProp) {
 
   const handleCloseModal = () => {
     prop.setIsModalOpen(false)
+    let updatedSizes = [...productChanges.sizes]
+    updatedSizes.pop()
+    setProductChanges({
+      ...productChanges,
+      sizes: updatedSizes
+    })
+    console.log("🚀 ~ file: ProductFormModal.tsx:129 ~ handleCloseModal ~ productChanges:", productChanges)
   }
 
   return (
     <div className="modal-overlay">
       <div className="modal-content">
-        <form className="p-4 bg-gray-100 rounded-lg" onSubmit={handleSubmit(handleFormSubmit)}>
-          <div className="flex justify-between">
-            {/* name container */}
-            <div className="mb-4">
-              <label htmlFor="name" className="flex flex-col text-primary_pink">
-                <span className="text-primary_green pl-2">Name:</span>
-                <input
-                  type="text"
-                  id="name"
-                  {...register('name')}
-                  className="border-2 border-primary_grey h-10 px-5 pr-16 rounded-lg text-sm focus:outline-none"
-                  value={productChanges.name}
-                  onChange={handleChange}
-                />
+        <form
+          className="p-4 bg-gray-100 rounded-lg max-h-[700px] overflow-y-auto"
+          onSubmit={handleSubmit(handleFormSubmit)}>
+          {/* name container */}
+          <div className="mb-4">
+            <label htmlFor="name" className="flex flex-col text-primary_pink">
+              <span className="text-primary_green pl-2">Name:</span>
+              <input
+                type="text"
+                id="name"
+                {...register('name')}
+                className="border-2 border-primary_grey h-10 px-5 pr-16 rounded-lg text-sm focus:outline-none"
+                value={productChanges.name}
+                onChange={handleChange}
+              />
 
-                {errors.name && <span className="text-primary_pink"> {errors.name.message} </span>}
-              </label>
-            </div>
+              {errors.name && <span className="text-primary_pink"> {errors.name.message} </span>}
+            </label>
+          </div>
 
+          <div className="flex justify-between flex-col md:flex-row">
             {/* price container */}
-            <div className="mb-4">
+            <div className="mb-4 md:w-1/2">
               <label htmlFor="price" className="flex flex-col text-primary_pink">
                 <span className="text-primary_green pl-2">Price:</span>
                 <input
                   type="number"
                   id="price"
                   {...register('price', { valueAsNumber: true })}
-                  className="border-2 border-primary_grey h-10 px-5 pr-16 rounded-lg text-sm focus:outline-none"
+                  className="border-2 border-primary_grey h-10 px-5 rounded-lg text-sm focus:outline-none"
                   value={productChanges.price}
+                  onChange={handleChange}
+                />
+                {errors.price && (
+                  <span className="text-primary_pink"> {errors.price.message} </span>
+                )}
+              </label>
+            </div>
+            {/* quantity in stock container */}
+            <div className="mb-4 md:w-1/2">
+              <label htmlFor="price" className="flex flex-col text-primary_pink">
+                <span className="text-primary_green pl-2">Quantity in stock:</span>
+                <input
+                  type="number"
+                  id="quantity-in-stock"
+                  {...register('quantityInStock', { valueAsNumber: true })}
+                  className="border-2 border-primary_grey h-10 px-5 rounded-lg text-sm focus:outline-none"
+                  value={productChanges.quantityInStock}
                   onChange={handleChange}
                 />
                 {errors.price && (
@@ -184,35 +219,52 @@ export default function ProductFormModal(prop: ProductFormModalProp) {
           <div className="mb-4">
             <label htmlFor="categories" className="flex flex-col text-primary_pink">
               <span className="text-primary_green pl-2">Categories:</span>
-              {categories.map((category) => (
-                <div className="border-2 border-primary_grey h-10 px-5 pr-16 rounded-lg text-sm focus:outline-none">
-                  <input
-                    key={category._id}
-                    type="checkbox"
-                    id={category.name}
-                    onChange={() => handleAddCategroy(category._id)}
-                    checked={productChanges.categories.some((item) => category._id === item)}
-                  />
-                  <label htmlFor={category.name}> {category.name}</label>
-                </div>
-              ))}
+              <div className="border-2 border-primary_grey px-5 py-2 rounded-lg text-sm focus:outline-none flex flex-wrap gap-2">
+                {categories.map((category) => (
+                  <div key={category._id}>
+                    <input
+                      type="checkbox"
+                      id={category.name}
+                      onChange={() => handleAddCategroy(category._id)}
+                      checked={productChanges.categories.some((item) => category._id === item)}
+                    />
+                    <label htmlFor={category.name}> {category.name}</label>
+                  </div>
+                ))}
+              </div>
             </label>
           </div>
 
-          {/* sizes container */}
+          {/* sizes containers */}
           <div className="mb-4">
             <label htmlFor="sizes" className="flex flex-col text-primary_pink">
-              <span className="text-primary_green pl-2">
-                Sizes: (use comma , to create multiple)
-              </span>
-              <input
-                type="text"
-                id="sizes"
-                {...register('sizes')}
-                className="border-2 border-primary_grey h-10 px-5 pr-16 rounded-lg text-sm focus:outline-none"
-                onChange={handleChange}
-                value={productChanges.sizes.join(',')}
-              />
+              <div className="flex justify-between">
+                <span className="text-primary_green pl-2">Sizes:</span>
+                <div>
+                  <button className="pr-2 text-2xl" onClick={handleRemoveSizeField}>
+                    -
+                  </button>
+                  <button className="pr-2 text-2xl" onClick={handleAddSizeField}>
+                    +
+                  </button>
+                </div>
+              </div>
+              <div className="flex flex-wrap justify-between">
+                {Array.from({ length: numberOfSizes }, (_, index) => {
+                  return (
+                    <input
+                      key={index}
+                      type="text"
+                      id="sizes"
+                      placeholder={`${index + 1}. Add size`}
+                      {...register('sizes')}
+                      className="border-2 border-primary_grey h-10 px-5 pr-16 rounded-lg text-sm focus:outline-none mb-2"
+                      onChange={(e) => handleChange(e, index)}
+                      //value={productChanges.sizes[index]}
+                    />
+                  )
+                })}
+              </div>
               {errors.sizes && <span className="text-primary_pink"> {errors.sizes.message} </span>}
             </label>
           </div>

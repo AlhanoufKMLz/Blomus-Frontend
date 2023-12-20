@@ -53,7 +53,7 @@ export default function Cart() {
                           </Link>
                         </td>
                         <td>{item.product.name}</td>
-                        <td>{item.product.price} SAR</td>
+                        <td>{item.product.price * item.quantity} SAR</td>
                         <td>
                           <button
                             className="px-1 hover:text-primary_pink"

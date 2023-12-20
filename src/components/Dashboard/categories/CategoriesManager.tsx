@@ -75,12 +75,10 @@ export function CategoriesManager() {
           <tbody>
             <tr className="text-left text-primary_pink">
               <th>Name</th>
-              <th>ID</th>
             </tr>
             {categoriesToDisplay.map((category) => (
               <tr className="border-t-2 border-zinc_secondery" key={category._id}>
                 <td className="text-primary_green py-5">{category.name}</td>
-                <td className="text-primary_green">{category._id}</td>
                 <td className="text-right">
                   <button
                     className="text-primary_green hover:text-primary_pink"

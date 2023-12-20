@@ -211,7 +211,7 @@ export type ProductSchema = {
   //image: string
   description: string
   price: number
-  //categories: string
+  quantityInStock: number
   sizes: string
 }
 
@@ -220,12 +220,6 @@ export const productSchema: ZodType<ProductSchema> = z.object({
   //image: z.string().refine((value) => value !== '', { message: 'Image is required' }),
   description: z.string().refine((value) => value !== '', { message: 'Description is required' }),
   price: z.number().refine((value) => value > 0, { message: 'Price is required' }),
-  sizes: z.string().refine(
-    (value) => {
-      if (value === '') return true
-      const pattern = /^(\s*[^,]+\s*,)*\s*[^,]+\s*$/
-      return pattern.test(value)
-    },
-    { message: 'Input should be in the format "x,y" or "x,y,z,..."' }
-  )
+  quantityInStock: z.number().refine((value) => value >= 0, { message: "Quantity cannt be negative" }),
+  sizes: z.string()
 })
