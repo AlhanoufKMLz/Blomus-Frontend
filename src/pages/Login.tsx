@@ -10,6 +10,7 @@ import { AppDispatch, RootState } from '../redux/store'
 import { loginUserThunk } from '../redux/slices/users/logedinUserSlice'
 import { LoginSchema, loginSchema } from '../types/types'
 import { fetchCartItemsThunk } from '../redux/slices/cart/cartSlice'
+import api from '../api'
 
 export default function Login() {
   const dispatch = useDispatch<AppDispatch>()
@@ -32,6 +33,7 @@ export default function Login() {
     dispatch(loginUserThunk(userLogin)).then((res) => {
       if(res.meta.requestStatus === 'fulfilled'){
         localStorage.setItem('token', res.payload.token)
+        api.defaults.headers['Authorization'] = `Bearer ${res.payload.token}`
         toast.success('Welcome back ' + res.payload.user.firstName + "! We're glad to see you again")
         navigate('/')
         dispatch(fetchCartItemsThunk())

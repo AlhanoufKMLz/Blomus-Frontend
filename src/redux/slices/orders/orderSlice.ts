@@ -3,13 +3,12 @@ import { Order, OrderState } from '../../../types/types'
 import api from '../../../api'
 import { AxiosError } from 'axios'
 
-// Create new product
+// Create order
 export const createOrderThunk = createAsyncThunk(
   'orders/createOrder',
   async (shippingInfo: { country: string, city: string, address: string }, { rejectWithValue }) => {
     try {
-      console.log("🚀 ~ file: orderSlice.ts:12 ~ shippingInfo:", shippingInfo)
-      const response = await api.post('/api/orders', shippingInfo)
+      const response = await api.post('/api/orders', {shippingInfo})
 
       return response.data.payload
     } catch (error) {
