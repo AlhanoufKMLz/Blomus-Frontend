@@ -1,9 +1,13 @@
 import './App.css'
-import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
-import { Navigate, Route, Routes } from 'react-router'
+import { ToastContainer } from 'react-toastify'
+import { Route, Routes } from 'react-router'
 import { useSelector } from 'react-redux'
 
+import { UsersManager } from './components/Dashboard/users/UsersManager'
+import { ProductsManager } from './components/Dashboard/products/ProductsManager'
+import { CategoriesManager } from './components/Dashboard/categories/CategoriesManager'
+import { RootState } from './redux/store'
 import Home from './pages/Home'
 import NavBar from './components/NavBar'
 import Products from './pages/Products'
@@ -14,13 +18,9 @@ import Orders from './components/Dashboard/orders/Orders'
 import Login from './pages/Login'
 import Register from './pages/Register'
 import Footer from './components/Footer'
-import { UsersManager } from './components/Dashboard/users/UsersManager'
-import { ProductsManager } from './components/Dashboard/products/ProductsManager'
-import { CategoriesManager } from './components/Dashboard/categories/CategoriesManager'
-import { RootState } from './redux/store'
-import { ROLES } from './constants'
 import ForgotPassword from './pages/ForgotPassword'
 import ResetPassword from './pages/ResetPassword'
+import PrivateRoutes from './utils/PrivateRoutes'
 
 function App() {
   const logedinUser = useSelector((state: RootState) => state.logedinUser.decodedUser)
@@ -30,9 +30,17 @@ function App() {
       <NavBar />
       <ToastContainer />
       <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/dashboard" element={logedinUser?.role == ROLES.ADMIN ? <Dashboard /> : <Navigate to="/" />} />
+        {/* private routes */}
+        <Route element={<PrivateRoutes />}>
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/productsmanager" element={<ProductsManager />} />
+          <Route path="/usersmanager" element={<UsersManager />} />
+          <Route path="/categoriesmanager" element={<CategoriesManager />} />
+          <Route path="/orders" element={<Orders />}></Route>
+        </Route>
 
+        {/* public routes */}
+        <Route path="/" element={<Home />} />
         <Route path="/products" element={<Products />}></Route>
         <Route path="/:productid" element={<ProductDetails />}></Route>
         <Route path="/cart" element={<Cart />}></Route>
@@ -41,10 +49,8 @@ function App() {
         <Route path="/forgot-password" element={<ForgotPassword />}></Route>
         <Route path="/reset-password/:resetPasswordToken" element={<ResetPassword />}></Route>
 
-        <Route path="/productsmanager" element={<ProductsManager />} />
-        <Route path="/usersmanager" element={<UsersManager />} />
-        <Route path="/categoriesmanager" element={<CategoriesManager />} />
-        <Route path="/orders" element={<Orders />}></Route>
+        {/* catch all */}
+        <Route path="*" element={<Home />}></Route>
       </Routes>
       <Footer />
     </div>
