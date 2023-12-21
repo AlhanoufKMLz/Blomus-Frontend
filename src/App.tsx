@@ -19,6 +19,8 @@ import { ProductsManager } from './components/Dashboard/products/ProductsManager
 import { CategoriesManager } from './components/Dashboard/categories/CategoriesManager'
 import { RootState } from './redux/store'
 import { ROLES } from './constants'
+import ForgotPassword from './pages/ForgotPassword'
+import ResetPassword from './pages/ResetPassword'
 
 function App() {
   const logedinUser = useSelector((state: RootState) => state.logedinUser.decodedUser)
@@ -36,6 +38,8 @@ function App() {
         <Route path="/cart" element={<Cart />}></Route>
         <Route path="/login" element={<Login />}></Route>
         <Route path="/register" element={<Register />}></Route>
+        <Route path="/forgot-password" element={<ForgotPassword />}></Route>
+        <Route path="/reset-password/:resetPasswordToken" element={<ResetPassword />}></Route>
 
         <Route path="/productsmanager" element={<ProductsManager />} />
         <Route path="/usersmanager" element={<UsersManager />} />

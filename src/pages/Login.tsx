@@ -35,8 +35,8 @@ export default function Login() {
         localStorage.setItem('token', res.payload.token)
         api.defaults.headers['Authorization'] = `Bearer ${res.payload.token}`
         toast.success('Welcome back ' + res.payload.user.firstName + "! We're glad to see you again")
-        navigate('/')
         dispatch(fetchCartItemsThunk())
+        navigate('/')
       } 
       if(res.meta.requestStatus === 'rejected'){
         toast.error(error)
@@ -130,7 +130,7 @@ export default function Login() {
                 {isLoading? "Loging in..." : "Login"}
               </button>
               <div className="mt-6 text-center text-primary_green hover:text-primary_pink">
-                <Link to={'/register'}>You don&lsquo;t have an account?</Link>
+                <Link to={'/forgot-password'}>Forgot you&lsquo;re password?</Link>
               </div>
             </div>
           </form>

@@ -90,13 +90,46 @@ export const switchUserRoleThunk = createAsyncThunk(
 )
 
 // Update user
-export const updateUserThunk= createAsyncThunk(
+export const updateUserThunk = createAsyncThunk(
   'users/updateUser',
   async ({user, userId}:{user: FormData, userId: string}, { rejectWithValue }) => {
     try {
       const response = await api.put(`/api/users/${userId}`, user)
 
       return response.data.payload
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        return rejectWithValue(error.response?.data.msg)
+      }
+    }
+  }
+)
+
+// Send reset password email
+export const sendEmailThunk = createAsyncThunk(
+  'users/sendResetEmail',
+  async ( email: string, { rejectWithValue }) => {
+    try {
+      const response = await api.post('/api/reset-password', {email})
+
+      return response.data.payload
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        return rejectWithValue(error.response?.data.msg)
+      }
+    }
+  }
+)
+
+// Reset password
+export const resetPasswordThunk = createAsyncThunk(
+  'users/resetPassword',
+  async ( {resetPasswordToken, password}: {resetPasswordToken: string, password: string}, { rejectWithValue }) => {
+    try {
+      console.log("🚀 ~ file: userSlice.ts:131 ~ password:", password)
+      const response = await api.post(`/api/reset-password/${resetPasswordToken}`, {password})
+
+      return response.data
     } catch (error) {
       if (error instanceof AxiosError) {
         return rejectWithValue(error.response?.data.msg)

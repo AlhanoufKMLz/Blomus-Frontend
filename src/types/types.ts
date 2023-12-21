@@ -58,8 +58,8 @@ export type DiscountCode = {
 }
 
 export type DecodedUser = {
-  firstName: string,
-  lastName: string,
+  firstName: string
+  lastName: string
   email: string
   userId: string
   role: Role
@@ -233,6 +233,25 @@ export const productSchema: ZodType<ProductSchema> = z.object({
   //image: z.string().refine((value) => value !== '', { message: 'Image is required' }),
   description: z.string().refine((value) => value !== '', { message: 'Description is required' }),
   price: z.number().refine((value) => value > 0, { message: 'Price is required' }),
-  quantityInStock: z.number().refine((value) => value >= 0, { message: "Quantity cannt be negative" }),
+  quantityInStock: z
+    .number()
+    .refine((value) => value >= 0, { message: 'Quantity cannt be negative' }),
   sizes: z.string()
 })
+
+export type ResetPassword = {
+  password: string
+  confirmPassword: string
+}
+
+// export const resetPasswordSchema: ZodType<ResetPassword> = z.object({
+//   password: z.string().refine((value) => value !== '', {
+//     message: 'Password is required'
+//   }),
+//   confirmPassword: z.string().refine((value) => value !== '', {
+//     message: 'Password is required'
+//   }).refine((data) => data.password === data.confirmPassword, {
+//     message: "Passwords don't match",
+//     path: ["confirmPassword"], // path of error
+//   })
+// })
