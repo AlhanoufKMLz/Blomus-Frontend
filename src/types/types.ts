@@ -167,7 +167,7 @@ export const registerSchema: ZodType<RegisterSchema> = z.object({
       const emailRegex = /\S+@\S+\.\S+/
       return emailRegex.test(value)
     },
-    { message: 'Email is not valid' }
+    { message: 'Please enter valid email' }
   ),
   password: z
     .string()
@@ -188,7 +188,16 @@ export type LoginSchema = {
 }
 
 export const loginSchema: ZodType<LoginSchema> = z.object({
-  email: z.string().refine((value) => value !== '', { message: 'Email is required' }),
+  email: z
+    .string()
+    .refine(
+      (value) => {
+        const emailRegex = /\S+@\S+\.\S+/
+        return emailRegex.test(value)
+      },
+      { message: 'Please enter valid email' }
+    )
+    .refine((value) => value !== '', { message: 'Email is required' }),
   password: z.string().refine((value) => value !== '', { message: 'Password name is required' })
 })
 
@@ -202,13 +211,16 @@ export type EditUserSchema = {
 export const editUserSchema: ZodType<EditUserSchema> = z.object({
   firstName: z.string().refine((value) => value !== '', { message: 'First name is required' }),
   lastName: z.string().refine((value) => value !== '', { message: 'Last name is required' }),
-  email: z.string().refine(
-    (value) => {
-      const emailRegex = /\S+@\S+\.\S+/
-      return emailRegex.test(value)
-    },
-    { message: 'Email is not valid' }
-  )
+  email: z
+    .string()
+    .email('This is not a valid email.')
+    .refine(
+      (value) => {
+        const emailRegex = /\S+@\S+\.\S+/
+        return emailRegex.test(value)
+      },
+      { message: 'Email is not valid' }
+    )
 })
 
 export type CategorySchema = {
@@ -239,19 +251,43 @@ export const productSchema: ZodType<ProductSchema> = z.object({
   sizes: z.string()
 })
 
-export type ResetPassword = {
+export type EmailSchema = {
+  email: string
+}
+
+export const emailSchema: ZodType<EmailSchema> = z.object({
+  email: z
+    .string()
+    .refine((value) => value !== '', { message: 'Email is required' })
+    .refine(
+      (value) => {
+        const emailRegex = /\S+@\S+\.\S+/
+        return emailRegex.test(value)
+      },
+      { message: 'Please enter valid email' }
+    )
+})
+
+export type ResetPasswordSchema = {
   password: string
   confirmPassword: string
 }
 
-// export const resetPasswordSchema: ZodType<ResetPassword> = z.object({
-//   password: z.string().refine((value) => value !== '', {
-//     message: 'Password is required'
-//   }),
-//   confirmPassword: z.string().refine((value) => value !== '', {
-//     message: 'Password is required'
-//   }).refine((data) => data.password === data.confirmPassword, {
-//     message: "Passwords don't match",
-//     path: ["confirmPassword"], // path of error
-//   })
-// })
+export const resetPasswordSchema: ZodType<ResetPasswordSchema> = z
+  .object({
+    password: z.string().refine(
+      (value) => {
+        const hasNumber = /\d/.test(value)
+        const hasAlphabetCharacter = /[a-zA-Z]/.test(value)
+        return hasNumber && hasAlphabetCharacter
+      },
+      { message: 'Password must contain at least one number and one alphabet character' }
+    ),
+    confirmPassword: z.string().refine((value) => value !== '', {
+      message: 'Password is required'
+    })
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords don't match",
+    path: ['confirmPassword']
+  })

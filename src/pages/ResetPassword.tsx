@@ -4,9 +4,9 @@ import { AppDispatch } from '../redux/store'
 import { useNavigate, useParams } from 'react-router'
 import { resetPasswordThunk } from '../redux/slices/users/userSlice'
 import { toast } from 'react-toastify'
-import { LoginSchema } from '../types/types'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
+import { ResetPasswordSchema, resetPasswordSchema } from '../types/types'
 
 export default function ResetPassword() {
   const { resetPasswordToken = '' } = useParams<{ resetPasswordToken: string }>()
@@ -14,19 +14,19 @@ export default function ResetPassword() {
   const navigate = useNavigate()
   const [newPassword, setNewPassword] = useState({ password: '', confirmPassword: '' })
 
-//   const {
-//     register,
-//     handleSubmit,
-//     formState: { errors }
-//   } = useForm<LoginSchema>({ resolver: zodResolver(newPassword) })
+  const {
+    register,
+    handleSubmit,
+    formState: { errors }
+  } = useForm<ResetPasswordSchema>({ resolver: zodResolver(resetPasswordSchema) })
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
     setNewPassword({ ...newPassword, [name]: value })
+    console.log("🚀 ~ file: ResetPassword.tsx:26 ~ handleChange ~ newPassword:", newPassword)
   }
 
-  function handleFormSubmit(e: FormEvent) {
-    e.preventDefault()
+  function handleFormSubmit() {
     const password = newPassword.password
     dispatch(resetPasswordThunk({ resetPasswordToken, password })).then((res) => {
       if (res.meta.requestStatus === 'fulfilled') {
@@ -40,7 +40,7 @@ export default function ResetPassword() {
     <div className="min-h-screen items-start">
       <section>
         <div className="container flex justify-center mt-10 mb-20 px-3 mx-auto">
-          <form onSubmit={handleFormSubmit} className="w-full max-w-md">
+          <form onSubmit={handleSubmit(handleFormSubmit)} className="w-full max-w-md">
             <div className="flex items-center justify-center mt-6">
               <h1 className="text-3xl text-primary_green font-bold text-center p-4">
                 Reset Password
@@ -67,16 +67,15 @@ export default function ResetPassword() {
               <input
                 type="password"
                 id="password"
-                // {...register('password')}
-                name="password"
+                {...register('password')}
                 onChange={handleChange}
                 className="block w-full px-10 py-3 border border-primary_grey rounded-lg"
                 placeholder="Password"
               />
             </div>
-            {/* {errors.password && (
+            {errors.password && (
               <span className="text-primary_pink"> {errors.password.message} </span>
-            )} */}
+            )}
 
             {/* confirm password container */}
             <div className="relative flex items-center mt-4">
@@ -99,16 +98,15 @@ export default function ResetPassword() {
               <input
                 type="password"
                 id="confirm-password"
-                // {...register('password')}
-                name="confirmPassword"
+                {...register('confirmPassword')}
                 onChange={handleChange}
                 className="block w-full px-10 py-3 border border-primary_grey rounded-lg"
                 placeholder="Confirm Password"
               />
             </div>
-            {/* {errors.password && (
-              <span className="text-primary_pink"> {errors.password.message} </span>
-            )} */}
+            {errors.confirmPassword && (
+              <span className="text-primary_pink"> {errors.confirmPassword.message} </span>
+            )}
 
             <div className="mt-6">
               <button className="w-full px-6 py-3 text-sm font-medium tracking-wide text-primary_grey capitalize transition-colors duration-300 transform bg-primary_pink rounded-lg hover:bg-primary_green">
