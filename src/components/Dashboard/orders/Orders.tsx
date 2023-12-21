@@ -21,9 +21,9 @@ export default function Orders() {
             {orders.orders.map((order) => (
               <tr className="border-t-2 border-zinc_secondery" key={order._id}>
                 <td className="text-primary_green">
-                  {order.products.map((item, index) => (
-                    <p key={index}>{item.product}</p>
-                  ))}
+                  {/* {order.products.map((item, index) => (
+                    <p key={index}>{item.product.name}</p>
+                  ))} */}
                 </td>
                 <td className="text-primary_green">{order.orderDate.toLocaleString()}</td>
                 <td className="text-primary_green">{order.user}</td>

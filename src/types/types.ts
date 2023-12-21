@@ -25,7 +25,7 @@ export type Category = {
 
 export type Order = {
   _id: string
-  products: { product: string; quantity: number }[]
+  products: { product: Product; quantity: number }[]
   user: string
   orderDate: Date
   shippingInfo: {
@@ -51,6 +51,7 @@ export type User = {
 }
 
 export type DiscountCode = {
+  _id: string
   code: string
   discountPercentage: number
   expirationDate: Date
@@ -113,6 +114,12 @@ export type OrderState = {
   isLoading: boolean
 }
 
+export type DiscountCodeState = {
+  codes: DiscountCode[]
+  error: undefined | string
+  isLoading: boolean
+}
+
 //-----------PROPS-----------
 
 export type ProductFormModalProp = {
@@ -131,6 +138,12 @@ export type ProfileModalProp = {
   isProfileOpen: boolean
   user: User
   setIsProfileOpen: React.Dispatch<React.SetStateAction<boolean>>
+}
+
+export type DiscountCodeFormModalProp = {
+  isOpen: boolean
+  discountCode: DiscountCode | null
+  setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 export type SideBarProp = {

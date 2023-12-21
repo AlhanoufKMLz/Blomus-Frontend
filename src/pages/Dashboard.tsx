@@ -11,6 +11,8 @@ import { fetchCategoriesThunk } from '../redux/slices/categories/categorySlice'
 import { fetchOrdersThunk } from '../redux/slices/orders/orderSlice'
 import { AppDispatch } from '../redux/store'
 import { fetchCartItemsThunk } from '../redux/slices/cart/cartSlice'
+import { DiscountCodesManager } from '../components/Dashboard/discountCodes/discountCodesManager'
+import { fetchDiscountCodesThunk } from '../redux/slices/discountCode/discountCodeSlice'
 
 export default function Admin() {
   const dispatch = useDispatch<AppDispatch>()
@@ -20,6 +22,7 @@ export default function Admin() {
     dispatch(fetchCategoriesThunk())
     dispatch(fetchUsersThunk())
     dispatch(fetchOrdersThunk())
+    dispatch(fetchDiscountCodesThunk())
   }, [])
   
   return (
@@ -30,6 +33,7 @@ export default function Admin() {
         {selectedComponent === 'categories' && <CategoriesManager />}
         {selectedComponent === 'users' && <UsersManager />}
         {selectedComponent === 'orders' && <Orders />}
+        {selectedComponent === 'discount' && <DiscountCodesManager />}
       </main>
     </div>
   )

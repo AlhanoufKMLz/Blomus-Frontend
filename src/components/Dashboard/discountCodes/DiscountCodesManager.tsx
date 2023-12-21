@@ -1,33 +1,33 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
+import DiscountCodeFormModal from './DiscountCodeFormModal'
 import { AppDispatch, RootState } from '../../../redux/store'
-import { Category } from '../../../types/types'
-import { deleteCategoryThunk } from '../../../redux/slices/categories/categorySlice'
-import CategoryFormModal from './CategoryFormModal'
+import { DiscountCode } from '../../../types/types'
+import { deleteDiscountCodeThunk } from '../../../redux/slices/discountCode/discountCodeSlice'
 
-export function CategoriesManager() {
-  const state = useSelector((state: RootState) => state.categories)
+export function DiscountCodesManager() {
+  const state = useSelector((state: RootState) => state.discountCodes)
   const dispatch = useDispatch<AppDispatch>()
 
   const [searchKeyWord, setSearchKeyWord] = useState('')
   const [isModalOpen, setIsModalOpen] = useState(false)
-  const [selectedCategory, setSelectedCategory] = useState<Category | null>()
+  const [selectedDiscount, setSelectedDiscount] = useState<DiscountCode | null>()
 
   //Search for category
   function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
     setSearchKeyWord(event.target.value)
   }
-
+  
   //Open edit category modal
-  function handleEdit(category: Category) {
-    setSelectedCategory(category)
+  function handleEdit(code: DiscountCode) {
+    setSelectedDiscount(code)
     setIsModalOpen(true)
   }
 
   //Open add category form
-  function addCategoryForm() {
-    setSelectedCategory(null)
+  function addDiscountForm() {
+    setSelectedDiscount(null)
     setIsModalOpen(true)
   }
 
@@ -66,14 +66,18 @@ export function CategoriesManager() {
           <tbody>
             <tr className="text-left text-primary_pink">
               <th>Name</th>
+              <th>Percentage</th>
+              <th>Expiration</th>
             </tr>
-            {state.categories.map((category) => (
-              <tr className="border-t-2 border-zinc_secondery" key={category._id}>
-                <td className="text-primary_green py-5">{category.name}</td>
+            {state.codes.map((code) => (
+              <tr className="border-t-2 border-zinc_secondery" key={code._id}>
+                <td className="text-primary_green py-5">{code.code}</td>
+                <td className="text-primary_green py-5">{code.discountPercentage} %</td>
+                <td className="text-primary_green py-5">{code.expirationDate?.toString()}</td>
                 <td className="text-right">
                   <button
                     className="text-primary_green hover:text-primary_pink"
-                    onClick={() => handleEdit(category)}>
+                    onClick={() => handleEdit(code)}>
                     <svg
                       width="20"
                       height="20"
@@ -101,7 +105,7 @@ export function CategoriesManager() {
                 <td className="text-right">
                   <button
                     className="text-primary_pink"
-                    onClick={() => dispatch(deleteCategoryThunk(category._id))}>
+                    onClick={() => dispatch(deleteDiscountCodeThunk(code._id))}>
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       width="20"
@@ -109,12 +113,11 @@ export function CategoriesManager() {
                       fill="currentColor"
                       className="bi bi-trash"
                       viewBox="0 0 16 16">
-                      {' '}
                       <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z" />{' '}
                       <path
                         fillRule="evenodd"
                         d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"
-                      />{' '}
+                      />
                     </svg>
                   </button>
                 </td>
@@ -125,22 +128,23 @@ export function CategoriesManager() {
       </div>
       <button
         className="fixed bg-primary_green bottom-8 right-8 text-white h-14 w-14 rounded-full text-4xl flex items-center justify-center shadow-md hover:shadow-none hover:bg-primary_pink hover:text-primary_green shadow-shadow"
-        onClick={addCategoryForm}>
+        onClick={addDiscountForm}>
         +
       </button>
 
       {/* Edit Modal */}
-      {selectedCategory && (
-        <CategoryFormModal
+      {selectedDiscount && (
+        <DiscountCodeFormModal
           isOpen={isModalOpen}
-          category={selectedCategory}
+          discountCode={selectedDiscount}
           setIsModalOpen={setIsModalOpen}
         />
       )}
       {/* Add Modal */}
-      {!selectedCategory && (
-        <CategoryFormModal isOpen={isModalOpen} category={null} setIsModalOpen={setIsModalOpen} />
+      {!selectedDiscount && (
+        <DiscountCodeFormModal isOpen={isModalOpen} discountCode={null} setIsModalOpen={setIsModalOpen} />
       )}
+      
     </div>
   )
 }
