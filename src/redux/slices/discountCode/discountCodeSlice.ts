@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { AxiosError } from 'axios'
 
 import { DiscountCode, DiscountCodeState } from '../../../types/types'
-import api from '../../../api'
+import discountCodesServices from '../../../services/discountCodes'
 
 const initialState: DiscountCodeState = {
   codes: [],
@@ -15,7 +15,7 @@ export const fetchDiscountCodesThunk = createAsyncThunk(
   'discountCode/fetchDiscountCodes',
   async (_, { rejectWithValue }) => {
     try {
-      const response = await api.get('/api/discount-code')
+      const response = await discountCodesServices.findAll()
 
       return response.data.payload
     } catch (error) {
@@ -29,9 +29,9 @@ export const fetchDiscountCodesThunk = createAsyncThunk(
 // Create new discount code
 export const createDiscountCodeThunk = createAsyncThunk(
   'discountCode/createDiscountCode',
-  async (discountCode: DiscountCode, { rejectWithValue }) => {
+  async (discountCode: Partial<DiscountCode>, { rejectWithValue }) => {
     try {
-      const response = await api.post('/api/discount-code', discountCode)
+      const response = await discountCodesServices.addDiscountCode(discountCode)
 
       return response.data.payload
     } catch (error) {
@@ -46,11 +46,11 @@ export const createDiscountCodeThunk = createAsyncThunk(
 export const updateDiscountCodeThunk = createAsyncThunk(
   'discountCode/updateDiscountCode',
   async (
-    { discountCode, discountCodeId }: { discountCode: DiscountCode; discountCodeId: string },
+    { discountCode, discountCodeId }: { discountCode: Partial<DiscountCode>, discountCodeId: string },
     { rejectWithValue }
   ) => {
     try {
-      const response = await api.put(`/api/discount-code/${discountCodeId}`, discountCode)
+      const response = await discountCodesServices.updateDiscountCode(discountCodeId, discountCode)
 
       return response.data.payload
     } catch (error) {
@@ -66,7 +66,7 @@ export const deleteDiscountCodeThunk = createAsyncThunk(
   'discountCode/deleteDiscountCode',
   async (discountCodeId: string, { rejectWithValue }) => {
     try {
-      const response = await api.delete(`/api/discount-code/${discountCodeId}`)
+      const response = await discountCodesServices.deleteDiscountCode(discountCodeId)
 
       return response.data.payload
     } catch (error) {

@@ -1,10 +1,11 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
+import { toast } from 'react-toastify'
+
 import { AppDispatch, RootState } from '../redux/store'
 import { Product } from '../types/types'
 import { addToCartThunk } from '../redux/slices/cart/cartSlice'
-import { toast } from 'react-toastify'
 import { fetchBestSellingProductsThunk } from '../redux/slices/products/productSlice'
 
 export default function Home() {

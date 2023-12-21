@@ -1,14 +1,22 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import { Order, OrderState } from '../../../types/types'
-import api from '../../../api'
 import { AxiosError } from 'axios'
+
+import { Order, OrderState } from '../../../types/types'
+import ordersServices from '../../../services/orders'
+
+// Fetch all orders
+export const fetchOrdersThunk = createAsyncThunk('orders/fetchOrders', async () => {
+  const response = await ordersServices.findAll()
+
+  return response.data.payload
+})
 
 // Create order
 export const createOrderThunk = createAsyncThunk(
   'orders/createOrder',
-  async (shippingInfo: { country: string, city: string, address: string }, { rejectWithValue }) => {
+  async (shippingInfo: Partial<Order>, { rejectWithValue }) => {
     try {
-      const response = await api.post('/api/orders', {shippingInfo})
+      const response = await ordersServices.createOrder(shippingInfo)
 
       return response.data.payload
     } catch (error) {
@@ -24,13 +32,6 @@ const initialState: OrderState = {
   error: undefined,
   isLoading: false
 }
-
-// Fetch all orders
-export const fetchOrdersThunk = createAsyncThunk('orders/fetchOrders', async () => {
-  const response = await api.get(`/api/orders`)
-
-  return response.data.payload
-})
 
 export const orderSlice = createSlice({
   name: 'orders',

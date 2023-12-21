@@ -1,9 +1,25 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+import { AxiosError } from 'axios'
 
 import { LogedinUserState, User } from '../../../types/types'
-import api from '../../../api'
-import { AxiosError } from 'axios'
 import { getDecodedTokenFromStorage } from '../../../utils/token'
+import usersServices from '../../../services/users'
+
+// Login user
+export const loginUserThunk = createAsyncThunk(
+  'user/loginUser',
+  async (user: { email: string; password: string }, { rejectWithValue }) => {
+    try {
+      const response = await usersServices.login(user)
+      
+      return response.data
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        return rejectWithValue(error.response?.data.msg)
+      }
+    }
+  }
+)
 
 const decodedUser = getDecodedTokenFromStorage()
 
@@ -19,22 +35,6 @@ const initialState: LogedinUserState = {
   isLoading: false,
   decodedUser
 }
-
-// Login user
-export const loginUserThunk = createAsyncThunk(
-  'user/loginUser',
-  async (user: { email: string; password: string }, { rejectWithValue }) => {
-    try {
-      const response = await api.post('/api/auth/login', user)
-      
-      return response.data
-    } catch (error) {
-      if (error instanceof AxiosError) {
-        return rejectWithValue(error.response?.data.msg)
-      }
-    }
-  }
-)
 
 export const logedinUserSlice = createSlice({
   name: 'loged in user',

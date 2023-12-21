@@ -1,10 +1,10 @@
 import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
-import DiscountCodeFormModal from './DiscountCodeFormModal'
 import { AppDispatch, RootState } from '../../../redux/store'
 import { DiscountCode } from '../../../types/types'
 import { deleteDiscountCodeThunk } from '../../../redux/slices/discountCode/discountCodeSlice'
+import DiscountCodeFormModal from './DiscountCodeFormModal'
 
 export function DiscountCodesManager() {
   const state = useSelector((state: RootState) => state.discountCodes)

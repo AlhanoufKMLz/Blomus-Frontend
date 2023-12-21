@@ -4,8 +4,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import { deleteProductThunk, fetchProductsThunk } from '../../../redux/slices/products/productSlice'
 import { AppDispatch, RootState } from '../../../redux/store'
 import { Product } from '../../../types/types'
-import ProductFormModal from './ProductFormModal'
 import { fetchCategoriesThunk } from '../../../redux/slices/categories/categorySlice'
+import ProductFormModal from './ProductFormModal'
 
 export function ProductsManager() {
   const dispatch = useDispatch<AppDispatch>()

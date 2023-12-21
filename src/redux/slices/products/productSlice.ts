@@ -61,7 +61,7 @@ export const fetchBestSellingProductsThunk = createAsyncThunk(
   'products/fetchBestSellingProducts',
   async (_, { rejectWithValue }) => {
     try {
-      const response = await api.get(`/api/products/highest-sold?limit=${6}`)
+      const response = await productService.findBestSeller(6)
 
       return response.data.payload
     } catch (error) {
@@ -77,7 +77,7 @@ export const createProductThunk = createAsyncThunk(
   'products/createProduct',
   async (product: FormData, { rejectWithValue }) => {
     try {
-      const response = await api.post('/api/products', product)
+      const response = await productService.createProduct(product)
 
       return response.data.payload
     } catch (error) {
@@ -93,7 +93,7 @@ export const updateProductThunk = createAsyncThunk(
   'products/updateProduct',
   async ({ product, productId }: { product: FormData; productId: string }, { rejectWithValue }) => {
     try {
-      const response = await api.put(`/api/products/${productId}`, product)
+      const response = await productService.updateProduct(productId, product)
 
       return response.data.payload
     } catch (error) {
@@ -109,7 +109,7 @@ export const deleteProductThunk = createAsyncThunk(
   'products/deleteProduct',
   async (productId: string, { rejectWithValue }) => {
     try {
-      const response = await api.delete(`/api/products/${productId}`)
+      const response = await productService.deleteProduct(productId)
 
       return response.data.payload
     } catch (error) {

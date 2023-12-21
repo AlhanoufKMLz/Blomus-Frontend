@@ -1,21 +1,15 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-
-import { Category, CategoryState } from '../../../types/types'
-import api from '../../../api'
 import { AxiosError } from 'axios'
 
-const initialState: CategoryState = {
-  categories: [],
-  error: undefined,
-  isLoading: false
-}
+import { Category, CategoryState } from '../../../types/types'
+import categoriesService from '../../../services/categories'
 
 // Fetch all categories
 export const fetchCategoriesThunk = createAsyncThunk(
   'categories/fetchCategoreis',
   async (_, { rejectWithValue }) => {
     try {
-      const response = await api.get('/api/categories')
+      const response = await categoriesService.findAll()
 
       return response.data.payload
     } catch (error) {
@@ -29,9 +23,9 @@ export const fetchCategoriesThunk = createAsyncThunk(
 // Create new category
 export const createCategoryThunk = createAsyncThunk(
   'categories/createCategory',
-  async (category: { name: string }, { rejectWithValue }) => {
+  async (category: Partial<Category>, { rejectWithValue }) => {
     try {
-      const response = await api.post('/api/categories', category)
+      const response = await categoriesService.addCategory(category)
 
       return response.data.payload
     } catch (error) {
@@ -46,11 +40,11 @@ export const createCategoryThunk = createAsyncThunk(
 export const updateCategoryThunk = createAsyncThunk(
   'categories/updateCategory',
   async (
-    { category, categoryId }: { category: { name: string }; categoryId: string },
+    { category, categoryId }: { category: Partial<Category>, categoryId: string },
     { rejectWithValue }
   ) => {
     try {
-      const response = await api.put(`/api/categories/${categoryId}`, category)
+      const response = await categoriesService.updateCategory(categoryId, category)
 
       return response.data.payload
     } catch (error) {
@@ -66,7 +60,7 @@ export const deleteCategoryThunk = createAsyncThunk(
   'categories/deleteCategory',
   async (categoryId: string, { rejectWithValue }) => {
     try {
-      const response = await api.delete(`/api/categories/${categoryId}`)
+      const response = await categoriesService.deleteCategory(categoryId)
 
       return response.data.payload
     } catch (error) {
@@ -76,6 +70,12 @@ export const deleteCategoryThunk = createAsyncThunk(
     }
   }
 )
+
+const initialState: CategoryState = {
+  categories: [],
+  error: undefined,
+  isLoading: false
+}
 
 export const categorySlice = createSlice({
   name: 'categories',

@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 
-import SideBar from '../components/Dashboard/SideBar'
 import { ProductsManager } from '../components/Dashboard/products/ProductsManager'
 import { CategoriesManager } from '../components/Dashboard/categories/CategoriesManager'
-import Orders from '../components/Dashboard/orders/Orders'
 import { UsersManager } from '../components/Dashboard/users/UsersManager'
 import { fetchUsersThunk } from '../redux/slices/users/userSlice'
 import { fetchCategoriesThunk } from '../redux/slices/categories/categorySlice'
 import { fetchOrdersThunk } from '../redux/slices/orders/orderSlice'
 import { AppDispatch } from '../redux/store'
-import { DiscountCodesManager } from '../components/Dashboard/discountCodes/discountCodesManager'
+import { DiscountCodesManager } from '../components/Dashboard/discountCodes/DiscountCodesManager';
 import { fetchDiscountCodesThunk } from '../redux/slices/discountCode/discountCodeSlice'
+import SideBar from '../components/Dashboard/SideBar'
+import Orders from '../components/Dashboard/orders/Orders'
 
 export default function Admin() {
   const dispatch = useDispatch<AppDispatch>()

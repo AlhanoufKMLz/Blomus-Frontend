@@ -2,35 +2,30 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { AxiosError } from 'axios'
 
 import { User, UserState } from '../../../types/types'
-import api from '../../../api'
+import usersServices from '../../../services/users'
 
 // Fetch all users
-export const fetchUsersThunk = createAsyncThunk('users/fetchUsers', async (_, { rejectWithValue }) => {
-  try {
-    const response = await api.get('/api/users')
+export const fetchUsersThunk = createAsyncThunk(
+  'users/fetchUsers',
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await usersServices.findAll()
 
-    return response.data.payload
-  } catch (error) {
-    if (error instanceof AxiosError) {
-      return rejectWithValue(error.response?.data.msg)
+      return response.data.payload
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        return rejectWithValue(error.response?.data.msg)
+      }
     }
   }
-})
+)
 
 // Register users
 export const registerUserThunk = createAsyncThunk(
   'users/register',
-  async (
-    user: {
-      firstName: string
-      lastName: string
-      email: string
-      password: string
-    },
-    { rejectWithValue }
-  ) => {
+  async (user: Partial<User>, { rejectWithValue }) => {
     try {
-      const response = await api.post('/api/auth/register', user)
+      const response = await usersServices.createUser(user)
 
       return response.data
     } catch (error) {
@@ -46,7 +41,7 @@ export const deleteUserThunk = createAsyncThunk(
   'users/deleteUser',
   async (userId: string, { rejectWithValue }) => {
     try {
-      const response = await api.delete(`/api/users/${userId}`)
+      const response = await usersServices.deleteUser(userId)
 
       return response.data.payload
     } catch (error) {
@@ -62,7 +57,7 @@ export const blockUserThunk = createAsyncThunk(
   'users/blockUser',
   async (userId: string, { rejectWithValue }) => {
     try {
-      const response = await api.put(`/api/users/${userId}/block`)
+      const response = await usersServices.blockUser(userId)
 
       return response.data.payload
     } catch (error) {
@@ -78,8 +73,7 @@ export const switchUserRoleThunk = createAsyncThunk(
   'users/switchRole',
   async (userId: string, { rejectWithValue }) => {
     try {
-      const response = await api.put(`/api/users/${userId}/switch-role`)
-
+      const response = await usersServices.switchRole(userId)
       return response.data.payload
     } catch (error) {
       if (error instanceof AxiosError) {
@@ -92,9 +86,9 @@ export const switchUserRoleThunk = createAsyncThunk(
 // Update user
 export const updateUserThunk = createAsyncThunk(
   'users/updateUser',
-  async ({user, userId}:{user: FormData, userId: string}, { rejectWithValue }) => {
+  async ({ user, userId }: { user: FormData; userId: string }, { rejectWithValue }) => {
     try {
-      const response = await api.put(`/api/users/${userId}`, user)
+      const response = await usersServices.updateProduct(userId, user)
 
       return response.data.payload
     } catch (error) {
@@ -108,9 +102,9 @@ export const updateUserThunk = createAsyncThunk(
 // Send reset password email
 export const sendEmailThunk = createAsyncThunk(
   'users/sendResetEmail',
-  async ( email: string, { rejectWithValue }) => {
+  async (email: string, { rejectWithValue }) => {
     try {
-      const response = await api.post('/api/reset-password', {email})
+      const response = await usersServices.SendResetEmail(email)
 
       return response.data.payload
     } catch (error) {
@@ -124,10 +118,12 @@ export const sendEmailThunk = createAsyncThunk(
 // Reset password
 export const resetPasswordThunk = createAsyncThunk(
   'users/resetPassword',
-  async ( {resetPasswordToken, password}: {resetPasswordToken: string, password: string}, { rejectWithValue }) => {
+  async (
+    { resetPasswordToken, password }: { resetPasswordToken: string; password: string },
+    { rejectWithValue }
+  ) => {
     try {
-      console.log("🚀 ~ file: userSlice.ts:131 ~ password:", password)
-      const response = await api.post(`/api/reset-password/${resetPasswordToken}`, {password})
+      const response = await usersServices.ResetPassword(resetPasswordToken, password)
 
       return response.data
     } catch (error) {

@@ -3,11 +3,11 @@ import { useDispatch } from 'react-redux'
 import { toast } from 'react-toastify'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
+
 import { EditUserSchema, ProfileModalProp, User, editUserSchema } from '../types/types'
 import { AppDispatch } from '../redux/store'
 import { updateUserThunk } from '../redux/slices/users/userSlice'
 import { editLogedInUser } from '../redux/slices/users/logedinUserSlice'
-//import { editLogedInUser } from '../redux/slices/users/logedinUserSlice'
 
 export default function Profile(prop: ProfileModalProp) {
   if (!prop.setIsProfileOpen) return null

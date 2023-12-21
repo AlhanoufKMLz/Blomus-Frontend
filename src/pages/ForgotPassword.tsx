@@ -1,11 +1,12 @@
-import React, { ChangeEvent, FormEvent, useState } from 'react'
+import React, { ChangeEvent, useState } from 'react'
 import { useDispatch } from 'react-redux'
-import { AppDispatch } from '../redux/store'
 import { Link } from 'react-router-dom'
-import { sendEmailThunk } from '../redux/slices/users/userSlice'
 import { useForm } from 'react-hook-form'
-import { EmailSchema, emailSchema } from '../types/types'
 import { zodResolver } from '@hookform/resolvers/zod'
+
+import { AppDispatch } from '../redux/store'
+import { sendEmailThunk } from '../redux/slices/users/userSlice'
+import { EmailSchema, emailSchema } from '../types/types'
 
 export default function ForgotPassword() {
   const dispatch = useDispatch<AppDispatch>()

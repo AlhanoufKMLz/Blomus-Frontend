@@ -1,11 +1,12 @@
 import React, { ChangeEvent, FormEvent, useState } from 'react'
 import { useDispatch } from 'react-redux'
-import { AppDispatch } from '../redux/store'
 import { useNavigate, useParams } from 'react-router'
-import { resetPasswordThunk } from '../redux/slices/users/userSlice'
 import { toast } from 'react-toastify'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
+
+import { AppDispatch } from '../redux/store'
+import { resetPasswordThunk } from '../redux/slices/users/userSlice'
 import { ResetPasswordSchema, resetPasswordSchema } from '../types/types'
 
 export default function ResetPassword() {

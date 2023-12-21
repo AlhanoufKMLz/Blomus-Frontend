@@ -1,10 +1,11 @@
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
+
 import { AppDispatch, RootState } from '../redux/store'
 import { logout } from '../redux/slices/users/logedinUserSlice'
-import Profile from './Profile'
 import { ROLES } from '../constants'
+import Profile from './Profile'
 
 export default function NavBar() {
   const dispatch = useDispatch<AppDispatch>()

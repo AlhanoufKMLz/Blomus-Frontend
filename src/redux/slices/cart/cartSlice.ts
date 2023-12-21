@@ -2,14 +2,14 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { AxiosError } from 'axios'
 
 import { CartState } from '../../../types/types'
-import api from '../../../api'
+import cartService from '../../../services/cart'
 
 // Fetch cart items
 export const fetchCartItemsThunk = createAsyncThunk(
   'cart/fetchCartItems',
   async (_, { rejectWithValue }) => {
     try {
-      const response = await api.get('/api/cart')
+      const response = await cartService.findOne()
 
       return response.data
     } catch (error) {
@@ -28,7 +28,7 @@ export const addToCartThunk = createAsyncThunk(
     { rejectWithValue }
   ) => {
     try {
-      const response = await api.post('/api/cart', { productId, quantity })
+      const response = await cartService.addItem(productId, quantity)
 
       return response.data.payload
     } catch (error) {
@@ -44,7 +44,7 @@ export const removeFromCartThunk = createAsyncThunk(
   'cart/removeFromCart',
   async (productId: string, { rejectWithValue }) => {
     try {
-      const response = await api.put('/api/cart', { productId })
+      const response = await cartService.removeItem(productId)
 
       return response.data
     } catch (error) {
@@ -60,7 +60,7 @@ export const updateItemQuantityThunk = createAsyncThunk(
   'cart/updateItemQuantity',
   async ( { productId, updateType } : { productId: string, updateType: string }, { rejectWithValue }) => {
     try {
-      const response = await api.put('/api/cart/update-quantity', { productId, updateType })
+      const response = await cartService.updateQuantity(productId, updateType)
 
       return response.data
     } catch (error) {
