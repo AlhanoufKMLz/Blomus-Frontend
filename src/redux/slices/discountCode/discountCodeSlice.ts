@@ -89,7 +89,6 @@ export const discountCodesSlice = createSlice({
       })
       .addCase(fetchDiscountCodesThunk.fulfilled, (state, action) => {
         state.codes = action.payload
-        console.log("🚀 ~ file: discountCodeSlice.ts:92 ~ .addCase ~ action.payload:", action.payload)
         state.isLoading = false
       })
       .addCase(fetchDiscountCodesThunk.rejected, (state, action) => {

@@ -24,7 +24,6 @@ export default function ResetPassword() {
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
     setNewPassword({ ...newPassword, [name]: value })
-    console.log("🚀 ~ file: ResetPassword.tsx:26 ~ handleChange ~ newPassword:", newPassword)
   }
 
   function handleFormSubmit() {

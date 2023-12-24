@@ -126,7 +126,6 @@ export default function ProductFormModal(prop: ProductFormModalProp) {
       ...productChanges,
       sizes: updatedSizes
     })
-    console.log("🚀 ~ file: ProductFormModal.tsx:129 ~ handleCloseModal ~ productChanges:", productChanges)
   }
 
   return (

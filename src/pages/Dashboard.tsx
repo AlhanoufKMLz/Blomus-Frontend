@@ -8,7 +8,7 @@ import { fetchUsersThunk } from '../redux/slices/users/userSlice'
 import { fetchCategoriesThunk } from '../redux/slices/categories/categorySlice'
 import { fetchOrdersThunk } from '../redux/slices/orders/orderSlice'
 import { AppDispatch } from '../redux/store'
-import { DiscountCodesManager } from '../components/Dashboard/discountCodes/DiscountCodesManager';
+import { DiscountCodesManager } from '../components/Dashboard/discountCodes/DiscountCodesManager'
 import { fetchDiscountCodesThunk } from '../redux/slices/discountCode/discountCodeSlice'
 import SideBar from '../components/Dashboard/SideBar'
 import Orders from '../components/Dashboard/orders/Orders'
@@ -18,12 +18,14 @@ export default function Admin() {
   const [selectedComponent, setSelectedComponent] = useState('products')
 
   useEffect(() => {
-    dispatch(fetchCategoriesThunk())
-    dispatch(fetchUsersThunk())
-    dispatch(fetchOrdersThunk())
-    dispatch(fetchDiscountCodesThunk())
+    Promise.all([
+      dispatch(fetchCategoriesThunk()),
+      dispatch(fetchUsersThunk()),
+      dispatch(fetchOrdersThunk()),
+      dispatch(fetchDiscountCodesThunk())
+    ])
   }, [])
-  
+
   return (
     <div className="min-h-screen items-start">
       <SideBar setSelectedComponent={setSelectedComponent} />

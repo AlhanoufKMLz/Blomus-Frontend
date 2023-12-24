@@ -21,6 +21,8 @@ import Footer from './components/Footer'
 import ForgotPassword from './pages/ForgotPassword'
 import ResetPassword from './pages/ResetPassword'
 import PrivateRoutes from './utils/PrivateRoutes'
+import WishList from './services/wishList'
+import Wishlist from './pages/Wishlist'
 
 function App() {
   const logedinUser = useSelector((state: RootState) => state.logedinUser.decodedUser)
@@ -44,6 +46,7 @@ function App() {
         <Route path="/products" element={<Products />}></Route>
         <Route path="/:productid" element={<ProductDetails />}></Route>
         <Route path="/cart" element={<Cart />}></Route>
+        <Route path="/wishlist" element={<Wishlist />}></Route>
         <Route path="/login" element={<Login />}></Route>
         <Route path="/register" element={<Register />}></Route>
         <Route path="/forgot-password" element={<ForgotPassword />}></Route>

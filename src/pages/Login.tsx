@@ -32,9 +32,7 @@ export default function Login() {
   function handleFormSubmit() {
     dispatch(loginUserThunk(userLogin)).then((res) => {
       if(res.meta.requestStatus === 'fulfilled'){
-        localStorage.setItem('token', res.payload.token)
-        api.defaults.headers['Authorization'] = `Bearer ${res.payload.token}`
-        toast.success('Welcome back ' + res.payload.user.firstName + "! We're glad to see you again")
+        //toast.success('Welcome back ' + res.payload.user.firstName + "! We're glad to see you again")
         dispatch(fetchCartItemsThunk())
         navigate('/')
       } 

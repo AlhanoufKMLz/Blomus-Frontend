@@ -1,6 +1,6 @@
 import { ZodType, z } from 'zod'
 
-import { ROLES, STATUS } from '../constants'
+import { ROLES, STATUS } from '../constants/constants'
 
 export type Role = keyof typeof ROLES
 export type Status = keyof typeof STATUS
@@ -95,7 +95,7 @@ export type LogedinUserState = {
   user: User | null
   error: undefined | string
   isLoading: boolean
-  decodedUser: DecodedUser | null
+  decodedUser: DecodedUser | undefined | null
 }
 
 export type CartState = {
@@ -106,6 +106,12 @@ export type CartState = {
   error: undefined | string
   isLoading: boolean
   itemsCount: number
+}
+
+export type WishlistState = {
+  items: {product: Product, _id: string}[]
+  error: undefined | string
+  isLoading: boolean
 }
 
 export type OrderState = {

@@ -8,6 +8,7 @@ import { addToCartThunk } from '../redux/slices/cart/cartSlice'
 import { Product } from '../types/types'
 import { fetchProductsThunk } from '../redux/slices/products/productSlice'
 import { fetchCategoriesThunk } from '../redux/slices/categories/categorySlice'
+import { addToWishlistThunk } from '../redux/slices/wishlist/wishlistSlice'
 
 export default function Products() {
   const dispatch = useDispatch<AppDispatch>()
@@ -15,20 +16,23 @@ export default function Products() {
   const [category, setCategory] = useState('')
   const [sortBy, setSortBy] = useState('')
   const [pageNumber, setPageNumber] = useState(1)
+  const { products, totalPages, isLoading, error } = useSelector(
+    (state: RootState) => state.products
+    )
+  const categories = useSelector((state: RootState) => state.categories)
 
   useEffect(() => {
     dispatch(fetchCategoriesThunk())
-  },[])
+  }, [])
 
   useEffect(() => {
-    dispatch(fetchProductsThunk({searchText, category, sortBy, pageNumber}))
+    if (products.length === 0 || searchText || sortBy || category || pageNumber !==1) {
+      dispatch(fetchProductsThunk({ searchText, category, sortBy, pageNumber }))
+    }
   }, [searchText, category, sortBy, pageNumber])
 
-  const {products, totalPages, isLoading, error} = useSelector((state: RootState) => state.products)
-  const categories = useSelector((state: RootState) => state.categories)
-
   function handleSearchTextChange(event: React.ChangeEvent<HTMLInputElement>) {
-    setSearchText (event.target.value)
+    setSearchText(event.target.value)
   }
 
   function handleSortChange(event: { target: { value: string } }) {
@@ -47,11 +51,22 @@ export default function Products() {
 
   function handleAddToCart(product: Product) {
     const productId = product._id
-    dispatch(addToCartThunk({productId})).then((res) => {
-      if(res.meta.requestStatus === 'fulfilled'){
+    dispatch(addToCartThunk({ productId })).then((res) => {
+      if (res.meta.requestStatus === 'fulfilled') {
         toast.success('Awesome pick! ' + product.name + ' is now waiting in your cart')
-      } 
-      if(res.meta.requestStatus === 'rejected'){
+      }
+      if (res.meta.requestStatus === 'rejected') {
+        toast.error(error)
+      }
+    })
+  }
+  function handleAddToWishlist(product: Product) {
+    const productId = product._id
+    dispatch(addToWishlistThunk(productId)).then((res) => {
+      if (res.meta.requestStatus === 'fulfilled') {
+        toast.success('Awesome pick! ' + product.name + ' is now waiting in your wishlist')
+      }
+      if (res.meta.requestStatus === 'rejected') {
         toast.error(error)
       }
     })
@@ -84,7 +99,9 @@ export default function Products() {
             <path d="M55.146,51.887L41.588,37.786c3.486-4.144,5.396-9.358,5.396-14.786c0-12.682-10.318-23-23-23s-23,10.318-23,23  s10.318,23,23,23c4.761,0,9.298-1.436,13.177-4.162l13.661,14.208c0.571,0.593,1.339,0.92,2.162,0.92  c0.779,0,1.518-0.297,2.079-0.837C56.255,54.982,56.293,53.08,55.146,51.887z M23.984,6c9.374,0,17,7.626,17,17s-7.626,17-17,17  s-17-7.626-17-17S14.61,6,23.984,6z" />
           </svg>
         </div>
-        <select onChange={handleSortChange} className="text-primary_pink mt-2 h-10 rounded-lg text-sm bg-zinc">
+        <select
+          onChange={handleSortChange}
+          className="text-primary_pink mt-2 h-10 rounded-lg text-sm bg-zinc">
           <option>Sort By</option>
           <option value={'lowestPrice'}>Low-High</option>
           <option value={'highestPrice'}>High-Low</option>
@@ -138,6 +155,24 @@ export default function Products() {
                           strokeLinejoin="round"
                         />
                       </svg>
+                    </button>
+                    <button
+                      onClick={() => handleAddToWishlist(product)}
+                      className="px-2 py-1 text-xs font-semibold text-secondary_grey hover:text-primary_green uppercase transition-colors duration-300 transform rounded focus:bg-grey-700 dark:focus:bg-grey-600">
+                      wishlist
+                      {/* <svg
+                        className="w-5 h-5"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path
+                          d="M3 3H5L5.4 5M7 13H17L21 5H5.4M7 13L5.4 5M7 13L4.70711 15.2929C4.07714 15.9229 4.52331 17 5.41421 17H17M17 17C15.8954 17 15 17.8954 15 19C15 20.1046 15.8954 21 17 21C18.1046 21 19 20.1046 19 19C19 17.8954 18.1046 17 17 17ZM9 19C9 20.1046 8.10457 21 7 21C5.89543 21 5 20.1046 5 19C5 17.8954 5.89543 17 7 17C8.10457 17 9 17.8954 9 19Z"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                      </svg> */}
                     </button>
                   </div>
                 </div>
