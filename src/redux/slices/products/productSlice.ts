@@ -93,6 +93,10 @@ export const updateProductThunk = createAsyncThunk(
   'products/updateProduct',
   async ({ product, productId }: { product: FormData; productId: string }, { rejectWithValue }) => {
     try {
+      console.log('FormData entries:');
+      for (const entry of product.entries()) {
+        console.log(entry);
+      }
       const response = await productService.updateProduct(productId, product)
 
       return response.data.payload

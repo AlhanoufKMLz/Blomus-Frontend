@@ -15,7 +15,6 @@ export default function NavBar() {
   const [isOpen, setIsOpen] = useState(false)
   const [isProfileOpe, setIsProfileOpen] = useState(false)
 
-
   function handleOpenNavBar() {
     setIsOpen(true)
   }
@@ -130,7 +129,7 @@ export default function NavBar() {
                 </div>
               )}
               <Link to={'/cart'}>
-                <div className="relative py-2 p-6">
+                <div className="relative pl-4 pr-2">
                   <a
                     className="relative text-primary_green transition-colors duration-300 transform hover:text-primary_grey"
                     href="#">
@@ -149,7 +148,7 @@ export default function NavBar() {
                     </svg>
                     {cart.itemsCount > 0 && (
                       <div className="absolute top-0 right-0">
-                        <p className="absolute -top-2 left-0 flex h-0 w-1 items-center justify-center rounded-full bg-primary_pink p-2 text-xs text-white">
+                        <p className="absolute -top-2 -left-2 flex h-0 w-1 items-center justify-center rounded-full bg-primary_pink p-2 text-xs text-white">
                           {cart.itemsCount}
                         </p>
                       </div>
@@ -159,26 +158,29 @@ export default function NavBar() {
               </Link>
 
               <Link to={'/wishlist'}>
-                <div className="relative py-2 p-6">
+                <div className="relative">
                   <a
                     className="relative text-primary_green transition-colors duration-300 transform hover:text-primary_grey"
                     href="#">
                     <svg
-                      className="w-6 h-6"
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
                       viewBox="0 0 24 24"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg">
+                      fill="none">
                       <path
-                        d="M3 3H5L5.4 5M7 13H17L21 5H5.4M7 13L5.4 5M7 13L4.70711 15.2929C4.07714 15.9229 4.52331 17 5.41421 17H17M17 17C15.8954 17 15 17.8954 15 19C15 20.1046 15.8954 21 17 21C18.1046 21 19 20.1046 19 19C19 17.8954 18.1046 17 17 17ZM9 19C9 20.1046 8.10457 21 7 21C5.89543 21 5 20.1046 5 19C5 17.8954 5.89543 17 7 17C8.10457 17 9 17.8954 9 19Z"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
+                        fill-rule="evenodd"
+                        clip-rule="evenodd"
+                        d="M12 6.00019C10.2006 3.90317 7.19377 3.2551 4.93923 5.17534C2.68468 7.09558 2.36727 10.3061 4.13778 12.5772C5.60984 14.4654 10.0648 18.4479 11.5249 19.7369C11.6882 19.8811 11.7699 19.9532 11.8652 19.9815C11.9483 20.0062 12.0393 20.0062 12.1225 19.9815C12.2178 19.9532 12.2994 19.8811 12.4628 19.7369C13.9229 18.4479 18.3778 14.4654 19.8499 12.5772C21.6204 10.3061 21.3417 7.07538 19.0484 5.17534C16.7551 3.2753 13.7994 3.90317 12 6.00019Z"
+                        stroke="#be9995"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
                       />
                     </svg>
                     {cart.itemsCount > 0 && (
                       <div className="absolute top-0 right-0">
-                        <p className="absolute -top-2 left-0 flex h-0 w-1 items-center justify-center rounded-full bg-primary_pink p-2 text-xs text-white">
+                        <p className="absolute -top-2 -left-2 flex h-0 w-1 items-center justify-center rounded-full bg-primary_green p-2 text-xs text-white">
                           {/* {cart.itemsCount} */}
                         </p>
                       </div>

@@ -5,7 +5,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 
 import { AppDispatch } from '../../../redux/store'
-import { DiscountCode, DiscountCodeFormModalProp } from '../../../types/types'
+import { DiscountCode, DiscountCodeFormModalProp, DiscountCodeSchema, discountCodeSchema } from '../../../types/types'
 import { createDiscountCodeThunk, updateDiscountCodeThunk } from '../../../redux/slices/discountCode/discountCodeSlice'
 
 const initialState = {
@@ -18,25 +18,25 @@ const initialState = {
 export default function DiscountCodeFormModal(prop: DiscountCodeFormModalProp) {
   if (!prop.isOpen) return null
 
-  // const {
-  //   register,
-  //   handleSubmit,
-  //   reset,
-  //   formState: { errors }
-  // } = useForm<CategorySchema>({ resolver: zodResolver(categorySchema) })
-
   const dispatch = useDispatch<AppDispatch>()
   const [discountCodeChanges, discountCodeChangesChanges] = useState<DiscountCode>(initialState)
+
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors }
+  } = useForm<DiscountCodeSchema>({ resolver: zodResolver(discountCodeSchema) })
 
   useEffect(() => {
     if (prop.discountCode) {
       discountCodeChangesChanges(prop.discountCode)
-      //reset()
+      reset()
     }
   }, [])
 
   const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const {value, name} = e.target
+    const {value, name} = e.target    
     discountCodeChangesChanges({ ...discountCodeChanges, [name]: value })
   }
 
@@ -69,13 +69,13 @@ export default function DiscountCodeFormModal(prop: DiscountCodeFormModalProp) {
     <div>
       <div className="modal-overlay">
         <div className="modal-content">
-          <form className="p-4 bg-gray-100 rounded-lg" onSubmit={() => (handleFormSubmit)}>
+          <form className="p-4 bg-gray-100 rounded-lg" onSubmit={handleSubmit(handleFormSubmit)}>
             <div className="mb-4">
               {/* code container */}
               <label htmlFor="name" className="flex flex-col text-primary_pink">
                 <span className="text-primary_green pl-2">Code:</span>
                 <input
-                  //{...register('name')}
+                  {...register('code')}
                   onChange={handleChange}
                   className="border-2 border-primary_grey h-10 px-5 rounded-lg text-sm focus:outline-none"
                   type="name"
@@ -83,11 +83,13 @@ export default function DiscountCodeFormModal(prop: DiscountCodeFormModalProp) {
                   value={discountCodeChanges.code}
                 />
               </label>
-              {/* Percentage container */}
+              {errors.code && <span className="text-primary_pink"> {errors.code.message} </span>}
+
+              {/* percentage container */}
               <label htmlFor="name" className="flex flex-col text-primary_pink">
                 <span className="text-primary_green pl-2">Percentage:</span>
                 <input
-                  //{...register('name')}
+                  {...register('percentage', { valueAsNumber: true })}
                   onChange={handleChange}
                   className="border-2 border-primary_grey h-10 px-5 rounded-lg text-sm focus:outline-none"
                   type="number"
@@ -95,20 +97,21 @@ export default function DiscountCodeFormModal(prop: DiscountCodeFormModalProp) {
                   value={discountCodeChanges.discountPercentage}
                 />
               </label>
-              {/* Percentage container */}
+              {errors.percentage && <span className="text-primary_pink"> {errors.percentage.message} </span>}
+
+              {/* expiration date container */}
               <label htmlFor="name" className="flex flex-col text-primary_pink">
-                <span className="text-primary_green pl-2">Percentage:</span>
+                <span className="text-primary_green pl-2">Expiration Date:</span>
                 <input
-                  //{...register('name')}
                   onChange={handleChange}
                   className="border-2 border-primary_grey h-10 px-5 rounded-lg text-sm focus:outline-none"
                   type="date"
                   name="expirationDate"
-                  //value={discountCodeChanges.expirationDate}
+                  //value={new Date(discountCodeChanges.expirationDate)}
                 />
               </label>
+
             </div>
-            {/* {errors.name && <span className="text-primary_pink"> {errors.name.message} </span>} */}
             <div className="flex justify-center gap-4">
               <button
                 type="submit"

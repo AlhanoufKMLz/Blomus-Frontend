@@ -26,7 +26,7 @@ export type Category = {
 export type Order = {
   _id: string
   products: { product: Product; quantity: number }[]
-  user: string
+  user: User
   orderDate: Date
   shippingInfo: {
     country: String
@@ -239,22 +239,32 @@ export const categorySchema: ZodType<CategorySchema> = z.object({
 
 export type ProductSchema = {
   name: string
-  //image: string
   description: string
   price: number
   quantityInStock: number
   sizes: string
+  discount: number
 }
 
 export const productSchema: ZodType<ProductSchema> = z.object({
   name: z.string().refine((value) => value !== '', { message: 'Name is required' }),
-  //image: z.string().refine((value) => value !== '', { message: 'Image is required' }),
   description: z.string().refine((value) => value !== '', { message: 'Description is required' }),
   price: z.number().refine((value) => value > 0, { message: 'Price is required' }),
+  discount: z.number().refine((value) => value >= 0, { message: 'Discount cannt be negative' }),
   quantityInStock: z
     .number()
     .refine((value) => value >= 0, { message: 'Quantity cannt be negative' }),
   sizes: z.string()
+})
+
+export type DiscountCodeSchema = {
+  code: string
+  percentage: number
+}
+
+export const discountCodeSchema: ZodType<DiscountCodeSchema> = z.object({
+  code: z.string().refine((value) => value !== '', { message: 'Code is required' }),
+  percentage: z.number().refine((value) => value >= 0, { message: 'Percentage is required' }),
 })
 
 export type EmailSchema = {

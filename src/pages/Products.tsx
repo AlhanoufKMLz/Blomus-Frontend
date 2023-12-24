@@ -18,15 +18,16 @@ export default function Products() {
   const [pageNumber, setPageNumber] = useState(1)
   const { products, totalPages, isLoading, error } = useSelector(
     (state: RootState) => state.products
-    )
+  )
   const categories = useSelector((state: RootState) => state.categories)
+  const wishlist = useSelector((state: RootState) => state.wishlist.items)
 
   useEffect(() => {
     dispatch(fetchCategoriesThunk())
   }, [])
 
   useEffect(() => {
-    if (products.length === 0 || searchText || sortBy || category || pageNumber !==1) {
+    if (products.length === 0 || searchText || sortBy || category || pageNumber !== 1) {
       dispatch(fetchProductsThunk({ searchText, category, sortBy, pageNumber }))
     }
   }, [searchText, category, sortBy, pageNumber])
@@ -125,55 +126,64 @@ export default function Products() {
           <ul className="py-8 flex gap-5 flex-wrap">
             {products.map((product) => (
               <li key={product._id} className="flex flex-col items-center justify-center mx-auto">
-                <div className="flex w-80 h-80 bg-white rounded-lg shadow-lg shadow-[#c0c0c0] hover:shadow-none items-center justify-center">
+                <div className="relative flex w-80 h-80 bg-white rounded-lg shadow-lg shadow-[#c0c0c0] hover:shadow-none items-center justify-center">
+                  {product.discount > 0 && <div className='absolute top-5 left-5 bg-primary_green rounded-lg px-2 text-primary_grey text-sm'>{product.discount} %</div>}
                   <Link to={`/${product._id}`}>
                     {/* <img className="w-48" src={product.image} alt={product.name} /> */}
                   </Link>
                 </div>
-                <div className="w-56 -mt-10 overflow-hidden rounded-lg shadow-lg md:w-64 bg-secondary_grey">
+                <div className="relative w-56 -mt-10 overflow-hidden rounded-lg shadow-lg md:w-64 bg-secondary_grey">
                   <Link to={`/${product._id}`}>
                     <h3 className="py-2 font-bold tracking-wide text-center text-primary_green uppercase">
                       {product.name}
                     </h3>
                   </Link>
 
-                  <div className="flex items-center justify-between px-3 py-2 bg-primary_pink">
+                  <div className="z-90 flex items-center justify-between px-3 py-2 bg-primary_pink">
                     <span className="text-secondary_grey">{product.price} SAR</span>
-                    <button
-                      onClick={() => handleAddToCart(product)}
-                      className="px-2 py-1 text-xs font-semibold text-secondary_grey hover:text-primary_green uppercase transition-colors duration-300 transform rounded focus:bg-grey-700 dark:focus:bg-grey-600">
-                      <svg
-                        className="w-5 h-5"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg">
-                        <path
-                          d="M3 3H5L5.4 5M7 13H17L21 5H5.4M7 13L5.4 5M7 13L4.70711 15.2929C4.07714 15.9229 4.52331 17 5.41421 17H17M17 17C15.8954 17 15 17.8954 15 19C15 20.1046 15.8954 21 17 21C18.1046 21 19 20.1046 19 19C19 17.8954 18.1046 17 17 17ZM9 19C9 20.1046 8.10457 21 7 21C5.89543 21 5 20.1046 5 19C5 17.8954 5.89543 17 7 17C8.10457 17 9 17.8954 9 19Z"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        />
-                      </svg>
-                    </button>
-                    <button
-                      onClick={() => handleAddToWishlist(product)}
-                      className="px-2 py-1 text-xs font-semibold text-secondary_grey hover:text-primary_green uppercase transition-colors duration-300 transform rounded focus:bg-grey-700 dark:focus:bg-grey-600">
-                      wishlist
-                      {/* <svg
-                        className="w-5 h-5"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg">
-                        <path
-                          d="M3 3H5L5.4 5M7 13H17L21 5H5.4M7 13L5.4 5M7 13L4.70711 15.2929C4.07714 15.9229 4.52331 17 5.41421 17H17M17 17C15.8954 17 15 17.8954 15 19C15 20.1046 15.8954 21 17 21C18.1046 21 19 20.1046 19 19C19 17.8954 18.1046 17 17 17ZM9 19C9 20.1046 8.10457 21 7 21C5.89543 21 5 20.1046 5 19C5 17.8954 5.89543 17 7 17C8.10457 17 9 17.8954 9 19Z"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        />
-                      </svg> */}
-                    </button>
+                    <div>
+                      <button
+                        onClick={() => handleAddToCart(product)}
+                        className="px-2 py-1 text-xs font-semibold text-secondary_grey hover:text-primary_green uppercase transition-colors duration-300 transform rounded focus:bg-grey-700 dark:focus:bg-grey-600">
+                        <svg
+                          className="w-5 h-5"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          xmlns="http://www.w3.org/2000/svg">
+                          <path
+                            d="M3 3H5L5.4 5M7 13H17L21 5H5.4M7 13L5.4 5M7 13L4.70711 15.2929C4.07714 15.9229 4.52331 17 5.41421 17H17M17 17C15.8954 17 15 17.8954 15 19C15 20.1046 15.8954 21 17 21C18.1046 21 19 20.1046 19 19C19 17.8954 18.1046 17 17 17ZM9 19C9 20.1046 8.10457 21 7 21C5.89543 21 5 20.1046 5 19C5 17.8954 5.89543 17 7 17C8.10457 17 9 17.8954 9 19Z"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          />
+                        </svg>
+                      </button>
+                      <button
+                        onClick={() => handleAddToWishlist(product)}
+                        className="px-2 py-1 text-xs font-semibold text-secondary_grey hover:text-primary_green uppercase transition-colors duration-300 transform rounded focus:bg-grey-700 dark:focus:bg-grey-600">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="20"
+                          height="20"
+                          viewBox="0 0 24 24"
+                          fill={
+                            wishlist.find((item) => item.product._id === product._id)
+                              ? 'currentColor'
+                              : 'none'
+                          }>
+                          <path
+                            fill-rule="evenodd"
+                            clip-rule="evenodd"
+                            d="M12 6.00019C10.2006 3.90317 7.19377 3.2551 4.93923 5.17534C2.68468 7.09558 2.36727 10.3061 4.13778 12.5772C5.60984 14.4654 10.0648 18.4479 11.5249 19.7369C11.6882 19.8811 11.7699 19.9532 11.8652 19.9815C11.9483 20.0062 12.0393 20.0062 12.1225 19.9815C12.2178 19.9532 12.2994 19.8811 12.4628 19.7369C13.9229 18.4479 18.3778 14.4654 19.8499 12.5772C21.6204 10.3061 21.3417 7.07538 19.0484 5.17534C16.7551 3.2753 13.7994 3.90317 12 6.00019Z"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                          />
+                        </svg>
+                      </button>
+                    </div>
                   </div>
                 </div>
               </li>

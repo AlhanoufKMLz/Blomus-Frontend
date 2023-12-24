@@ -32,8 +32,8 @@ export const createDiscountCodeThunk = createAsyncThunk(
   async (discountCode: Partial<DiscountCode>, { rejectWithValue }) => {
     try {
       const response = await discountCodesServices.addDiscountCode(discountCode)
-
-      return response.data.payload
+      
+      return response.data
     } catch (error) {
       if (error instanceof AxiosError) {
         return rejectWithValue(error.response?.data.msg)
@@ -52,7 +52,7 @@ export const updateDiscountCodeThunk = createAsyncThunk(
     try {
       const response = await discountCodesServices.updateDiscountCode(discountCodeId, discountCode)
 
-      return response.data.payload
+      return response.data
     } catch (error) {
       if (error instanceof AxiosError) {
         return rejectWithValue(error.response?.data.msg)
@@ -68,7 +68,7 @@ export const deleteDiscountCodeThunk = createAsyncThunk(
     try {
       const response = await discountCodesServices.deleteDiscountCode(discountCodeId)
 
-      return response.data.payload
+      return response.data
     } catch (error) {
       if (error instanceof AxiosError) {
         return rejectWithValue(error.response?.data.msg)
@@ -105,7 +105,7 @@ export const discountCodesSlice = createSlice({
         state.isLoading = true
       })
       .addCase(createDiscountCodeThunk.fulfilled, (state, action) => {
-        state.codes = [action.payload, ...state.codes]
+        state.codes = [action.payload.payload, ...state.codes]
         state.isLoading = false
       })
       .addCase(createDiscountCodeThunk.rejected, (state, action) => {
@@ -122,10 +122,11 @@ export const discountCodesSlice = createSlice({
         state.isLoading = true
       })
       .addCase(updateDiscountCodeThunk.fulfilled, (state, action) => {
-        state.codes = state.codes.filter(
-          (code) => code._id !== action.payload._id
-        )
-        state.codes = [action.payload, ...state.codes]
+        const updatedDiscountCodes = state.codes.map((code) => {
+          if (code._id === action.payload.payload._id) return action.payload.payload
+          return code
+        })
+        state.codes = updatedDiscountCodes
         state.isLoading = false
       })
       .addCase(updateDiscountCodeThunk.rejected, (state, action) => {
@@ -143,7 +144,7 @@ export const discountCodesSlice = createSlice({
       })
       .addCase(deleteDiscountCodeThunk.fulfilled, (state, action) => {
         state.codes = state.codes.filter(
-          (code) => code._id !== action.payload._id
+          (code) => code._id !== action.payload.payload._id
         )
         state.isLoading = false
       })

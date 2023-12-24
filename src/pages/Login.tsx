@@ -11,6 +11,7 @@ import { loginUserThunk } from '../redux/slices/users/logedinUserSlice'
 import { LoginSchema, loginSchema } from '../types/types'
 import { fetchCartItemsThunk } from '../redux/slices/cart/cartSlice'
 import api from '../api'
+import { fetchWishlistItemsThunk } from '../redux/slices/wishlist/wishlistSlice'
 
 export default function Login() {
   const dispatch = useDispatch<AppDispatch>()
@@ -34,6 +35,7 @@ export default function Login() {
       if(res.meta.requestStatus === 'fulfilled'){
         //toast.success('Welcome back ' + res.payload.user.firstName + "! We're glad to see you again")
         dispatch(fetchCartItemsThunk())
+        dispatch(fetchWishlistItemsThunk())
         navigate('/')
       } 
       if(res.meta.requestStatus === 'rejected'){

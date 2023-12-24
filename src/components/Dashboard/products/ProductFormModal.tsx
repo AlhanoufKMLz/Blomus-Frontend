@@ -97,10 +97,12 @@ export default function ProductFormModal(prop: ProductFormModalProp) {
     const productData = new FormData()
     productData.append('name', productChanges.name)
     productData.append('price', String(productChanges.price))
+    productData.append('quantityInStock', String(productChanges.quantityInStock))
+    productData.append('discount', String(productChanges.discount))
     productData.append('description', productChanges.description)
-    if (productImage) productData.append('image', productImage)
     productData.append('categories', productChanges.categories.join(','))
     productData.append('sizes', productChanges.sizes.join(','))
+    if (productImage) productData.append('image', productImage)
 
     // Add new product
     if (!prop.product) {
@@ -153,7 +155,7 @@ export default function ProductFormModal(prop: ProductFormModalProp) {
 
           <div className="flex justify-between flex-col md:flex-row">
             {/* price container */}
-            <div className="mb-4 md:w-1/2">
+            <div className="mb-4 md:w-1/3">
               <label htmlFor="price" className="flex flex-col text-primary_pink">
                 <span className="text-primary_green pl-2">Price:</span>
                 <input
@@ -170,7 +172,7 @@ export default function ProductFormModal(prop: ProductFormModalProp) {
               </label>
             </div>
             {/* quantity in stock container */}
-            <div className="mb-4 md:w-1/2">
+            <div className="mb-4 md:w-1/3">
               <label htmlFor="price" className="flex flex-col text-primary_pink">
                 <span className="text-primary_green pl-2">Quantity in stock:</span>
                 <input
@@ -183,6 +185,23 @@ export default function ProductFormModal(prop: ProductFormModalProp) {
                 />
                 {errors.price && (
                   <span className="text-primary_pink"> {errors.price.message} </span>
+                )}
+              </label>
+            </div>
+            {/* discount container */}
+            <div className="mb-4 md:w-1/3">
+              <label htmlFor="discount" className="flex flex-col text-primary_pink">
+                <span className="text-primary_green pl-2">Discount:</span>
+                <input
+                  type="number"
+                  id="discount"
+                  {...register('discount', { valueAsNumber: true })}
+                  className="border-2 border-primary_grey h-10 px-5 rounded-lg text-sm focus:outline-none"
+                  value={productChanges.discount}
+                  onChange={handleChange}
+                />
+                {errors.discount && (
+                  <span className="text-primary_pink"> {errors.discount.message} </span>
                 )}
               </label>
             </div>

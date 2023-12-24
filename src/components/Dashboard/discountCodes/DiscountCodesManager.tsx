@@ -59,13 +59,13 @@ export function DiscountCodesManager() {
           </svg>
         </div>
       </div>
-      {state.isLoading && <h3> Loading categories...</h3>}
+      {state.isLoading && <h3> Loading discount codes...</h3>}
       {state.error && <h3> {state.error}</h3>}
       <div className="max-h-[600px] overflow-y-auto ml-16">
         <table className="md:mx-40 md:my-8 w-9/12">
           <tbody>
             <tr className="text-left text-primary_pink">
-              <th>Name</th>
+              <th>Code</th>
               <th>Percentage</th>
               <th>Expiration</th>
             </tr>
