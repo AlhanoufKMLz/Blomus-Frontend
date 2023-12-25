@@ -10,7 +10,6 @@ import { AppDispatch, RootState } from '../redux/store'
 import { loginUserThunk } from '../redux/slices/users/logedinUserSlice'
 import { LoginSchema, loginSchema } from '../types/types'
 import { fetchCartItemsThunk } from '../redux/slices/cart/cartSlice'
-import api from '../api'
 import { fetchWishlistItemsThunk } from '../redux/slices/wishlist/wishlistSlice'
 
 export default function Login() {
@@ -22,6 +21,7 @@ export default function Login() {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors }
   } = useForm<LoginSchema>({ resolver: zodResolver(loginSchema) })
 

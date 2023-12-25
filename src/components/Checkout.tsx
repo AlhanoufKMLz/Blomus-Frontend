@@ -1,25 +1,44 @@
-import React, { ChangeEvent, useState } from 'react'
+import React, { ChangeEvent, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 
 import { AppDispatch, RootState } from '../redux/store'
 import { createOrderThunk } from '../redux/slices/orders/orderSlice'
+import { ShippingInfo } from '../types/types'
+import { applyDiscount, calculatePrice } from '../redux/slices/cart/cartSlice'
+import { fetchSingleDiscountCodeThunk } from '../redux/slices/discountCode/discountCodeSlice'
 
 export default function () {
   const dispatch = useDispatch<AppDispatch>()
-
   const cart = useSelector((state: RootState) => state.cart)
-  const [shippingInfo, setShippingInfo] = useState({ country: '', city: '', address: '' })
+  const discount = useSelector((state: RootState) => state.discountCodes.code)
 
-  const shippingFee = 25
-  const taxes = (cart.totalPrice * 0.15).toFixed(2)
-  const finalPrice = cart.totalAfterDiscount + Number(taxes) + shippingFee
+  const [discountCode, setDiscountCode] = useState('')
+  const [shippingInfo, setShippingInfo] = useState<ShippingInfo>({
+    country: '',
+    city: '',
+    address: ''
+  })
 
+  // calculate price
+  useEffect(() => {
+    dispatch(calculatePrice())
+  }, [cart.items])
+
+  // handle discount
+  const handleChangeDiscountCode = (e: ChangeEvent<HTMLInputElement>) => {
+    setDiscountCode(e.target.value)
+  }
+  const handleApplyDiscount = () => {
+    dispatch(fetchSingleDiscountCodeThunk(discountCode))
+    discount && dispatch(applyDiscount({ discount }))
+  }
+
+  // handle checkout
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
     setShippingInfo({ ...shippingInfo, [name]: value })
   }
-
   const handleCheckOut = () => {
     dispatch(createOrderThunk(shippingInfo))
   }
@@ -35,11 +54,11 @@ export default function () {
           </div>
           <div className="flex justify-between text-primary_pink">
             <span>Shipping</span>
-            <span>{shippingFee}</span>
+            <span>{cart.shippingFee}</span>
           </div>
           <div className="flex justify-between text-primary_pink">
             <span>Taxes</span>
-            <span>{taxes}</span>
+            <span>{cart.taxes}</span>
           </div>
           <div className="flex justify-between text-primary_pink">
             <span>Discount</span>
@@ -47,7 +66,7 @@ export default function () {
           </div>
           <div className="flex justify-between text-primary_pink border-y-2 border-zinc_secondery font-bold">
             <span>Total</span>
-            <span>{finalPrice}</span>
+            <span>{cart.finalTotal}</span>
           </div>
         </div>
         <details>
@@ -134,21 +153,26 @@ export default function () {
             />
           </div>
         </details>
+
         <div className="flex justify-between">
           <input
             className="block w-full py-2 border border-primary_grey px-6 rounded-l-lg text-sm focus:outline-none"
             type="code"
             name="code"
             placeholder="Coupon code"
+            onChange={handleChangeDiscountCode}
           />
-          <button className="bg-primary_green p-2 rounded-r-lg text-secondary_grey shadow-lg hover:shadow-none hover:bg-secondary_grey hover:text-primary_green">
+          <button
+            onClick={handleApplyDiscount}
+            className="bg-primary_green p-2 rounded-r-lg text-secondary_grey shadow-lg hover:shadow-none hover:bg-secondary_grey hover:text-primary_green">
             Apply
           </button>
         </div>
+
         <div className="flex flex-col gap-2">
           <button
             className="bg-primary_pink p-2 rounded-lg text-secondary_grey shadow-md hover:shadow-none hover:bg-secondary_grey hover:text-primary_pink shadow-shadow"
-            onClick={() => handleCheckOut()}>
+            onClick={handleCheckOut}>
             Check Out
           </button>
           <Link

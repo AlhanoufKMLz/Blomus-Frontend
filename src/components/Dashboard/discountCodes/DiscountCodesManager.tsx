@@ -66,14 +66,14 @@ export function DiscountCodesManager() {
           <tbody>
             <tr className="text-left text-primary_pink">
               <th>Code</th>
-              <th>Percentage</th>
               <th>Expiration</th>
+              <th className='text-center'>Percentage</th>
             </tr>
             {state.codes.map((code) => (
               <tr className="border-t-2 border-zinc_secondery" key={code._id}>
                 <td className="text-primary_green py-5">{code.code}</td>
-                <td className="text-primary_green py-5">{code.discountPercentage} %</td>
                 <td className="text-primary_green py-5">{new Date(code.expirationDate)?.toLocaleDateString()}</td>
+                <td className="text-primary_green text-center">{code.discountPercentage} %</td>
                 <td className="text-right">
                   <button
                     className="text-primary_green hover:text-primary_pink"

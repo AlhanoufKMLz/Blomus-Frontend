@@ -28,12 +28,13 @@ export type Order = {
   products: { product: Product; quantity: number }[]
   user: User
   orderDate: Date
-  shippingInfo: {
-    country: String
-    city: String
-    address: String
-  }
+  shippingInfo: ShippingInfo
   orderStatus: Status
+}
+export type ShippingInfo = {
+  country: String
+  city: String
+  address: String
 }
 
 export type User = {
@@ -99,13 +100,15 @@ export type LogedinUserState = {
 }
 
 export type CartState = {
+  shippingFee: number
   items: { product: Product; quantity: number }[]
   totalPrice: number
   savedAmount: number
-  totalAfterDiscount: number
+  finalTotal: number
   error: undefined | string
   isLoading: boolean
   itemsCount: number
+  taxes: number
 }
 
 export type WishlistState = {
@@ -122,6 +125,7 @@ export type OrderState = {
 
 export type DiscountCodeState = {
   codes: DiscountCode[]
+  code: DiscountCode | null
   error: undefined | string
   isLoading: boolean
 }

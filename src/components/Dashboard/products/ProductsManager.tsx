@@ -90,10 +90,10 @@ export function ProductsManager() {
             <tr className="text-left text-primary_pink">
               <th>Image</th>
               <th>Name</th>
-              <th>Price</th>
-              <th>Stock</th>
-              <th>Sold</th>
-              <th>Discount</th>
+              <th className="text-center">Price</th>
+              <th className="text-center">Stock</th>
+              <th className="text-center">Sold</th>
+              <th className="text-center">Discount</th>
             </tr>
             {products.products.map((product) => (
               <tr className="border-t-2 border-zinc_secondery" key={product._id}>
@@ -101,10 +101,10 @@ export function ProductsManager() {
                   {/* <img src={product.image} alt={product.name} width="50" /> */}
                 </td>
                 <td className="text-primary_green">{product.name}</td>
-                <td className="text-primary_green">{product.price}</td>
-                <td className="text-primary_green">{product.quantityInStock}</td>
-                <td className="text-primary_green">{product.itemsSold}</td>
-                <td className="text-primary_green">{product.discount} %</td>
+                <td className="text-primary_green text-center">{product.price}</td>
+                <td className="text-primary_green text-center">{product.quantityInStock}</td>
+                <td className="text-primary_green text-center">{product.itemsSold}</td>
+                <td className="text-primary_green text-center">{product.discount} %</td>
                 <td className="text-right">
                   <button className="text-primary_green" onClick={() => handleEdit(product)}>
                     <svg

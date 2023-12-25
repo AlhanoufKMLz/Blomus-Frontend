@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { AxiosError } from 'axios'
 
-import { Order, OrderState } from '../../../types/types'
+import { Order, OrderState, ShippingInfo } from '../../../types/types'
 import ordersServices from '../../../services/orders'
 
 // Fetch all orders
@@ -14,9 +14,28 @@ export const fetchOrdersThunk = createAsyncThunk('orders/fetchOrders', async () 
 // Create order
 export const createOrderThunk = createAsyncThunk(
   'orders/createOrder',
-  async (shippingInfo: Partial<Order>, { rejectWithValue }) => {
+  async (
+    shippingInfo: ShippingInfo,
+    { rejectWithValue }
+  ) => {
     try {
       const response = await ordersServices.createOrder(shippingInfo)
+
+      return response.data.payload
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        return rejectWithValue(error.response?.data.msg)
+      }
+    }
+  }
+)
+
+// Update order status
+export const updateOrderStatusThunk = createAsyncThunk(
+  'orders/updateOrderStatus',
+  async (data:{orderStatus: string, orderId: string}, { rejectWithValue }) => {
+    try {
+      const response = await ordersServices.updateStatus(data.orderStatus, data.orderId)
 
       return response.data.payload
     } catch (error) {
@@ -50,7 +69,7 @@ export const orderSlice = createSlice({
         state.error = action.error.message
         state.isLoading = false
       })
-      
+
       // Create new product
       .addCase(createOrderThunk.pending, (state) => {
         state.isLoading = true
@@ -60,6 +79,27 @@ export const orderSlice = createSlice({
         state.isLoading = false
       })
       .addCase(createOrderThunk.rejected, (state, action) => {
+        const errorMessage = action.payload
+        if (typeof errorMessage === 'string') {
+          state.error = errorMessage
+        }
+        state.isLoading = false
+        return state
+      })
+
+      // block user
+      .addCase(updateOrderStatusThunk.pending, (state) => {
+        state.isLoading = true
+      })
+      .addCase(updateOrderStatusThunk.fulfilled, (state, action) => {
+        const updatedOrders = state.orders.map((order) => {
+          if (order._id === action.payload._id) return action.payload
+          return order
+        })
+        state.orders = updatedOrders
+        state.isLoading = false
+      })
+      .addCase(updateOrderStatusThunk.rejected, (state, action) => {
         const errorMessage = action.payload
         if (typeof errorMessage === 'string') {
           state.error = errorMessage

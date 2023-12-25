@@ -184,7 +184,7 @@ export default function ProductFormModal(prop: ProductFormModalProp) {
                   onChange={handleChange}
                 />
                 {errors.price && (
-                  <span className="text-primary_pink"> {errors.price.message} </span>
+                  <span className="text-primary_pink"> {errors.quantityInStock?.message} </span>
                 )}
               </label>
             </div>

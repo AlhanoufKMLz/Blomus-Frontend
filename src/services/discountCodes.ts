@@ -6,6 +6,10 @@ export default {
     const response = await api.get('/api/discount-code')
     return response
   },
+  findOne: async (discountCode: string) => {
+    const response = await api.get(`/api/discount-code/${discountCode}`)
+    return response
+  },
   addDiscountCode: async (discountCode: Partial<DiscountCode>) => {
     const response = api.post('/api/discount-code', discountCode)
     return response

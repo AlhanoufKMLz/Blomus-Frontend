@@ -1,8 +1,10 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { AxiosError } from 'axios'
 
-import { CartState } from '../../../types/types'
+import { CartState, DiscountCode } from '../../../types/types'
 import cartService from '../../../services/cart'
+import { disconnect } from 'process'
+import discountCodes from '../../../services/discountCodes'
 
 // Fetch cart items
 export const fetchCartItemsThunk = createAsyncThunk(
@@ -58,7 +60,10 @@ export const removeFromCartThunk = createAsyncThunk(
 // Update item quantity
 export const updateItemQuantityThunk = createAsyncThunk(
   'cart/updateItemQuantity',
-  async ( { productId, updateType } : { productId: string, updateType: string }, { rejectWithValue }) => {
+  async (
+    { productId, updateType }: { productId: string; updateType: string },
+    { rejectWithValue }
+  ) => {
     try {
       const response = await cartService.updateQuantity(productId, updateType)
 
@@ -73,18 +78,37 @@ export const updateItemQuantityThunk = createAsyncThunk(
 
 const initialState: CartState = {
   items: [],
+  shippingFee: 25,
   totalPrice: 0,
   savedAmount: 0,
-  totalAfterDiscount: 0,
+  finalTotal: 0,
   error: undefined,
   isLoading: false,
-  itemsCount: 0
+  itemsCount: 0,
+  taxes: 0
 }
 
 export const cartSlice = createSlice({
   name: 'cart',
   initialState,
-  reducers: {},
+  reducers: {
+    calculatePrice(state) {
+      state.totalPrice = state.items.reduce(
+        (total, item) => total + item.product.price * item.quantity,
+        0
+      )
+      state.taxes = Number((state.totalPrice * 0.15).toFixed())
+      state.finalTotal = state.totalPrice + Number(state.taxes) + state.shippingFee
+    },
+    applyDiscount(state, action: { payload: { discount: DiscountCode } }) {
+      if(action.payload.discount.expirationDate < new Date)
+        state.error = 'Discount code is expiered'
+      else{
+        state.savedAmount = state.finalTotal * action.payload.discount.discountPercentage / 100
+        state.finalTotal = state.finalTotal - state.savedAmount 
+      }      
+    }
+  },
   extraReducers: (builder) => {
     builder
       // Fetch cart items
@@ -93,9 +117,6 @@ export const cartSlice = createSlice({
       })
       .addCase(fetchCartItemsThunk.fulfilled, (state, action) => {
         state.items = action.payload.cartItems
-        state.totalAfterDiscount = action.payload.totalAfterDiscount
-        state.totalPrice = action.payload.totalPrice
-        state.savedAmount = action.payload.savedAmount
         state.itemsCount = action.payload.itemsCount
         state.isLoading = false
       })
@@ -131,7 +152,7 @@ export const cartSlice = createSlice({
       .addCase(removeFromCartThunk.fulfilled, (state, action) => {
         const removed = state.items.find((item) => item.product._id !== action.payload.result)
         state.items = state.items.filter((item) => item.product._id !== action.payload.result)
-        if(removed) state.itemsCount -= removed.quantity
+        if (removed) state.itemsCount -= removed.quantity
         state.isLoading = false
       })
       .addCase(removeFromCartThunk.rejected, (state, action) => {
@@ -167,5 +188,7 @@ export const cartSlice = createSlice({
       })
   }
 })
+
+export const { calculatePrice, applyDiscount } = cartSlice.actions
 
 export default cartSlice.reducer
