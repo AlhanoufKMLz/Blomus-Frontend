@@ -44,7 +44,7 @@ export default function OrdersManager() {
               <React.Fragment key={order._id}>
                 <tr className="border-t-2 border-zinc_secondery">
                   <td className="text-primary_green py-5">{order.user.firstName}</td>
-                  <td className="text-primary_green">{order.orderDate.toLocaleString()}</td>
+                  <td className="text-primary_green">{new Date(order.orderDate)?.toLocaleDateString()}</td>
                   <td className="flex justify-center align-middle py-5">
                     <select
                       className="text-primary_green rounded-lg p-1"

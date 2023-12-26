@@ -80,12 +80,12 @@ export default function Home() {
                     {product.discount} %
                   </div>
                 )}
-                <Link to={`/${product._id}`}>
+                <Link to={`/products/${product._id}`}>
                   <img className="w-48" src={`https://${product.image}`} alt={product.name} />
                 </Link>
               </div>
               <div className="relative w-56 -mt-10 overflow-hidden rounded-lg shadow-lg md:w-64 bg-secondary_grey">
-                <Link to={`/${product._id}`}>
+                <Link to={`/products/${product._id}`}>
                   <h3 className="py-2 font-bold tracking-wide text-center text-primary_green uppercase">
                     {product.name}
                   </h3>

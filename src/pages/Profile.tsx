@@ -111,7 +111,7 @@ export default function Profile() {
                       key={product.product._id}
                       className="flex flex-col items-center justify-center">
                       <div className="relative flex w-40 h-40 bg-zinc rounded-lg shadow-lg shadow-[#c0c0c0] hover:shadow-none items-center justify-center">
-                        <Link to={`/${product.product._id}`}>
+                        <Link to={`/products/${product.product._id}`}>
                           <img
                             className="w-20"
                             src={`https://${product.product.image}`}
@@ -120,7 +120,7 @@ export default function Profile() {
                         </Link>
                       </div>
                       <div className="relative w-40 -mt-10 overflow-hidden rounded-lg shadow-lg bg-secondary_grey">
-                        <Link to={`/${product.product._id}`}>
+                        <Link to={`/products/${product.product._id}`}>
                           <h3 className="py-1 font-bold tracking-wide text-xs text-center text-primary_green uppercase">
                             {product.product.name}
                           </h3>

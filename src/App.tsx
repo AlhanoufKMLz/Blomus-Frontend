@@ -45,8 +45,12 @@ function App() {
 
         {/* public routes */}
         <Route path="/" element={<Home />} />
-        <Route path="/products" element={<Products />}></Route>
-        <Route path="/:productid" element={<ProductDetails />}></Route>
+
+        <Route path="products">
+          <Route index element={<Products />}></Route>
+          <Route path=":productid" element={<ProductDetails />}></Route>
+        </Route>
+
         <Route path="/cart" element={<Cart />}></Route>
         <Route path="/thank-you" element={<ThankYou />}></Route>
         <Route path="/profile" element={<Profile />}></Route>

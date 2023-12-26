@@ -81,9 +81,9 @@ const initialState: CartState = {
   savedAmount: 0,
   finalTotal: 0,
   error: undefined,
+  taxes: 0,
   isLoading: false,
-  itemsCount: 0,
-  taxes: 0
+  itemsCount: 0
 }
 
 export const cartSlice = createSlice({
