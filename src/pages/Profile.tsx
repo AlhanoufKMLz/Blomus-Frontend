@@ -14,7 +14,7 @@ export default function Profile() {
   const decoded = useSelector((state: RootState) => state.logedinUser.decodedUser)
   if (!decoded) {
     navigate('/login')
-    return
+    return null
   }
 
   const dispatch = useDispatch<AppDispatch>()
