@@ -9,6 +9,10 @@ import ProductFormModal from './ProductFormModal'
 
 export function ProductsManager() {
   const dispatch = useDispatch<AppDispatch>()
+  const { products, totalPages, isLoading, error } = useSelector(
+    (state: RootState) => state.products
+  )
+  const categories = useSelector((state: RootState) => state.categories)
 
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [selectedProduct, setSelectedProduct] = useState<Product | null>()
@@ -25,9 +29,6 @@ export function ProductsManager() {
     dispatch(fetchProductsThunk({ searchText, category, sortBy, pageNumber }))
   }, [searchText, category, sortBy, pageNumber])
 
-  const products = useSelector((state: RootState) => state.products)
-  const categories = useSelector((state: RootState) => state.categories)
-
   //Open edit product modal
   function handleEdit(product: Product) {
     setSelectedProduct(product)
@@ -43,13 +44,21 @@ export function ProductsManager() {
   //handle search text change
   function handleSearchTextChange(event: React.ChangeEvent<HTMLInputElement>) {
     setSearchText(event.target.value)
+    setPageNumber(1)
   }
 
+  // handle page change
+  const handlePageChange = (page: number) => {
+    setPageNumber(page)
+  }
+
+  // handle sort change
   function handleSortChange(event: { target: { value: string } }) {
     setSortBy(event.target.value)
     setPageNumber(1)
   }
 
+  //handle filter change 
   function handleFilterChange(event: { target: { value: string } }) {
     setCategory(event.target.value)
     setPageNumber(1)
@@ -118,7 +127,7 @@ export function ProductsManager() {
               <th className="text-center">Sold</th>
               <th className="text-center">Discount</th>
             </tr>
-            {products.products.map((product) => (
+            {products.map((product) => (
               <tr className="border-t-2 border-zinc_secondery" key={product._id}>
                 <td className="pl-10 py-5">
                   <img src={`https://${product.image}`} alt={product.name} width="50" />
@@ -177,6 +186,52 @@ export function ProductsManager() {
             ))}
           </tbody>
         </table>
+      </div>
+
+      {/* Pagenation */}
+      <div className="flex justify-center">
+        {pageNumber !== 1 && (
+          <button
+            className={'rounded-full hover:border w-6 m-2 border-primary_pink text-primary_green'}
+            onClick={() => {
+              handlePageChange(pageNumber - 1)
+            }}>
+            &laquo;
+          </button>
+        )}
+        {Array.from({ length: totalPages }, (_, index) => {
+          if (
+            index + 1 === pageNumber ||
+            index + 1 === pageNumber + 1 ||
+            index + 1 === pageNumber - 1 ||
+            index + 1 == 1 ||
+            index + 1 == totalPages
+          )
+            return (
+              <button
+                key={index + 1}
+                className={
+                  index + 1 == pageNumber
+                    ? 'rounded-full bg-primary_green w-6 m-2 text-secondary_grey'
+                    : 'rounded-full hover:border w-6 m-2 border-primary_pink text-primary_green'
+                }
+                onClick={() => {
+                  handlePageChange(index + 1)
+                }}>
+                {index + 1}
+              </button>
+            )
+          else return <span className="text-primary_green">.</span>
+        })}
+        {pageNumber !== totalPages && (
+          <button
+            className={'rounded-full hover:border w-6 m-2 border-primary_pink text-primary_green'}
+            onClick={() => {
+              handlePageChange(pageNumber + 1)
+            }}>
+            &raquo;
+          </button>
+        )}
       </div>
 
       {/* add product button */}

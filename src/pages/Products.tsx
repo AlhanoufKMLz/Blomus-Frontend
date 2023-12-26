@@ -16,14 +16,14 @@ export default function Products() {
   const wishlist = useSelector((state: RootState) => state.wishlist.items)
   const wishlistError = useSelector((state: RootState) => state.wishlist.error)
   const addToCartError = useSelector((state: RootState) => state.cart.error)
+  const { products, totalPages, isLoading, error } = useSelector(
+    (state: RootState) => state.products
+  )
 
   const [searchText, setSearchText] = useState('')
   const [category, setCategory] = useState('')
   const [sortBy, setSortBy] = useState('')
   const [pageNumber, setPageNumber] = useState(1)
-  const { products, totalPages, isLoading, error } = useSelector(
-    (state: RootState) => state.products
-  )
 
   // fetch categories
   useEffect(() => {
