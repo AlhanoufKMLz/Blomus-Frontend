@@ -1,15 +1,16 @@
-import React, { ChangeEvent, useEffect, useState } from 'react'
+import { ChangeEvent, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
-import { AppDispatch, RootState } from '../redux/store'
-import { createOrderThunk } from '../redux/slices/orders/orderSlice'
-import { ShippingInfo } from '../types/types'
-import { applyDiscount, calculatePrice } from '../redux/slices/cart/cartSlice'
-import { fetchSingleDiscountCodeThunk } from '../redux/slices/discountCode/discountCodeSlice'
+import { AppDispatch, RootState } from '../../redux/store'
+import { createOrderThunk } from '../../redux/slices/orders/orderSlice'
+import { ShippingInfo } from '../../types/types'
+import { applyDiscount, calculatePrice } from '../../redux/slices/cart/cartSlice'
+import { fetchSingleDiscountCodeThunk } from '../../redux/slices/discountCode/discountCodeSlice'
 
 export default function () {
   const dispatch = useDispatch<AppDispatch>()
+  const navigate = useNavigate()
   const cart = useSelector((state: RootState) => state.cart)
   const discount = useSelector((state: RootState) => state.discountCodes.code)
 
@@ -40,7 +41,11 @@ export default function () {
     setShippingInfo({ ...shippingInfo, [name]: value })
   }
   const handleCheckOut = () => {
-    dispatch(createOrderThunk(shippingInfo))
+    dispatch(createOrderThunk(shippingInfo)).then((res) => {
+      if(res.meta.requestStatus === 'fulfilled'){
+        navigate('/thank-you')
+      } 
+    })
   }
 
   return (

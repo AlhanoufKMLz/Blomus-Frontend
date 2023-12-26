@@ -34,6 +34,7 @@ export function CategoriesManager() {
   //Display categories table
   return (
     <div className="flex flex-col min-h-screen align-middle">
+      {/* search */}
       <div className="flex flex-col justify-center md:flex-row border-b-2 border-zinc_secondery pb-5">
         <div className="pt-2 relative text-primary_pink">
           <input
@@ -59,8 +60,8 @@ export function CategoriesManager() {
           </svg>
         </div>
       </div>
-      {state.isLoading && <h3> Loading categories...</h3>}
-      {state.error && <h3> {state.error}</h3>}
+
+      {/* categories table */}
       <div className="max-h-[600px] overflow-y-auto ml-16">
         <table className="md:mx-40 md:my-8 w-9/12">
           <tbody>
@@ -123,6 +124,8 @@ export function CategoriesManager() {
           </tbody>
         </table>
       </div>
+
+      {/* add category bottun */}
       <button
         className="fixed bg-primary_green bottom-8 right-8 text-white h-14 w-14 rounded-full text-4xl flex items-center justify-center shadow-md hover:shadow-none hover:bg-primary_pink hover:text-primary_green shadow-shadow"
         onClick={addCategoryForm}>

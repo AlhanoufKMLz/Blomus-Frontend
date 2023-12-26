@@ -3,8 +3,6 @@ import { AxiosError } from 'axios'
 
 import { CartState, DiscountCode } from '../../../types/types'
 import cartService from '../../../services/cart'
-import { disconnect } from 'process'
-import discountCodes from '../../../services/discountCodes'
 
 // Fetch cart items
 export const fetchCartItemsThunk = createAsyncThunk(
@@ -169,6 +167,10 @@ export const cartSlice = createSlice({
         state.isLoading = true
       })
       .addCase(updateItemQuantityThunk.fulfilled, (state, action) => {
+        if(action.payload.item.quantity === 0){
+          state.items = state.items.filter((item) => item.product._id !== action.payload.item.product)
+          return
+        }
         const updatedCart = state.items.map((item) => {
           if (item.product._id === action.payload.item.product) {
             item.quantity = action.payload.item.quantity

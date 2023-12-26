@@ -19,10 +19,10 @@ export function ProductsManager() {
 
   useEffect(() => {
     dispatch(fetchCategoriesThunk())
-  },[])
+  }, [])
 
   useEffect(() => {
-    dispatch(fetchProductsThunk({searchText, category, sortBy, pageNumber}))
+    dispatch(fetchProductsThunk({ searchText, category, sortBy, pageNumber }))
   }, [searchText, category, sortBy, pageNumber])
 
   const products = useSelector((state: RootState) => state.products)
@@ -40,14 +40,26 @@ export function ProductsManager() {
     setIsModalOpen(true)
   }
 
+  //handle search text change
   function handleSearchTextChange(event: React.ChangeEvent<HTMLInputElement>) {
-    setSearchText (event.target.value)
+    setSearchText(event.target.value)
+  }
+
+  function handleSortChange(event: { target: { value: string } }) {
+    setSortBy(event.target.value)
+    setPageNumber(1)
+  }
+
+  function handleFilterChange(event: { target: { value: string } }) {
+    setCategory(event.target.value)
+    setPageNumber(1)
   }
 
   //Display products table
   return (
     <div className="flex flex-col min-h-screen align-middle">
       <div className="flex flex-col justify-center md:flex-row border-b-2 border-zinc_secondery pb-5">
+        {/* search */}
         <div className="pt-2 relative text-primary_pink">
           <input
             onChange={handleSearchTextChange}
@@ -71,8 +83,19 @@ export function ProductsManager() {
             <path d="M55.146,51.887L41.588,37.786c3.486-4.144,5.396-9.358,5.396-14.786c0-12.682-10.318-23-23-23s-23,10.318-23,23  s10.318,23,23,23c4.761,0,9.298-1.436,13.177-4.162l13.661,14.208c0.571,0.593,1.339,0.92,2.162,0.92  c0.779,0,1.518-0.297,2.079-0.837C56.255,54.982,56.293,53.08,55.146,51.887z M23.984,6c9.374,0,17,7.626,17,17s-7.626,17-17,17  s-17-7.626-17-17S14.61,6,23.984,6z" />
           </svg>
         </div>
+
+        {/* Sort */}
         <select
-          //onChange={filter}
+          onChange={handleSortChange}
+          className="text-primary_pink mt-2 h-10 rounded-lg text-sm bg-zinc">
+          <option>Sort By</option>
+          <option value={'lowestPrice'}>Low-High</option>
+          <option value={'highestPrice'}>High-Low</option>
+        </select>
+
+        {/* filter */}
+        <select
+          onChange={handleFilterChange}
           className="text-primary_pink mt-2 h-10 rounded-lg text-sm bg-zinc">
           <option value={0}>All Products</option>
           {categories.categories.map((category) => (
@@ -82,8 +105,8 @@ export function ProductsManager() {
           ))}
         </select>
       </div>
-      {products.isLoading && <h3> Loading products...</h3>}
-      {products.error && <h3> {products.error}</h3>}
+
+      {/* products table */}
       <div className="max-h-[600px] overflow-y-auto ml-16">
         <table className="md:mx-40 md:my-8 w-9/12">
           <tbody>
@@ -98,7 +121,7 @@ export function ProductsManager() {
             {products.products.map((product) => (
               <tr className="border-t-2 border-zinc_secondery" key={product._id}>
                 <td className="pl-10 py-5">
-                  {/* <img src={product.image} alt={product.name} width="50" /> */}
+                  <img src={`https://${product.image}`} alt={product.name} width="50" />
                 </td>
                 <td className="text-primary_green">{product.name}</td>
                 <td className="text-primary_green text-center">{product.price}</td>
@@ -156,13 +179,14 @@ export function ProductsManager() {
         </table>
       </div>
 
+      {/* add product button */}
       <button
         className="fixed bg-primary_green bottom-8 right-8 text-white h-14 w-14 rounded-full text-4xl flex items-center justify-center shadow-md hover:shadow-none hover:bg-primary_pink hover:text-primary_green shadow-shadow"
         onClick={addProductForm}>
         +
       </button>
 
-      {/* Prodact modal */}
+      {/* edit modal */}
       {selectedProduct && (
         <ProductFormModal
           isOpen={isModalOpen}
@@ -170,6 +194,7 @@ export function ProductsManager() {
           setIsModalOpen={setIsModalOpen}
         />
       )}
+      {/* add modal */}
       {!selectedProduct && (
         <ProductFormModal isOpen={isModalOpen} product={null} setIsModalOpen={setIsModalOpen} />
       )}

@@ -1,23 +1,45 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { AxiosError } from 'axios'
 
-import { Order, OrderState, ShippingInfo } from '../../../types/types'
+import { OrderState, ShippingInfo } from '../../../types/types'
 import ordersServices from '../../../services/orders'
 
 // Fetch all orders
-export const fetchOrdersThunk = createAsyncThunk('orders/fetchOrders', async () => {
-  const response = await ordersServices.findAll()
+export const fetchOrdersThunk = createAsyncThunk(
+  'orders/fetchOrders',
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await ordersServices.findAll()
 
-  return response.data.payload
-})
+      return response.data.payload
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        return rejectWithValue(error.response?.data.msg)
+      }
+    }
+  }
+)
+
+// Fetch orders history
+export const fetchOrderHistoryThunk = createAsyncThunk(
+  'orders/fetchOrderHistory',
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await ordersServices.findAll()
+
+      return response.data.payload
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        return rejectWithValue(error.response?.data.msg)
+      }
+    }
+  }
+)
 
 // Create order
 export const createOrderThunk = createAsyncThunk(
   'orders/createOrder',
-  async (
-    shippingInfo: ShippingInfo,
-    { rejectWithValue }
-  ) => {
+  async (shippingInfo: ShippingInfo, { rejectWithValue }) => {
     try {
       const response = await ordersServices.createOrder(shippingInfo)
 
@@ -33,7 +55,7 @@ export const createOrderThunk = createAsyncThunk(
 // Update order status
 export const updateOrderStatusThunk = createAsyncThunk(
   'orders/updateOrderStatus',
-  async (data:{orderStatus: string, orderId: string}, { rejectWithValue }) => {
+  async (data: { orderStatus: string; orderId: string }, { rejectWithValue }) => {
     try {
       const response = await ordersServices.updateStatus(data.orderStatus, data.orderId)
 
@@ -58,6 +80,7 @@ export const orderSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
+      // Fetch all orders
       .addCase(fetchOrdersThunk.pending, (state) => {
         state.isLoading = true
       })
@@ -66,6 +89,19 @@ export const orderSlice = createSlice({
         state.isLoading = false
       })
       .addCase(fetchOrdersThunk.rejected, (state, action) => {
+        state.error = action.error.message
+        state.isLoading = false
+      })
+
+      // Fetch orders history
+      .addCase(fetchOrderHistoryThunk.pending, (state) => {
+        state.isLoading = true
+      })
+      .addCase(fetchOrderHistoryThunk.fulfilled, (state, action) => {
+        state.orders = action.payload
+        state.isLoading = false
+      })
+      .addCase(fetchOrderHistoryThunk.rejected, (state, action) => {
         state.error = action.error.message
         state.isLoading = false
       })

@@ -3,27 +3,29 @@ import { AxiosError } from 'axios'
 
 import { ProductState } from '../../../types/types'
 import productService from '../../../services/products'
-import api from '../../../api'
 
 // Fetch all products
 export const fetchProductsThunk = createAsyncThunk(
   'products/fetchProducts',
   async (
     {
-      searchText = '',
-      category = '',
-      sortBy = '',
+      searchText,
+      category,
+      sortBy,
       pageNumber
     }: {
-      searchText?: string
-      category?: string
-      sortBy?: string
+      searchText: string
+      category: string
+      sortBy: string
       pageNumber: number
     },
     { rejectWithValue }
   ) => {
     try {
       const queryParams = new URLSearchParams()
+      queryParams.forEach((value, key) => {
+        console.log(`${key}: ${value}`);
+      });
       queryParams.append('pageNumber', String(pageNumber))
       searchText && queryParams.append('searchText', searchText)
       category && queryParams.append('category', category)
@@ -247,7 +249,5 @@ export const productSlice = createSlice({
       })
   }
 })
-
-export const {} = productSlice.actions
 
 export default productSlice.reducer

@@ -1,4 +1,3 @@
-import React from 'react'
 import { Product } from '../../../types/types'
 
 export default function OrderDetails(prop: {orders:{product: Product, quantity: number}[]}) {
@@ -17,7 +16,7 @@ export default function OrderDetails(prop: {orders:{product: Product, quantity: 
               {prop.orders.map((item) => (
                 <tr className="border-t-2 border-zinc_secondery" key={item.product._id}>
                   <td className="pl-10 py-5">
-                    {/* <img src={product.image} alt={product.name} width="50" /> */}
+                    <img src={`https://${item.product.image}`} alt={item.product.name} width="50" />
                   </td>
                   <td className="text-primary_green">{item.product.name}</td>
                   <td className="text-primary_green text-center">{item.product.price}</td>

@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { AxiosError } from 'axios'
 
 import { WishlistState } from '../../../types/types'
-import wishlistService from '../../../services/wishList'
+import wishlistService from '../../../services/wishlist'
 
 // Fetch wishlist items
 export const fetchWishlistItemsThunk = createAsyncThunk(

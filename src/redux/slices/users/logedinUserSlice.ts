@@ -26,7 +26,21 @@ export const loginUserThunk = createAsyncThunk(
   }
 )
 
+// Fetch user profile
+export const fetchSingleUserThunk = createAsyncThunk(
+  'users/fetchUsers',
+  async (userId: string, { rejectWithValue }) => {
+    try {
+      const response = await usersServices.findOne(userId)
 
+      return response.data
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        return rejectWithValue(error.response?.data.msg)
+      }
+    }
+  }
+)
 
 export type UserState = {
   user: User | null
@@ -68,6 +82,24 @@ export const logedinUserSlice = createSlice({
         return state
       })
       .addCase(loginUserThunk.rejected, (state, action) => {
+        const errorMessage = action.payload
+        if (typeof errorMessage === 'string') {
+          state.error = errorMessage
+        }
+        state.isLoading = false
+        return state
+      })
+
+      // Fetch user profile
+      .addCase(fetchSingleUserThunk.pending, (state) => {
+        state.isLoading = true
+      })
+      .addCase(fetchSingleUserThunk.fulfilled, (state, action) => {
+        state.user = action.payload.payload
+        state.isLoading = false
+        return state
+      })
+      .addCase(fetchSingleUserThunk.rejected, (state, action) => {
         const errorMessage = action.payload
         if (typeof errorMessage === 'string') {
           state.error = errorMessage

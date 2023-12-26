@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useState } from 'react'
+import { ChangeEvent, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
@@ -6,10 +6,12 @@ import { zodResolver } from '@hookform/resolvers/zod'
 
 import { AppDispatch } from '../redux/store'
 import { sendEmailThunk } from '../redux/slices/users/userSlice'
-import { EmailSchema, emailSchema } from '../types/types'
+import { EmailSchema } from '../types/types'
+import { emailSchema } from '../schemas/schemas'
 
 export default function ForgotPassword() {
   const dispatch = useDispatch<AppDispatch>()
+
   const [email, setEmail] = useState('')
 
   const {
@@ -18,10 +20,12 @@ export default function ForgotPassword() {
     formState: { errors }
   } = useForm<EmailSchema>({ resolver: zodResolver(emailSchema) })
 
+  // handle email changes
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value)
   }
 
+  //handle submit
   function handleFormSubmit() {
     dispatch(sendEmailThunk(email))
   }
@@ -79,7 +83,7 @@ export default function ForgotPassword() {
 
             <div className="mt-6">
               <button className="w-full px-6 py-3 text-sm font-medium tracking-wide text-primary_grey capitalize transition-colors duration-300 transform bg-primary_pink rounded-lg hover:bg-primary_green">
-                {/* {isLoading? "Loging in..." : "Login"} */} Send Email
+                Send Email
               </button>
             </div>
           </form>

@@ -1,28 +1,34 @@
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 
 import { AppDispatch, RootState } from '../redux/store'
-import { fetchCartItemsThunk, removeFromCartThunk, updateItemQuantityThunk } from '../redux/slices/cart/cartSlice'
-import Checkout from '../components/Checkout'
+import {
+  fetchCartItemsThunk,
+  removeFromCartThunk,
+  updateItemQuantityThunk
+} from '../redux/slices/cart/cartSlice'
+import Checkout from '../components/Global/Checkout'
 
 export default function Cart() {
   const dispatch = useDispatch<AppDispatch>()
+  const cart = useSelector((state: RootState) => state.cart)
 
   useEffect(() => {
     dispatch(fetchCartItemsThunk())
   }, [])
-  
-  const cart = useSelector((state: RootState) => state.cart)
 
+  // hadle remove item  from cart
   function handleRemoveFromCart(productId: string) {
     dispatch(removeFromCartThunk(productId))
   }
 
+  // handle change cart item quantity
   function handleQuantity(productId: string, updateType: string) {
     dispatch(updateItemQuantityThunk({ productId, updateType }))
   }
 
+  // display cart
   return (
     <div className="min-h-screen items-start m-4 md:mx-20 md:my-5">
       <div className="grid ">
@@ -40,16 +46,23 @@ export default function Cart() {
         )}
         {cart.items.length > 0 && (
           <div>
-            <h1 className="text-primary_pink font-bold">YOUR CART</h1>
+            <div className="flex justify-between md:w-8/12">
+              <h1 className="text-primary_pink font-bold">YOUR CART</h1>
+              <h1 className="text-primary_pink font-bold">{cart.items.length} ITEMS</h1>
+            </div>
             <div className="flex gap-16 flex-col md:flex-row">
-              <div className="overflow-y-auto max-h-[500px] w-full md:w-8/12">
+              <div className="overflow-y-auto max-h-[700px] w-full md:w-8/12 bg-white rounded-lg">
                 <table className="text-primary_green w-full">
                   <tbody>
                     {cart.items.map((item) => (
                       <tr className="border-t-2 border-zinc_secondery" key={item.product._id}>
-                        <td className="py-8">
+                        <td className="p-8">
                           <Link to={`/products/${item.product._id}`}>
-                            {/* <img src={product.image} alt={product.name} width="70" /> */}
+                            <img
+                              src={`https://${item.product.image}`}
+                              alt={item.product.name}
+                              width="70"
+                            />
                           </Link>
                         </td>
                         <td>{item.product.name}</td>
@@ -67,7 +80,7 @@ export default function Cart() {
                             +
                           </button>
                         </td>
-                        <td>
+                        <td className="p-4">
                           <button
                             className="hover:text-primary_pink"
                             onClick={() => handleRemoveFromCart(item.product._id)}>

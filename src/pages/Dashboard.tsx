@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 
 import { ProductsManager } from '../components/Dashboard/products/ProductsManager'
@@ -11,7 +11,7 @@ import { AppDispatch } from '../redux/store'
 import { DiscountCodesManager } from '../components/Dashboard/discountCodes/DiscountCodesManager'
 import { fetchDiscountCodesThunk } from '../redux/slices/discountCode/discountCodeSlice'
 import SideBar from '../components/Dashboard/SideBar'
-import Orders from '../components/Dashboard/orders/Orders'
+import Orders from '../components/Dashboard/orders/OrdersManager'
 
 export default function Admin() {
   const dispatch = useDispatch<AppDispatch>()

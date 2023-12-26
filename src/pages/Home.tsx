@@ -1,13 +1,14 @@
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { toast } from 'react-toastify'
 
 import { AppDispatch, RootState } from '../redux/store'
 import { Product } from '../types/types'
-import { addToCartThunk } from '../redux/slices/cart/cartSlice'
+import { addToCartThunk, fetchCartItemsThunk } from '../redux/slices/cart/cartSlice'
 import { fetchBestSellingProductsThunk } from '../redux/slices/products/productSlice'
 import { addToWishlistThunk } from '../redux/slices/wishlist/wishlistSlice'
+import { fetchCategoriesThunk } from '../redux/slices/categories/categorySlice'
 
 export default function Home() {
   const dispatch = useDispatch<AppDispatch>()
@@ -15,14 +16,21 @@ export default function Home() {
   const wishlist = useSelector((state: RootState) => state.wishlist.items)
 
   useEffect(() => {
-    dispatch(fetchBestSellingProductsThunk())
+    Promise.all([
+      dispatch(fetchBestSellingProductsThunk()),
+      dispatch(fetchCategoriesThunk()),
+      dispatch(fetchCartItemsThunk())
+    ])
   }, [])
 
+  //handle add to cart
   function handleAddToCart(product: Product) {
     const productId = product._id
     dispatch(addToCartThunk({ productId }))
     toast.success('Awesome pick! ' + product.name + ' is now waiting in your cart')
   }
+
+  //handle add to wishlist
   function handleAddToWishlist(product: Product) {
     const productId = product._id
     dispatch(addToWishlistThunk(productId)).then((res) => {
@@ -38,6 +46,7 @@ export default function Home() {
   return (
     <div className="min-h-screen items-start">
       <div>
+        {/* hero */}
         <div className="flex flex-col shadow-xl p-12 gap-3">
           <h1 className="text-4xl text-primary_pink font-bold">
             Let Your Space Shine Bright: <br />
@@ -50,6 +59,7 @@ export default function Home() {
           </Link>
         </div>
 
+        {/* images */}
         <div className="flex items-start ">
           <img className="w-60 rounded-b-full" src="public/images/h1.JPG" />
           <img className="w-52 rounded-b-full" src="public/images/h3.JPG" />
@@ -61,16 +71,20 @@ export default function Home() {
         <h1 className="text-3xl text-primary_green font-bold text-center border-b-2 border-zinc_secondery p-4">
           Our best selling items
         </h1>
-
-        <ul className="py-8 flex gap-5 flex-wrap">
+        <ul className="py-8 flex gap-5 flex-wrap p-10 px-20">
           {bestSellers.map((product) => (
             <li key={product._id} className="flex flex-col items-center justify-center mx-auto">
-              <div className="flex w-80 h-80 bg-white rounded-lg shadow-lg shadow-[#c0c0c0] hover:shadow-none items-center justify-center">
+              <div className="relative flex w-80 h-80 bg-white rounded-lg shadow-lg shadow-[#c0c0c0] hover:shadow-none items-center justify-center">
+                {product.discount > 0 && (
+                  <div className="flex absolute top-5 left-5 w-10 h-10 text-xs justify-center items-center text-center bg-primary_green p-1 text-primary_grey opacity-80 rounded-full">
+                    {product.discount} %
+                  </div>
+                )}
                 <Link to={`/${product._id}`}>
-                  {/* <img className="w-48" src={product.image} alt={product.name} /> */}
+                  <img className="w-48" src={`https://${product.image}`} alt={product.name} />
                 </Link>
               </div>
-              <div className="w-56 -mt-10 overflow-hidden rounded-lg shadow-lg md:w-64 bg-secondary_grey">
+              <div className="relative w-56 -mt-10 overflow-hidden rounded-lg shadow-lg md:w-64 bg-secondary_grey">
                 <Link to={`/${product._id}`}>
                   <h3 className="py-2 font-bold tracking-wide text-center text-primary_green uppercase">
                     {product.name}
@@ -78,7 +92,18 @@ export default function Home() {
                 </Link>
 
                 <div className="flex items-center justify-between px-3 py-2 bg-primary_pink">
-                  <span className="text-secondary_grey">{product.price} SAR</span>
+                  <div>
+                    {product.discount > 0 && (
+                      <span className="text-primary_green line-through"> {product.price} SAR</span>
+                    )}
+                    <span className="text-secondary_grey">
+                      {' '}
+                      {product.discount > 0
+                        ? (product.price * product.discount) % 100
+                        : product.price}{' '}
+                      SAR
+                    </span>
+                  </div>
                   <div>
                     <button
                       onClick={() => handleAddToCart(product)}

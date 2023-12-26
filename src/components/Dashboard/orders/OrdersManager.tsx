@@ -1,22 +1,24 @@
 import { useDispatch, useSelector } from 'react-redux'
 
 import { AppDispatch, RootState } from '../../../redux/store'
-import { ChangeEvent, useState } from 'react'
+import { useState } from 'react'
 import React from 'react'
 import OrderDetails from './OrderDetails'
 import { STATUS } from '../../../constants/constants'
 import { updateOrderStatusThunk } from '../../../redux/slices/orders/orderSlice'
 
-export default function Orders() {
+export default function OrdersManager() {
   const dispatch = useDispatch<AppDispatch>()
   const orders = useSelector((state: RootState) => state.orders)
-  const [showMoreOrder, setShowMoreOrder] = useState('')
-  const [selectedStatus, setSelectedStatus] = useState('')
 
+  const [showMoreOrder, setShowMoreOrder] = useState('')
+
+  // handle change order status
   const handleChangeStatus = (orderStatus: string, orderId: string) => {
     dispatch(updateOrderStatusThunk({ orderStatus, orderId }))
   }
 
+  // handle show more order details
   const handleShowMore = (orderId: string) => {
     if (showMoreOrder === orderId) {
       setShowMoreOrder('')
@@ -25,10 +27,10 @@ export default function Orders() {
     setShowMoreOrder(orderId)
   }
 
+  // display orders table
   return (
     <div className="flex flex-col min-h-screen align-middle">
-      {orders.isLoading && <h3> Loading orders...</h3>}
-      {orders.error && <h3> {orders.error}</h3>}
+      {/* orders table */}
       <div className="max-h-[600px] overflow-y-auto  ml-16">
         <table className="md:mx-40 md:my-8 w-9/12">
           <tbody>
@@ -45,7 +47,7 @@ export default function Orders() {
                   <td className="text-primary_green">{order.orderDate.toLocaleString()}</td>
                   <td className="flex justify-center align-middle py-5">
                     <select
-                    className="text-primary_green rounded-lg p-1"
+                      className="text-primary_green rounded-lg p-1"
                       onChange={(e) => handleChangeStatus(e.target.value, order._id)}>
                       {Object.values(STATUS).map((status) => (
                         <option key={status} value={status} selected={status === order.orderStatus}>

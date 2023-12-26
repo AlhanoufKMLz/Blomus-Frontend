@@ -6,14 +6,10 @@ export default {
     const response = await api.get('/api/users')
     return response
   },
-  // findOne: async (productId: string) => {
-  //   const response = await api.get(`/api/products/${productId}`)
-  //   return response
-  // },
-  // findBestSeller: async (limit: number) => {
-  //   const response = await api.get(`/api/products/highest-sold?limit=${limit}`)
-  //   return response
-  // },
+  findOne: async (userId: string) => {
+    const response = await api.get(`/api/users/${userId}`)
+    return response
+  },
   createUser: async (user: Partial<User>) => {
     const response = await api.post('/api/auth/register', user)
     return response

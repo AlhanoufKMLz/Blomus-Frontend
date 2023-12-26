@@ -1,12 +1,20 @@
-import React, { ChangeEvent, useEffect, useState } from 'react'
+import { ChangeEvent, useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { toast } from 'react-toastify'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 
 import { AppDispatch } from '../../../redux/store'
-import { Category, CategoryFormModalProp, CategorySchema, categorySchema } from '../../../types/types'
-import { createCategoryThunk, updateCategoryThunk } from '../../../redux/slices/categories/categorySlice'
+import {
+  Category,
+  CategoryFormModalProp,
+  CategorySchema,
+} from '../../../types/types'
+import {
+  createCategoryThunk,
+  updateCategoryThunk
+} from '../../../redux/slices/categories/categorySlice'
+import { categorySchema } from '../../../schemas/schemas'
 
 const initialState = {
   _id: '',
@@ -16,6 +24,9 @@ const initialState = {
 export default function CategoryFormModal(prop: CategoryFormModalProp) {
   if (!prop.isOpen) return null
 
+  const dispatch = useDispatch<AppDispatch>()
+  const [categoryChanges, setCategoryChanges] = useState<Category>(initialState)
+
   const {
     register,
     handleSubmit,
@@ -23,9 +34,7 @@ export default function CategoryFormModal(prop: CategoryFormModalProp) {
     formState: { errors }
   } = useForm<CategorySchema>({ resolver: zodResolver(categorySchema) })
 
-  const dispatch = useDispatch<AppDispatch>()
-  const [categoryChanges, setCategoryChanges] = useState<Category>(initialState)
-
+  // set initial value for update 
   useEffect(() => {
     if (prop.category) {
       setCategoryChanges(prop.category)
@@ -33,10 +42,12 @@ export default function CategoryFormModal(prop: CategoryFormModalProp) {
     }
   }, [])
 
+  // handle category changes
   const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setCategoryChanges({ ...categoryChanges, name: e.target.value })
   }
 
+  // handle submit
   const handleFormSubmit = () => {
     if (!prop.category) {
       dispatch(createCategoryThunk({ name: categoryChanges.name }))
@@ -57,6 +68,7 @@ export default function CategoryFormModal(prop: CategoryFormModalProp) {
     prop.setIsModalOpen(false)
   }
 
+  // handle close modal
   const handleCloseModal = () => {
     setCategoryChanges(initialState)
     prop.setIsModalOpen(false)
@@ -67,6 +79,7 @@ export default function CategoryFormModal(prop: CategoryFormModalProp) {
       <div className="modal-overlay">
         <div className="modal-content">
           <form className="p-4 bg-gray-100 rounded-lg" onSubmit={handleSubmit(handleFormSubmit)}>
+            {/* name container */}
             <div className="mb-4">
               <label htmlFor="name" className="flex flex-col text-primary_pink">
                 <span className="text-primary_green pl-2">Name:</span>
@@ -81,6 +94,8 @@ export default function CategoryFormModal(prop: CategoryFormModalProp) {
               </label>
             </div>
             {errors.name && <span className="text-primary_pink"> {errors.name.message} </span>}
+
+            {/* buttons container */}
             <div className="flex justify-center gap-4">
               <button
                 type="submit"

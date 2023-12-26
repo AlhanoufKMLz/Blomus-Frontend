@@ -1,4 +1,4 @@
-import React, { ChangeEvent, FormEvent, useState } from 'react'
+import { ChangeEvent, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { useNavigate, useParams } from 'react-router'
 import { toast } from 'react-toastify'
@@ -7,12 +7,14 @@ import { useForm } from 'react-hook-form'
 
 import { AppDispatch } from '../redux/store'
 import { resetPasswordThunk } from '../redux/slices/users/userSlice'
-import { ResetPasswordSchema, resetPasswordSchema } from '../types/types'
+import { ResetPasswordSchema } from '../types/types'
+import { resetPasswordSchema } from '../schemas/schemas'
 
 export default function ResetPassword() {
   const { resetPasswordToken = '' } = useParams<{ resetPasswordToken: string }>()
   const dispatch = useDispatch<AppDispatch>()
   const navigate = useNavigate()
+
   const [newPassword, setNewPassword] = useState({ password: '', confirmPassword: '' })
 
   const {
@@ -21,11 +23,13 @@ export default function ResetPassword() {
     formState: { errors }
   } = useForm<ResetPasswordSchema>({ resolver: zodResolver(resetPasswordSchema) })
 
+  // handle password change
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
     setNewPassword({ ...newPassword, [name]: value })
   }
 
+  // handle submit
   function handleFormSubmit() {
     const password = newPassword.password
     dispatch(resetPasswordThunk({ resetPasswordToken, password })).then((res) => {

@@ -1,11 +1,10 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 
-import { AppDispatch, RootState } from '../redux/store'
-import { logout } from '../redux/slices/users/logedinUserSlice'
-import { ROLES } from '../constants/constants'
-import Profile from './Profile'
+import { AppDispatch, RootState } from '../../redux/store'
+import { logout } from '../../redux/slices/users/logedinUserSlice'
+import { ROLES } from '../../constants/constants'
 
 export default function NavBar() {
   const dispatch = useDispatch<AppDispatch>()
@@ -13,7 +12,6 @@ export default function NavBar() {
   const state = useSelector((state: RootState) => state.logedinUser)
 
   const [isOpen, setIsOpen] = useState(false)
-  const [isProfileOpe, setIsProfileOpen] = useState(false)
 
   function handleOpenNavBar() {
     setIsOpen(true)
@@ -26,10 +24,6 @@ export default function NavBar() {
   function handleLogout() {
     dispatch(logout())
     localStorage.removeItem('token')
-  }
-
-  function handleOpenProfile() {
-    setIsProfileOpen(true)
   }
 
   return (
@@ -120,12 +114,12 @@ export default function NavBar() {
                     to={'/'}>
                     Logout
                   </Link>
-                  <button onClick={handleOpenProfile}>
+                  <Link to={'/profile'}>
                     <img
                       className="object-cover w-8 h-8 rounded-full ring ring-primary_pink"
                       src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"
                       alt=""></img>
-                  </button>
+                  </Link>
                 </div>
               )}
               <Link to={'/cart'}>
@@ -156,7 +150,6 @@ export default function NavBar() {
                   </a>
                 </div>
               </Link>
-
               <Link to={'/wishlist'}>
                 <div className="relative">
                   <a
@@ -178,13 +171,6 @@ export default function NavBar() {
                         stroke-linejoin="round"
                       />
                     </svg>
-                    {cart.itemsCount > 0 && (
-                      <div className="absolute top-0 right-0">
-                        <p className="absolute -top-2 -left-2 flex h-0 w-1 items-center justify-center rounded-full bg-primary_green p-2 text-xs text-white">
-                          {/* {cart.itemsCount} */}
-                        </p>
-                      </div>
-                    )}
                   </a>
                 </div>
               </Link>
@@ -192,14 +178,6 @@ export default function NavBar() {
           </div>
         </div>
       </nav>
-
-      {isProfileOpe && state.user && (
-        <Profile
-          isProfileOpen={isProfileOpe}
-          user={state.user}
-          setIsProfileOpen={setIsProfileOpen}
-        />
-      )}
     </div>
   )
 }

@@ -12,6 +12,9 @@ import { addToWishlistThunk } from '../redux/slices/wishlist/wishlistSlice'
 
 export default function Products() {
   const dispatch = useDispatch<AppDispatch>()
+  const categories = useSelector((state: RootState) => state.categories)
+  const wishlist = useSelector((state: RootState) => state.wishlist.items)
+
   const [searchText, setSearchText] = useState('')
   const [category, setCategory] = useState('')
   const [sortBy, setSortBy] = useState('')
@@ -19,37 +22,41 @@ export default function Products() {
   const { products, totalPages, isLoading, error } = useSelector(
     (state: RootState) => state.products
   )
-  const categories = useSelector((state: RootState) => state.categories)
-  const wishlist = useSelector((state: RootState) => state.wishlist.items)
 
+  // fetch categories
   useEffect(() => {
     dispatch(fetchCategoriesThunk())
   }, [])
 
+  // fetch products
   useEffect(() => {
-    if (products.length === 0 || searchText || sortBy || category || pageNumber !== 1) {
-      dispatch(fetchProductsThunk({ searchText, category, sortBy, pageNumber }))
-    }
+    dispatch(fetchProductsThunk({ searchText, category, sortBy, pageNumber }))
   }, [searchText, category, sortBy, pageNumber])
 
+  // handle search text change
   function handleSearchTextChange(event: React.ChangeEvent<HTMLInputElement>) {
     setSearchText(event.target.value)
+    setPageNumber(1)
   }
 
+  // handle sort change
   function handleSortChange(event: { target: { value: string } }) {
     setSortBy(event.target.value)
     setPageNumber(1)
   }
 
+  // handle filter change
   function handleFilterChange(event: { target: { value: string } }) {
     setCategory(event.target.value)
     setPageNumber(1)
   }
 
+  // handle page change
   const handlePageChange = (page: number) => {
     setPageNumber(page)
   }
 
+  // handle add to cart
   function handleAddToCart(product: Product) {
     const productId = product._id
     dispatch(addToCartThunk({ productId })).then((res) => {
@@ -61,6 +68,8 @@ export default function Products() {
       }
     })
   }
+
+  //  handle add to wishlist
   function handleAddToWishlist(product: Product) {
     const productId = product._id
     dispatch(addToWishlistThunk(productId)).then((res) => {
@@ -77,6 +86,7 @@ export default function Products() {
   return (
     <div className="min-h-screen items-start m-4 md:mx-20 md:my-5">
       <div className="flex flex-col justify-center md:flex-row border-b-2 border-zinc_secondery pb-5">
+        {/* Search */}
         <div className="pt-2 relative text-primary_pink">
           <input
             onChange={handleSearchTextChange}
@@ -100,6 +110,8 @@ export default function Products() {
             <path d="M55.146,51.887L41.588,37.786c3.486-4.144,5.396-9.358,5.396-14.786c0-12.682-10.318-23-23-23s-23,10.318-23,23  s10.318,23,23,23c4.761,0,9.298-1.436,13.177-4.162l13.661,14.208c0.571,0.593,1.339,0.92,2.162,0.92  c0.779,0,1.518-0.297,2.079-0.837C56.255,54.982,56.293,53.08,55.146,51.887z M23.984,6c9.374,0,17,7.626,17,17s-7.626,17-17,17  s-17-7.626-17-17S14.61,6,23.984,6z" />
           </svg>
         </div>
+
+        {/* Sort */}
         <select
           onChange={handleSortChange}
           className="text-primary_pink mt-2 h-10 rounded-lg text-sm bg-zinc">
@@ -107,29 +119,35 @@ export default function Products() {
           <option value={'lowestPrice'}>Low-High</option>
           <option value={'highestPrice'}>High-Low</option>
         </select>
+
+        {/* Filter */}
         <select
           onChange={handleFilterChange}
           className="text-primary_pink mt-2 h-10 rounded-lg text-sm bg-zinc">
           <option value={''}>All Products</option>
           {categories.categories.map((category) => (
-            <option key={category._id} value={category.name}>
+            <option key={category._id} value={category._id}>
               {category.name}
             </option>
           ))}
         </select>
       </div>
 
+      {/* Display products */}
       <section className="products-container">
         {isLoading && <h3> Loading products...</h3>}
-        {error && <h3> {error}</h3>}
         <div className="grid gap-4">
           <ul className="py-8 flex gap-5 flex-wrap">
             {products.map((product) => (
               <li key={product._id} className="flex flex-col items-center justify-center mx-auto">
                 <div className="relative flex w-80 h-80 bg-white rounded-lg shadow-lg shadow-[#c0c0c0] hover:shadow-none items-center justify-center">
-                  {product.discount > 0 && <div className='absolute top-5 left-5 bg-primary_green rounded-lg px-2 text-primary_grey text-sm'>{product.discount} %</div>}
+                  {product.discount > 0 && (
+                    <div className="flex absolute top-5 left-5 w-10 h-10 text-xs justify-center items-center text-center bg-primary_green p-1 text-primary_grey opacity-80 rounded-full">
+                      {product.discount} %
+                    </div>
+                  )}
                   <Link to={`/${product._id}`}>
-                    {/* <img className="w-48" src={product.image} alt={product.name} /> */}
+                    <img className="w-48" src={`https://${product.image}`} alt={product.name} />
                   </Link>
                 </div>
                 <div className="relative w-56 -mt-10 overflow-hidden rounded-lg shadow-lg md:w-64 bg-secondary_grey">
@@ -138,9 +156,22 @@ export default function Products() {
                       {product.name}
                     </h3>
                   </Link>
-
                   <div className="z-90 flex items-center justify-between px-3 py-2 bg-primary_pink">
-                    <span className="text-secondary_grey">{product.price} SAR</span>
+                    <div>
+                      {product.discount > 0 && (
+                        <span className="text-primary_green line-through">
+                          {' '}
+                          {product.price} SAR
+                        </span>
+                      )}
+                      <span className="text-secondary_grey">
+                        {' '}
+                        {product.discount > 0
+                          ? (product.price * product.discount) % 100
+                          : product.price}{' '}
+                        SAR
+                      </span>
+                    </div>
                     <div>
                       <button
                         onClick={() => handleAddToCart(product)}
@@ -191,6 +222,7 @@ export default function Products() {
           </ul>
         </div>
       </section>
+
       {/* Pagenation */}
       <div className="flex justify-center">
         {pageNumber !== 1 && (

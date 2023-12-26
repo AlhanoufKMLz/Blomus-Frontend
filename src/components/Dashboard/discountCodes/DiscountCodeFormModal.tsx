@@ -1,12 +1,13 @@
-import React, { ChangeEvent, useEffect, useState } from 'react'
+import { ChangeEvent, useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { toast } from 'react-toastify'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 
 import { AppDispatch } from '../../../redux/store'
-import { DiscountCode, DiscountCodeFormModalProp, DiscountCodeSchema, discountCodeSchema } from '../../../types/types'
+import { DiscountCode, DiscountCodeFormModalProp, DiscountCodeSchema } from '../../../types/types'
 import { createDiscountCodeThunk, updateDiscountCodeThunk } from '../../../redux/slices/discountCode/discountCodeSlice'
+import { discountCodeSchema } from '../../../schemas/schemas'
 
 const initialState = {
   _id: '',
@@ -28,6 +29,7 @@ export default function DiscountCodeFormModal(prop: DiscountCodeFormModalProp) {
     formState: { errors }
   } = useForm<DiscountCodeSchema>({ resolver: zodResolver(discountCodeSchema) })
 
+  // set initial value for update form
   useEffect(() => {
     if (prop.discountCode) {
       discountCodeChangesChanges(prop.discountCode)
@@ -35,11 +37,13 @@ export default function DiscountCodeFormModal(prop: DiscountCodeFormModalProp) {
     }
   }, [])
 
+  //handle discount change
   const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const {value, name} = e.target    
     discountCodeChangesChanges({ ...discountCodeChanges, [name]: value })
   }
 
+  // handle submit
   const handleFormSubmit = () => {
     if (!prop.discountCode) {
       dispatch(createDiscountCodeThunk(discountCodeChanges))
@@ -60,6 +64,7 @@ export default function DiscountCodeFormModal(prop: DiscountCodeFormModalProp) {
     prop.setIsModalOpen(false)
   }
 
+  // handle close modal
   const handleCloseModal = () => {
     discountCodeChangesChanges(initialState)
     prop.setIsModalOpen(false)
@@ -107,11 +112,11 @@ export default function DiscountCodeFormModal(prop: DiscountCodeFormModalProp) {
                   className="border-2 border-primary_grey h-10 px-5 rounded-lg text-sm focus:outline-none"
                   type="date"
                   name="expirationDate"
-                  //value={new Date(discountCodeChanges.expirationDate)}
                 />
               </label>
-
             </div>
+
+            {/* buttons container */}
             <div className="flex justify-center gap-4">
               <button
                 type="submit"

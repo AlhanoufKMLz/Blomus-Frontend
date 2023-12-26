@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useState } from 'react'
+import { ChangeEvent, useState } from 'react'
 import { useNavigate } from 'react-router'
 import { Link } from 'react-router-dom'
 import { toast } from 'react-toastify'
@@ -6,20 +6,22 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useDispatch, useSelector } from 'react-redux'
 
-import { User, registerSchema } from '../types/types'
+import { User } from '../types/types'
 import { AppDispatch, RootState } from '../redux/store'
 import { registerUserThunk } from '../redux/slices/users/userSlice'
+import { registerSchema } from '../schemas/schemas'
 
 export default function Register() {
+  const navigate = useNavigate()
   const dispatch = useDispatch<AppDispatch>()
+  const { error, isLoading } = useSelector((state: RootState) => state.users)
+
   const [userData, setUserData] = useState({
     firstName: '',
     lastName: '',
     email: '',
     password: ''
   })
-  const navigate = useNavigate()
-  const { error, isLoading } = useSelector((state: RootState) => state.users)
 
   const {
     register,
@@ -27,11 +29,13 @@ export default function Register() {
     formState: { errors }
   } = useForm<User>({ resolver: zodResolver(registerSchema) })
 
+  // handle user data changes
   function handleChange(e: ChangeEvent<HTMLInputElement>) {
     const { name, value } = e.target
     setUserData({ ...userData, [name]: value })
   }
 
+  // handle submit
   function handleFormSubmit() {
     dispatch(registerUserThunk(userData)).then((res) => {
       if (res.meta.requestStatus === 'fulfilled') {

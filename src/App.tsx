@@ -1,7 +1,7 @@
 import './App.css'
 import 'react-toastify/dist/ReactToastify.css'
 import { ToastContainer } from 'react-toastify'
-import { Route, Routes } from 'react-router'
+import { Navigate, Route, Routes } from 'react-router'
 import { useSelector } from 'react-redux'
 
 import { UsersManager } from './components/Dashboard/users/UsersManager'
@@ -9,20 +9,22 @@ import { ProductsManager } from './components/Dashboard/products/ProductsManager
 import { CategoriesManager } from './components/Dashboard/categories/CategoriesManager'
 import { RootState } from './redux/store'
 import Home from './pages/Home'
-import NavBar from './components/NavBar'
+import NavBar from './components/Global/NavBar'
 import Products from './pages/Products'
 import ProductDetails from './pages/ProductDetails'
 import Dashboard from './pages/Dashboard'
 import Cart from './pages/Cart'
-import Orders from './components/Dashboard/orders/Orders'
+import Orders from './components/Dashboard/orders/OrdersManager'
 import Login from './pages/Login'
 import Register from './pages/Register'
-import Footer from './components/Footer'
+import Footer from './components/Global/Footer'
 import ForgotPassword from './pages/ForgotPassword'
 import ResetPassword from './pages/ResetPassword'
 import PrivateRoutes from './utils/PrivateRoutes'
-import WishList from './services/wishList'
 import Wishlist from './pages/Wishlist'
+import Profile from './pages/Profile'
+import ThankYou from './pages/ThankYou'
+import NotFound from './pages/NotFound'
 
 function App() {
   const logedinUser = useSelector((state: RootState) => state.logedinUser.decodedUser)
@@ -46,6 +48,8 @@ function App() {
         <Route path="/products" element={<Products />}></Route>
         <Route path="/:productid" element={<ProductDetails />}></Route>
         <Route path="/cart" element={<Cart />}></Route>
+        <Route path="/thank-you" element={<ThankYou />}></Route>
+        <Route path="/profile" element={<Profile />}></Route>
         <Route path="/wishlist" element={<Wishlist />}></Route>
         <Route path="/login" element={<Login />}></Route>
         <Route path="/register" element={<Register />}></Route>
@@ -53,7 +57,7 @@ function App() {
         <Route path="/reset-password/:resetPasswordToken" element={<ResetPassword />}></Route>
 
         {/* catch all */}
-        <Route path="*" element={<Home />}></Route>
+        <Route path="*" element={<NotFound />}></Route>
       </Routes>
       <Footer />
     </div>

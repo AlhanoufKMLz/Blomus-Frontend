@@ -1,23 +1,28 @@
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 
 import { AppDispatch, RootState } from '../redux/store'
-import { fetchWishlistItemsThunk, removeFromWishlistThunk } from '../redux/slices/wishlist/wishlistSlice'
+import {
+  fetchWishlistItemsThunk,
+  removeFromWishlistThunk
+} from '../redux/slices/wishlist/wishlistSlice'
 
 export default function Wishlist() {
   const dispatch = useDispatch<AppDispatch>()
   const wishlist = useSelector((state: RootState) => state.wishlist)
-  
-  useEffect(() => {
-    dispatch(fetchWishlistItemsThunk())    
-  }, [])
-  
 
+  // fetch wishlist
+  useEffect(() => {
+    dispatch(fetchWishlistItemsThunk())
+  }, [])
+
+  // handle remove item from wishlist
   function handleRemoveFromWishlist(productId: string) {
     dispatch(removeFromWishlistThunk(productId))
   }
 
+  // display wishlist table
   return (
     <div className="min-h-screen items-start m-4 md:mx-20 md:my-5">
       <div className="grid ">
@@ -34,17 +39,24 @@ export default function Wishlist() {
           </div>
         )}
         {wishlist.items.length > 0 && (
-          <div>
-            <h1 className="text-primary_pink font-bold">YOUR WISHLIST</h1>
+          <div className="mx-20">
+            <div className="flex justify-between">
+              <h1 className="text-primary_pink font-bold">YOUR WISHLIST</h1>
+              <h1 className="text-primary_pink font-bold">{wishlist.items.length} ITEMS</h1>
+            </div>
             <div className="flex gap-16 flex-col md:flex-row">
-              <div className="overflow-y-auto max-h-[500px] w-full">
+              <div className="overflow-y-auto max-h-[600px] w-full bg-white rounded-lg">
                 <table className="text-primary_green w-full">
                   <tbody>
                     {wishlist.items.map((item) => (
                       <tr className="border-t-2 border-zinc_secondery" key={item.product._id}>
-                        <td className="py-8">
+                        <td className="p-8">
                           <Link to={`/products/${item._id}`}>
-                            {/* <img src={product.image} alt={product.name} width="70" /> */}
+                            <img
+                              src={`https://${item.product.image}`}
+                              alt={item.product.name}
+                              width="70"
+                            />
                           </Link>
                         </td>
                         <td>{item.product.name}</td>

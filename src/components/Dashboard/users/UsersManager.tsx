@@ -22,6 +22,7 @@ export function UsersManager() {
   //Display users table
   return (
     <div className="flex flex-col min-h-screen align-middle">
+      {/* search */}
       <div className="flex flex-col justify-center md:flex-row border-b-2 border-zinc_secondery pb-5">
         <div className="pt-2 relative text-primary_pink">
           <input
@@ -47,8 +48,8 @@ export function UsersManager() {
           </svg>
         </div>
       </div>
-      {users.isLoading && <h3> Loading users...</h3>}
-      {users.error && <h3> {users.error}</h3>}
+      
+      {/* users table */}
       <div className="max-h-[600px] overflow-y-auto ml-16">
         <table className="md:mx-40 md:my-8 w-9/12">
           <tbody>

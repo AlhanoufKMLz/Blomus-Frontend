@@ -4,10 +4,11 @@ import { toast } from 'react-toastify'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 
-import { ProductFormModalProp, Product, ProductSchema, productSchema } from '../../../types/types'
+import { ProductFormModalProp, Product, ProductSchema } from '../../../types/types'
 import { AppDispatch, RootState } from '../../../redux/store'
 import { createProductThunk, updateProductThunk } from '../../../redux/slices/products/productSlice'
 import { fetchCategoriesThunk } from '../../../redux/slices/categories/categorySlice'
+import { productSchema } from '../../../schemas/schemas'
 
 const initialState = {
   _id: '',
@@ -25,6 +26,13 @@ const initialState = {
 export default function ProductFormModal(prop: ProductFormModalProp) {
   if (!prop.isOpen) return null
 
+  const dispatch = useDispatch<AppDispatch>()
+  const categories = useSelector((state: RootState) => state.categories.categories)
+
+  const [productChanges, setProductChanges] = useState<Product>(initialState)
+  const [productImage, setProductImage] = useState<File | undefined>(undefined)
+  const [numberOfSizes, setNumberOfSizes] = useState(1)
+
   const {
     register,
     handleSubmit,
@@ -32,11 +40,7 @@ export default function ProductFormModal(prop: ProductFormModalProp) {
     formState: { errors }
   } = useForm<ProductSchema>({ resolver: zodResolver(productSchema) })
 
-  const dispatch = useDispatch<AppDispatch>()
-  const [productChanges, setProductChanges] = useState<Product>(initialState)
-  const [productImage, setProductImage] = useState<File | undefined>(undefined)
-  const [numberOfSizes, setNumberOfSizes] = useState(1)
-
+  // set initial value for update form
   useEffect(() => {
     if (prop.product) {
       setProductChanges(prop.product)
@@ -44,11 +48,12 @@ export default function ProductFormModal(prop: ProductFormModalProp) {
     }
   }, [])
 
+  // fetch categories
   useEffect(() => {
     dispatch(fetchCategoriesThunk())
   }, [])
-  const categories = useSelector((state: RootState) => state.categories.categories)
 
+  // handle product changes
   const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, index?: number) => {
     const { name, value } = e.target
     if (index != undefined) {
@@ -66,10 +71,12 @@ export default function ProductFormModal(prop: ProductFormModalProp) {
     })
   }
 
+  // handle upload image
   const handleUploadImage = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) setProductImage(e.target.files[0])
   }
 
+  // handle add or remove category
   const handleAddCategroy = (category: string) => {
     //add category
     if (!productChanges.categories.includes(category))
@@ -85,14 +92,17 @@ export default function ProductFormModal(prop: ProductFormModalProp) {
       })
   }
 
+  // handle add new size field
   const handleAddSizeField = () => {
     setNumberOfSizes(numberOfSizes + 1)
   }
 
+  // handle remove new size field
   const handleRemoveSizeField = () => {
     setNumberOfSizes(numberOfSizes - 1)
   }
 
+  // handle submit
   const handleFormSubmit = () => {
     const productData = new FormData()
     productData.append('name', productChanges.name)
@@ -120,6 +130,7 @@ export default function ProductFormModal(prop: ProductFormModalProp) {
     prop.setIsModalOpen(false)
   }
 
+  // handle close modal
   const handleCloseModal = () => {
     prop.setIsModalOpen(false)
     let updatedSizes = [...productChanges.sizes]

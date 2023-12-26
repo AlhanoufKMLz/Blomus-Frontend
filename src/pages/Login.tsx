@@ -8,28 +8,31 @@ import { useForm } from 'react-hook-form'
 
 import { AppDispatch, RootState } from '../redux/store'
 import { loginUserThunk } from '../redux/slices/users/logedinUserSlice'
-import { LoginSchema, loginSchema } from '../types/types'
+import { LoginSchema } from '../types/types'
 import { fetchCartItemsThunk } from '../redux/slices/cart/cartSlice'
 import { fetchWishlistItemsThunk } from '../redux/slices/wishlist/wishlistSlice'
+import { loginSchema } from '../schemas/schemas'
 
 export default function Login() {
   const dispatch = useDispatch<AppDispatch>()
   const navigate = useNavigate()
-  const [userLogin, setUserLogin] = useState({ email: '', password: '' })
   const {error, isLoading} = useSelector((state: RootState) => state.logedinUser)
+  
+  const [userLogin, setUserLogin] = useState({ email: '', password: '' })
 
   const {
     register,
     handleSubmit,
-    reset,
     formState: { errors }
   } = useForm<LoginSchema>({ resolver: zodResolver(loginSchema) })
 
+  // handle login changes
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
     setUserLogin({ ...userLogin, [name]: value })
   }
 
+  // handle submit
   function handleFormSubmit() {
     dispatch(loginUserThunk(userLogin)).then((res) => {
       if(res.meta.requestStatus === 'fulfilled'){

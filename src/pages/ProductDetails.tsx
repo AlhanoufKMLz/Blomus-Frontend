@@ -16,13 +16,14 @@ export default function ProductDetails() {
   const product = useSelector((state: RootState) => state.products.singleProduct)
   const wishlist = useSelector((state: RootState) => state.wishlist.items)
 
+  //fetch single product
   useEffect(() => {
     if (productid) {
       dispatch(fetchSingleProductThunk(productid))
     }
   }, [dispatch, productid])
 
-
+  // handle add to cart
   function handleAddToCart() {
     if (product) {
       const productId = product._id
@@ -30,6 +31,8 @@ export default function ProductDetails() {
       toast.success('Awesome pick! ' + product.name + ' is now waiting in your cart')
     }
   }
+
+  // handle add to wishlist
   function handleAddToWishlist(product: Product) {
     const productId = product._id
     dispatch(addToWishlistThunk(productId)).then((res) => {
@@ -64,8 +67,13 @@ export default function ProductDetails() {
               />
             </svg>
           </Link>
-          <div className="flex w-96 h-96 bg-white rounded-lg shadow-md items-center justify-center">
-            {/* <img className="w-56" src={product.image} alt={product.name} /> */}
+          <div className="relative flex w-96 h-96 bg-white rounded-lg shadow-md items-center justify-center">
+            {product.discount > 0 && (
+              <div className="flex absolute top-5 left-5 w-12 h-12 text-sm justify-center items-center text-center bg-primary_green p-1 text-primary_grey opacity-80 rounded-full">
+                {product.discount} %
+              </div>
+            )}
+            <img className="w-56" src={`https://${product.image}`} alt={product.name} />
           </div>
           <table className="w-72 -mt-10 overflow-hidde text-primary_green rounded-lg md:w-64">
             <tbody>
@@ -97,7 +105,18 @@ export default function ProductDetails() {
               )}
               <tr className="text-primary_pink border-b border-primary_grey">
                 <td className="flex justify-between py-4">
-                  <span>{product?.price} SAR</span>
+                  <div>
+                    {product.discount > 0 && (
+                      <span className="text-primary_pink line-through"> {product.price} SAR</span>
+                    )}
+                    <span className="text-primary_green">
+                      {' '}
+                      {product.discount > 0
+                        ? (product.price * product.discount) % 100
+                        : product.price}{' '}
+                      SAR
+                    </span>
+                  </div>
                   <div>
                     <button
                       onClick={() => handleAddToCart()}
