@@ -36,7 +36,6 @@ export default function Login() {
   function handleFormSubmit() {
     dispatch(loginUserThunk(userLogin)).then((res) => {
       if(res.meta.requestStatus === 'fulfilled'){
-        //toast.success('Welcome back ' + res.payload.user.firstName + "! We're glad to see you again")
         dispatch(fetchCartItemsThunk())
         dispatch(fetchWishlistItemsThunk())
         navigate('/')

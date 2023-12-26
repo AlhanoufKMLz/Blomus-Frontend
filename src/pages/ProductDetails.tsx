@@ -14,7 +14,8 @@ export default function ProductDetails() {
   const { productid } = useParams()
   const dispatch = useDispatch<AppDispatch>()
   const product = useSelector((state: RootState) => state.products.singleProduct)
-  const wishlist = useSelector((state: RootState) => state.wishlist.items)
+  const {items, error} = useSelector((state: RootState) => state.wishlist)
+  const addToCartError = useSelector((state: RootState) => state.cart.error)
 
   //fetch single product
   useEffect(() => {
@@ -27,8 +28,14 @@ export default function ProductDetails() {
   function handleAddToCart() {
     if (product) {
       const productId = product._id
-      dispatch(addToCartThunk({ productId }))
-      toast.success('Awesome pick! ' + product.name + ' is now waiting in your cart')
+      dispatch(addToCartThunk({ productId })).then((res) => {
+        if (res.meta.requestStatus === 'fulfilled') {
+          toast.success('Awesome pick! ' + product.name + ' is now waiting in your cart')
+        }
+        if (res.meta.requestStatus === 'rejected') {
+          toast.error(addToCartError)
+        }
+      })
     }
   }
 
@@ -40,7 +47,7 @@ export default function ProductDetails() {
         toast.success('Awesome pick! ' + product.name + ' is now waiting in your wishlist')
       }
       if (res.meta.requestStatus === 'rejected') {
-        //toast.error(error)
+        toast.error(error)
       }
     })
   }
@@ -144,7 +151,7 @@ export default function ProductDetails() {
                         height="24"
                         viewBox="0 0 24 24"
                         fill={
-                          wishlist.find((item) => item.product._id === product._id)
+                          items.find((item) => item.product._id === product._id)
                             ? 'currentColor'
                             : 'none'
                         }>

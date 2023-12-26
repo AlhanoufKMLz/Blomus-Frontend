@@ -14,6 +14,8 @@ export default function Products() {
   const dispatch = useDispatch<AppDispatch>()
   const categories = useSelector((state: RootState) => state.categories)
   const wishlist = useSelector((state: RootState) => state.wishlist.items)
+  const wishlistError = useSelector((state: RootState) => state.wishlist.error)
+  const addToCartError = useSelector((state: RootState) => state.cart.error)
 
   const [searchText, setSearchText] = useState('')
   const [category, setCategory] = useState('')
@@ -64,7 +66,7 @@ export default function Products() {
         toast.success('Awesome pick! ' + product.name + ' is now waiting in your cart')
       }
       if (res.meta.requestStatus === 'rejected') {
-        toast.error(error)
+        toast.error(addToCartError)
       }
     })
   }
@@ -77,7 +79,7 @@ export default function Products() {
         toast.success('Awesome pick! ' + product.name + ' is now waiting in your wishlist')
       }
       if (res.meta.requestStatus === 'rejected') {
-        toast.error(error)
+        toast.error(wishlistError)
       }
     })
   }

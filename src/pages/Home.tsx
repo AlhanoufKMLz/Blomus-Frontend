@@ -13,7 +13,7 @@ import { fetchCategoriesThunk } from '../redux/slices/categories/categorySlice'
 export default function Home() {
   const dispatch = useDispatch<AppDispatch>()
   const bestSellers = useSelector((state: RootState) => state.products.bestSellers)
-  const wishlist = useSelector((state: RootState) => state.wishlist.items)
+  const {items, error} = useSelector((state: RootState) => state.wishlist)
 
   useEffect(() => {
     Promise.all([
@@ -38,7 +38,7 @@ export default function Home() {
         toast.success('Awesome pick! ' + product.name + ' is now waiting in your wishlist')
       }
       if (res.meta.requestStatus === 'rejected') {
-        //toast.error(error)
+        toast.error(error)
       }
     })
   }
@@ -131,7 +131,7 @@ export default function Home() {
                         height="20"
                         viewBox="0 0 24 24"
                         fill={
-                          wishlist.find((item) => item.product._id === product._id)
+                          items.find((item) => item.product._id === product._id)
                             ? 'currentColor'
                             : 'none'
                         }>
