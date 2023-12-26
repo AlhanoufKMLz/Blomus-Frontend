@@ -1,13 +1,14 @@
 import axios from 'axios'
 import { getTokenFromStorage } from '../utils/token'
 
-const baseURL = process.env.BACKEND_ORIGIN
+const isDevelopment = import.meta.env.MODE === 'development'
+const BASE_URL = import.meta.env.VITE_BACKEND_ORIGIN || 'http://localhost:5050'
 
 const api = axios.create({
-  baseURL
+  baseURL: BASE_URL
 })
 
 const token = getTokenFromStorage()
-if(token) api.defaults.headers['Authorization'] = `Bearer ${token}`
+if (token) api.defaults.headers['Authorization'] = `Bearer ${token}`
 
 export default api

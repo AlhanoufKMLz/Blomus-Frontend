@@ -116,7 +116,7 @@ export function ProductsManager() {
       </div>
 
       {/* products table */}
-      <div className="max-h-[600px] overflow-y-auto ml-16">
+      <div className="max-h-[700px] overflow-y-auto ml-16">
         <table className="md:mx-40 md:my-8 w-9/12">
           <tbody>
             <tr className="text-left text-primary_pink">
