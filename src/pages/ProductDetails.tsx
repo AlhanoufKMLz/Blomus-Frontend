@@ -94,22 +94,6 @@ export default function ProductDetails() {
                   <span>{product.description}</span>
                 </td>
               </tr>
-              {/* {product.sizes.length > 0 && (
-                <tr className="border-b border-primary_grey">
-                  <td>
-                    <span className="text-primary_pink font-bold">Sizes</span>
-
-                    {product.sizes.map((size) => (
-                      <div key={size}>
-                        <input type="radio" id={size} name="drone" value={size} checked />
-                        <label className="pl-2" htmlFor={size}>
-                          {size}
-                        </label>
-                      </div>
-                    ))}
-                  </td>
-                </tr>
-              )} */}
               <tr className="text-primary_pink border-b border-primary_grey">
                 <td className="flex justify-between py-4">
                   <div>

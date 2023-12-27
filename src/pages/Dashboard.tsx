@@ -143,6 +143,28 @@ export default function Admin() {
           </div>
         </div>
       </div>
+
+      <div className="flex gap-5 pl-56 justify-start mb-10">
+        <div className="bg-white rounded-lg shadow-lg p-5 w-80 flex gap-4 items-center">
+          <div className="bg-primary_green p-2 rounded-full w-16 h-16 flex justify-center items-center">
+            <h1 className="font-bold text-2xl text-white">SAR</h1>
+          </div>
+          <div>
+            <h1 className=" text-primary_grey">Visits</h1>
+            <h1 className="font-bold text-2xl text-primary_pink">54</h1>
+          </div>
+        </div>
+        <div className="bg-white rounded-lg shadow-lg p-5 w-80 flex gap-4 items-center">
+          <div className="bg-primary_green p-2 rounded-full w-16 h-16 flex justify-center items-center">
+            <h1 className="font-bold text-2xl text-white">SAR</h1>
+          </div>
+          <div>
+            <h1 className=" text-primary_grey">Sales</h1>
+            <h1 className="font-bold text-2xl text-primary_pink">5,5520</h1>
+          </div>
+        </div>
+      </div>
+
       <main>
         {selectedComponent === 'products' && <ProductsManager />}
         {selectedComponent === 'categories' && <CategoriesManager />}
