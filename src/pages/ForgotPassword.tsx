@@ -1,18 +1,20 @@
 import { ChangeEvent, useState } from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 
-import { AppDispatch } from '../redux/store'
+import { AppDispatch, RootState } from '../redux/store'
 import { sendEmailThunk } from '../redux/slices/users/userSlice'
 import { EmailSchema } from '../types/types'
 import { emailSchema } from '../schemas/schemas'
 
 export default function ForgotPassword() {
   const dispatch = useDispatch<AppDispatch>()
+  const { error, isLoading } = useSelector((state: RootState) => state.users)
 
   const [email, setEmail] = useState('')
+  const [message, setMessage] = useState('')
 
   const {
     register,
@@ -27,7 +29,15 @@ export default function ForgotPassword() {
 
   //handle submit
   function handleFormSubmit() {
-    dispatch(sendEmailThunk(email))
+    dispatch(sendEmailThunk(email)).then((res) => {
+      if(res.meta.requestStatus === 'fulfilled'){
+        setMessage('Reset password email has been sent to youre email, check youre email to reset the password')
+      } 
+      if(res.meta.requestStatus === 'rejected'){
+        if(error) setMessage(error)
+        else setMessage('Something went wrong, Please try again')
+      }
+    })
   }
 
   return (
@@ -78,12 +88,13 @@ export default function ForgotPassword() {
               />
             </div>
             {errors.email && (
-              <span className="text-primary_pink"> {errors.email.message} </span>
+              <span className="text-primary_green"> {errors.email.message} </span>
             )}
+            {message && <span className="text-primary_pink"> {message} </span>}
 
             <div className="mt-6">
               <button className="w-full px-6 py-3 text-sm font-medium tracking-wide text-primary_grey capitalize transition-colors duration-300 transform bg-primary_pink rounded-lg hover:bg-primary_green">
-                Send Email
+                {isLoading? "Sending..." : "Send Email"}
               </button>
             </div>
           </form>
@@ -92,3 +103,4 @@ export default function ForgotPassword() {
     </div>
   )
 }
+

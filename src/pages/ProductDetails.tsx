@@ -94,7 +94,7 @@ export default function ProductDetails() {
                   <span>{product.description}</span>
                 </td>
               </tr>
-              {product.sizes.length > 0 && (
+              {/* {product.sizes.length > 0 && (
                 <tr className="border-b border-primary_grey">
                   <td>
                     <span className="text-primary_pink font-bold">Sizes</span>
@@ -109,7 +109,7 @@ export default function ProductDetails() {
                     ))}
                   </td>
                 </tr>
-              )}
+              )} */}
               <tr className="text-primary_pink border-b border-primary_grey">
                 <td className="flex justify-between py-4">
                   <div>

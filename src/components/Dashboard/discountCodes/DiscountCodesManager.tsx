@@ -7,8 +7,8 @@ import { deleteDiscountCodeThunk } from '../../../redux/slices/discountCode/disc
 import DiscountCodeFormModal from './DiscountCodeFormModal'
 
 export function DiscountCodesManager() {
-  const state = useSelector((state: RootState) => state.discountCodes)
   const dispatch = useDispatch<AppDispatch>()
+  const state = useSelector((state: RootState) => state.discountCodes)
 
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [selectedDiscount, setSelectedDiscount] = useState<DiscountCode | null>()
