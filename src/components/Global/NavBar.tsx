@@ -29,10 +29,10 @@ export default function NavBar() {
   return (
     <div>
       <nav>
-        <div className="p-6 md:justify-between md:flex md:w-screen md:items-center">
+        <div className="p-6 md:justify-between md:flex md:w-screen md:items-center shadow-xl">
           <div className="flex">
             <Link to="/">
-              <img className="w-60 md:w-40" src="public/images/logo.png" alt="" />
+              <img className="w-60 md:w-40" src="https://sda-ecommerce.s3.eu-north-1.amazonaws.com/1703646934655-logo.png" alt="" />
             </Link>
 
             {/* <!-- Mobile menu button --> */}

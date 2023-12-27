@@ -66,7 +66,22 @@ export default function Cart() {
                           </Link>
                         </td>
                         <td>{item.product.name}</td>
-                        <td>{item.product.price * item.quantity} SAR</td>
+                        <td>
+                          {item.product.discount > 0 && (
+                            <span className="text-primary_pink line-through">
+                              {' '}
+                              {item.product.price * item.quantity} SAR
+                            </span>
+                          )}
+                          <span className="text-secondary_green">
+                            {' '}
+                            {item.product.discount > 0
+                              ? item.product.price * item.quantity -
+                                ((item.product.price * item.product.discount) % 100)
+                              : item.product.price * item.quantity}{' '}
+                            SAR
+                          </span>
+                        </td>
                         <td>
                           <button
                             className="px-1 hover:text-primary_pink"

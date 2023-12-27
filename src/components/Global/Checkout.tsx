@@ -55,7 +55,7 @@ export default function () {
           <h2 className="font-bold text-primary_green text-xl">SUMMARY</h2>
           <div className="flex justify-between text-primary_pink">
             <span>Subtotal</span>
-            <span>{cart.totalPrice}</span>
+            <span>{cart.totalPrice.toFixed(2)}</span>
           </div>
           <div className="flex justify-between text-primary_pink">
             <span>Shipping</span>
@@ -63,15 +63,15 @@ export default function () {
           </div>
           <div className="flex justify-between text-primary_pink">
             <span>Taxes</span>
-            <span>{cart.taxes}</span>
+            <span>{cart.taxes.toFixed(2)}</span>
           </div>
           <div className="flex justify-between text-primary_pink">
             <span>Discount</span>
-            <span>-{cart.savedAmount}</span>
+            <span>-{cart.savedAmount.toFixed(2)}</span>
           </div>
           <div className="flex justify-between text-primary_pink border-y-2 border-zinc_secondery font-bold">
             <span>Total</span>
-            <span>{cart.finalTotal}</span>
+            <span>{cart.finalTotal.toFixed(2)}</span>
           </div>
         </div>
         <details>

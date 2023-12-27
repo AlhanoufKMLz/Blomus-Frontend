@@ -1,7 +1,7 @@
 import './App.css'
 import 'react-toastify/dist/ReactToastify.css'
 import { ToastContainer } from 'react-toastify'
-import { Navigate, Route, Routes } from 'react-router'
+import { Route, Routes } from 'react-router'
 import { useSelector } from 'react-redux'
 
 import { UsersManager } from './components/Dashboard/users/UsersManager'
@@ -25,6 +25,7 @@ import Wishlist from './pages/Wishlist'
 import Profile from './pages/Profile'
 import ThankYou from './pages/ThankYou'
 import NotFound from './pages/NotFound'
+import Activation from './pages/Activation'
 
 function App() {
   const logedinUser = useSelector((state: RootState) => state.logedinUser.decodedUser)
@@ -59,6 +60,8 @@ function App() {
         <Route path="/register" element={<Register />}></Route>
         <Route path="/forgot-password" element={<ForgotPassword />}></Route>
         <Route path="/reset-password/:resetPasswordToken" element={<ResetPassword />}></Route>
+        <Route path="/activation" element={<Activation />}></Route>
+
 
         {/* catch all */}
         <Route path="*" element={<NotFound />}></Route>

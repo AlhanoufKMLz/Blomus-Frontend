@@ -4,9 +4,10 @@ import { useDispatch, useSelector } from 'react-redux'
 import { AppDispatch, RootState } from '../redux/store'
 import { fetchSingleUserThunk } from '../redux/slices/users/logedinUserSlice'
 import { useNavigate } from 'react-router'
-import { fetchOrderHistoryThunk } from '../redux/slices/orders/orderSlice'
+import { fetchOrderHistoryThunk, updateOrderStatusThunk } from '../redux/slices/orders/orderSlice'
 import { Link } from 'react-router-dom'
 import ProfileFormModal from '../components/Global/ProfileFormModal'
+import { STATUS } from '../constants/constants'
 
 export default function Profile() {
   // make sure user is loged in
@@ -34,6 +35,11 @@ export default function Profile() {
   // handle open edit profile form
   function handleEdit() {
     setIsModalOpen(true)
+  }
+
+  // handle change order status
+  const handleChangeStatus = (orderStatus: string, orderId: string) => {
+    dispatch(updateOrderStatusThunk({ orderStatus, orderId }))
   }
 
   return (
@@ -104,7 +110,23 @@ export default function Profile() {
                     </span>
                     <span className="text-primary_green">{order.orderStatus}</span>
                   </div>
+                  <div className="flex flex-col gap-1">
+                    <button
+                      disabled={order.orderStatus !== STATUS.Pending}
+                      onClick={() => handleChangeStatus(STATUS.Canceled, order._id)}
+                      className="bg-primary_pink p-1 text-center w-full text-sm rounded-lg text-secondary_grey shadow-md hover:shadow-none hover:bg-secondary_grey hover:text-primary_pink disabled:shadow-none disabled:bg-secondary_grey disabled:text-primary_pink shadow-shadow">
+                      Cancel order
+                    </button>
+
+                    <button
+                      disabled={order.orderStatus !== STATUS.Delivered}
+                      onClick={() => handleChangeStatus(STATUS.Returned, order._id)}
+                      className="bg-primary_green p-1 text-center w-full text-sm rounded-lg text-secondary_grey shadow-md hover:shadow-none hover:bg-secondary_grey hover:text-primary_green disabled:shadow-none disabled:bg-secondary_grey disabled:text-primary_pink shadow-shadow">
+                      Return order
+                    </button>
+                  </div>
                 </li>
+
                 {order.products.map((product) => {
                   return (
                     <li

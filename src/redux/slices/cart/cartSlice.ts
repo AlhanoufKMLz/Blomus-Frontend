@@ -92,7 +92,7 @@ export const cartSlice = createSlice({
   reducers: {
     calculatePrice(state) {
       state.totalPrice = state.items.reduce(
-        (total, item) => total + item.product.price * item.quantity,
+        (total, item) => total + (item.product.price * item.quantity) * (1-item.product.discount/100),
         0
       )
       state.taxes = Number((state.totalPrice * 0.15).toFixed())

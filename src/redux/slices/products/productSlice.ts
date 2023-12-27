@@ -9,14 +9,14 @@ export const fetchProductsThunk = createAsyncThunk(
   'products/fetchProducts',
   async (
     {
-      searchText,
-      category,
-      sortBy,
+      searchText = '',
+      category = '',
+      sortBy = '',
       pageNumber
     }: {
-      searchText: string
-      category: string
-      sortBy: string
+      searchText?: string
+      category?: string
+      sortBy?: string
       pageNumber: number
     },
     { rejectWithValue }
