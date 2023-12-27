@@ -60,7 +60,7 @@ function App() {
         <Route path="/register" element={<Register />}></Route>
         <Route path="/forgot-password" element={<ForgotPassword />}></Route>
         <Route path="/reset-password/:resetPasswordToken" element={<ResetPassword />}></Route>
-        <Route path="/activate" element={<Activation />}></Route>
+        <Route path="/activate/:resetPasswordToken" element={<Activation />}></Route>
 
 
         {/* catch all */}
